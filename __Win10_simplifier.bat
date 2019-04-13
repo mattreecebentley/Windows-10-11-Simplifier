@@ -63,6 +63,7 @@ IF "%1"=="-all" (
 	set disable_defender="y"
 	set reboot="y"
 	set mydefrag="n"
+	set solid_color_background="y"
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag="y"
@@ -81,6 +82,7 @@ IF "%1"=="-none" (
 	set disable_notifications="n"
 	set disable_defender="n"
 	set reboot="n"
+	set solid_color_background="n"
 	goto begin
 )
 
@@ -93,6 +95,7 @@ set mydefrag="n"
 set disable_notifications="n"
 set disable_defender="n"
 set reboot="n"
+set solid_color_background="n"
 
 
 
@@ -126,6 +129,11 @@ FOR %%A IN (%*) DO (
 		ECHO Hibernation/fast boot disabling enabled
 		set reboot="y"
 	)
+
+	IF "%%A"=="-solidcolordesktop" (
+		ECHO Solid color desktop background enabled
+		set solid_color_background="y"
+	)
 )
 
 
@@ -157,6 +165,7 @@ If /I "%disk_cleanup%"=="a" (
 	set disable_notifications="y"
 	set disable_defender="y"
 	set reboot="n"
+	set solid_color_background="y"
 	goto begin
 )
 
@@ -210,6 +219,14 @@ set /P disable_defender=Type input: %=%
 
 
 
+ECHO.
+ECHO Do you want to change the desktop background to a solid color?
+ECHO Press Y or N and then ENTER:
+set solid_color_background=
+set /P solid_color_background=Type input: %=%
+
+
+
 
 :begin
 
@@ -234,6 +251,13 @@ REG SAVE "HKCU\AppEvents" %~dp0\HKCUapp_events.HIV /y
 
 
 REM *** Begin main changes: ***
+
+
+If /I "%solid_color_background%"=="y" (
+	ECHO Changing desktop background to solid color:
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\change_desktop_to_solid_color.ps1" -Verb RunAs
+)
+
 
 
 If /I "%disable_defender%"=="y" (
