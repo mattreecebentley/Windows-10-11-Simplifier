@@ -12,7 +12,7 @@ Download from github using the green 'Clone or Download' button. Save the result
 Purpose:
 --------
 
-This is a set of hacks, settings changes and tweaks I regularly apply on new Windows 10 machines, primarily to reduce the amount of 'noise' the user has to deal with. Many of my clients are elderly, and small things irk them.
+This is a set of settings changes and tweaks I regularly apply on new Windows 10 machines, primarily to reduce the amount of 'noise' the user has to deal with. Many of my clients are elderly, and small things irk them.
 With this in mind, there are a number of annoying Windows 10 features disabled, some silly default settings corrected, and visual effects are turned off (only those which slow the responsiveness of windows, and are unnecessary). Other than that, some useful scripts and programs external to this script will be run automatically if they're placed in the same folder.
 
 Almost all of the settings can be changed back manually in 'Settings' or the Control Panel (the real "settings"). In addition, all settings are backed up in registry files prior to execution and will be restored if the user runs the 'unsimplifier' .bat. However those registry files are written to the same folder, so will be overwritten if you use the script, for example, on more than one computer from an external drive.
@@ -80,7 +80,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Turns on Night Light with the on/off times set to 9pm and 7am respectively
-* Optionally Runs Windows Disk Cleanup with /AUTOCLEAN /VERYLOWDISK settings - Downloads folder will not be touched, but previous windows versions will be removed
+* Optionally runs Windows Disk Cleanup - 'Downloads' folder will not be touched, but previous windows versions will be removed
 * Changes desktop background to a solid color (OPTIONAL)
 
 
