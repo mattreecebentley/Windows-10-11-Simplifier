@@ -108,18 +108,19 @@ Additional Command Line Options:
 
 The following can be used to run the script without prompts:
 
--all enables all options
--none disables all options
+* -all - enables all options
+* -none - disables all options
 
 If either of the above are specified, the rest of the command line options will be ignored.
 If any other command line options below are specified, it is assumed that any unspecified options are 'off' (same as '-none' above). The individual command line options are:
--cleanup - enables disk cleanup at end of scripts
--defrag - enables defrag using mydefrag with a monthly script at end of all scripts
--disablenotifications - disables notifications center and prevents background apps from running
--disablehibernation - disables hibernation/fast boot
--disabledefender - disables Windows Defender
--reboot - reboot computer once script is finished. Will only occur if mydefrag is not run. See mydefrag notes above for how to reboot after mydefrag is done.
--solidcolordesktop - changes windows desktop background to a solid color
+
+* -cleanup - enables disk cleanup at end of scripts
+* -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
+* -disablenotifications - disables notifications center and prevents background apps from running
+* -disablehibernation - disables hibernation/fast boot
+* -disabledefender - disables Windows Defender
+* -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run. See mydefrag notes above for how to reboot after mydefrag is done.
+* -solidcolordesktop - changes windows desktop background to a solid color
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
@@ -131,7 +132,9 @@ Additional Notes:
 
 This script has been tested on Windows 10 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
+
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
+
 You can leave a freshly-installed computer for half an hour or so to automatically download and install updates/drivers before applying this script, so that the disk cleanup process has more junk to get rid of. Or alternatively you can always run disk clean up manually later at your leisure once updates have completed.
 Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
