@@ -37,17 +37,12 @@ This script disables:
 ---------------------
 
 * game mode notifications
-* notification center and background apps (OPTIONAL)
-* windows defender (OPTIONAL)
-* fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
-* hibernation and removes the hibernation file (OPTIONAL)
 * people and task view buttons on taskbar
 * zip/cab folders (if 7z installer present, see below)
 * auto-hide scrollbars
 * quick access folders in explorer
 * duplicate instances of external/USB drives visible in explorer
 * the ability for windows to change the sound scheme when changing themes
-* hiding of system tray icons
 * login/lock screen screen photos
 * lock screen
 * combining of taskbar buttons
@@ -62,6 +57,11 @@ This script disables:
 * Fade in/out UI objects
 * Smooth-scroll list boxes
 * Sliding comboboxes
+* notification center and background apps (OPTIONAL)
+* windows defender (OPTIONAL)
+* fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
+* hibernation and removes the hibernation file (OPTIONAL)
+* hiding of system tray icons (OPTIONAL)
 
 
 
@@ -80,8 +80,10 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Turns on Night Light with the on/off times set to 9pm and 7am respectively
-* Optionally runs Windows Disk Cleanup - 'Downloads' folder will not be touched, but previous windows versions will be removed
+* Runs Windows Disk Cleanup - 'Downloads' folder will not be touched, but previous windows versions will be removed (OPTIONAL)
 * Changes desktop background to a solid color (OPTIONAL)
+* Reboots once script has finished (OPTIONAL)
+* Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
 
 
 
@@ -96,7 +98,7 @@ Other scripts/executables this script will run, if present in the same folder:
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit win10 is detected it will install the 64-bit version, so include both executables.
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat -StopEdgePDF (this will also disable cortana)
 * Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only
-* ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier
+* ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
 * MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optional - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. Since this program runs at the end of the script, you can edit the Scripts/Settings.myd and change the line "WhenFinished(wait)" to "WhenFinished(reboot)". This will reboot the computer and the registry changes will be applied on next boot.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell restarts the explorer.exe process, which also kills the cmd window, thus why this installer is run at the Very end of the script.
@@ -121,6 +123,8 @@ If any other command line options below are specified, it is assumed that any un
 * -disabledefender - disables Windows Defender
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run. See mydefrag notes above for how to reboot after mydefrag is done.
 * -solidcolordesktop - changes windows desktop background to a solid color
+* -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
+* -showtrayitems - disable hiding of system tray icons
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.

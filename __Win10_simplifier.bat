@@ -64,6 +64,8 @@ IF "%1"=="-all" (
 	set reboot="y"
 	set mydefrag="n"
 	set solid_color_background="y"
+	set chkdsk="y"
+	set disablehidesystemtray="y"
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag="y"
@@ -83,6 +85,8 @@ IF "%1"=="-none" (
 	set disable_defender="n"
 	set reboot="n"
 	set solid_color_background="n"
+	set chkdsk="n"
+	set disablehidesystemtray="n"
 	goto begin
 )
 
@@ -96,6 +100,8 @@ set disable_notifications="n"
 set disable_defender="n"
 set reboot="n"
 set solid_color_background="n"
+set chkdsk="n"
+set disablehidesystemtray="n"
 
 
 
@@ -121,12 +127,12 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-disabledefender" (
-		ECHO Hibernation/fast boot disabling enabled
+		ECHO Defender disabling enabled
 		set disable_defender="y"
 	)
 
 	IF "%%A"=="-reboot" (
-		ECHO Hibernation/fast boot disabling enabled
+		ECHO Reboot at end of script enabled (will be disabled if -defrag specified)
 		set reboot="y"
 	)
 
@@ -134,6 +140,17 @@ FOR %%A IN (%*) DO (
 		ECHO Solid color desktop background enabled
 		set solid_color_background="y"
 	)
+
+	IF "%%A"=="-chkdsk" (
+		ECHO Chkdsk for bad sectors on reboot enabled
+		set chkdsk="y"
+	)
+
+	IF "%%A"=="-showtrayitems" (
+		ECHO Disable hiding of system tray items enabled
+		set disablehidesystemtray="y"
+	)
+
 )
 
 
@@ -150,6 +167,8 @@ goto begin
 
 REM *** Ask questions: ***
 
+ECHO.
+ECHO Questions section. Note: either lowercase or uppercase letters are both fine for all answers.
 
 ECHO.
 ECHO Do you want to run Windows Disk Cleanup at end of scripts? Previous windows installations will be deleted automatically, Downloads folder will be left alone.
@@ -166,11 +185,16 @@ If /I "%disk_cleanup%"=="a" (
 	set disable_defender="y"
 	set reboot="n"
 	set solid_color_background="y"
+	set chkdsk="y"
+	set disablehidesystemtray="y"
 	goto begin
 )
 
 
 set mydefrag="n"
+
+
+setlocal EnableDelayedExpansion
 
 IF EXIST "%~dp0\MyDefrag.exe" (
 	ECHO.
@@ -178,20 +202,38 @@ IF EXIST "%~dp0\MyDefrag.exe" (
 	ECHO Press Y or N and then ENTER:
 	set /P mydefrag=Type input: %=%
 
-	If /I "%mydefrag%"=="y" (
-		ECHO Defrag enabled! Make sure your settings.myd file is set to reboot after defrag, if you want that to happen.
+	If /I "!mydefrag!"=="y" (
+		ECHO.
+		ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
 		set reboot="n"
+	)
+) ELSE (
+	IF NOT "%reboot%"=="n" (
+		ECHO.
+		ECHO Do you want Reboot after the script completes?
+		ECHO Press Y or N and then ENTER:
+		set /P reboot=Type input: %=%
 	)
 )
 
+setlocal DisableDelayedExpansion
 
 
-IF NOT "%reboot%"=="n" (
+
+ECHO.
+ECHO Do you want to check the system hard drive for bad sectors and filesystem errors on next reboot?
+ECHO Press Y or N and then ENTER:
+set chkdsk=
+set /P chkdsk=Type input: %=%
+
+
+
+IF /I "%chkdsk%"=="y" (
 	ECHO.
-	ECHO Do you want Reboot after the script completes?
-	ECHO Press Y or N and then ENTER:
-	set /P reboot=Type input: %=%
+	ECHO Running chkdsk now, please press Y then Enter at the prompt so it can run on next reboot:
+	chkdsk c: /f /r
 )
+
 
 
 
@@ -227,6 +269,13 @@ set /P solid_color_background=Type input: %=%
 
 
 
+ECHO.
+ECHO Do you want to disable hiding items in system tray (will not be reenable-able from settings)?
+ECHO Press Y or N and then ENTER:
+set disablehidesystemtray=
+set /P disablehidesystemtray=Type input: %=%
+
+
 
 :begin
 
@@ -253,9 +302,18 @@ REG SAVE "HKCU\AppEvents" %~dp0\HKCUapp_events.HIV /y
 REM *** Begin main changes: ***
 
 
+REM Show all items in system tray:
+
+If /I "%disablehidesystemtray%"=="y" (
+	ECHO Disable hiding of items in system tray:
+	REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
+)
+
+
+
 If /I "%solid_color_background%"=="y" (
 	ECHO Changing desktop background to solid color:
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\change_desktop_to_solid_color.ps1" -Verb RunAs
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
 )
 
 
@@ -432,8 +490,8 @@ If /I "%disk_cleanup%"=="y" (
 
 
 
-If /I "%mydefrag%"=="y" (
-	IF EXIST "%~dp0\MyDefrag.exe" (
+IF EXIST "%~dp0\MyDefrag.exe" (
+	If /I "%mydefrag%"=="y" (
 		ECHO Running MyDefrag Monthly script on C:
 		start %~dp0\MyDefrag.exe -v C -r %~dp0\Scripts\SystemDiskMonthly.MyD
 	)
@@ -450,4 +508,7 @@ IF EXIST "%~dp0\OpenShellSetup.exe" (
 If /I "%reboot%"=="y" (
 	ECHO Script finished, Rebooting:
 	shutdown /r
+) ELSE (
+	ECHO Simplifier Finished!
+	pause
 )
