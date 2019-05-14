@@ -62,6 +62,8 @@ This script disables:
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * hibernation and removes the hibernation file (OPTIONAL)
 * hiding of system tray icons (OPTIONAL)
+* automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
+* Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 
 
 
@@ -125,6 +127,8 @@ If any other command line options below are specified, it is assumed that any un
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
 * -showtrayitems - disable hiding of system tray icons
+* -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
+* -disableae - disable Application Experience (required for some older apps)
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.

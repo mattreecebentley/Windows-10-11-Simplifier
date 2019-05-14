@@ -65,7 +65,9 @@ IF "%1"=="-all" (
 	set mydefrag="n"
 	set solid_color_background="y"
 	set chkdsk="y"
-	set disablehidesystemtray="y"
+	set disable_hide_systemtray="y"
+	set disable_folder_templates="y"
+	set disable_application_experience="y"
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag="y"
@@ -86,7 +88,9 @@ IF "%1"=="-none" (
 	set reboot="n"
 	set solid_color_background="n"
 	set chkdsk="n"
-	set disablehidesystemtray="n"
+	set disable_hide_systemtray="n"
+	set disable_folder_templates="n"
+	set disable_application_experience="n"
 	goto begin
 )
 
@@ -101,7 +105,9 @@ set disable_defender="n"
 set reboot="n"
 set solid_color_background="n"
 set chkdsk="n"
-set disablehidesystemtray="n"
+set disable_hide_systemtray="n"
+set disable_folder_templates="n"
+set disable_application_experience="n"
 
 
 
@@ -148,9 +154,18 @@ FOR %%A IN (%*) DO (
 
 	IF "%%A"=="-showtrayitems" (
 		ECHO Disable hiding of system tray items enabled
-		set disablehidesystemtray="y"
+		set disable_hide_systemtray="y"
 	)
 
+	IF "%%A"=="-disablefoldertemplates" (
+		ECHO Disable hiding of system tray items enabled
+		set disable_folder_templates="y"
+	)
+
+	IF "%%A"=="-disableae" (
+		ECHO Disable hiding of system tray items enabled
+		set disable_application_experience="y"
+	)
 )
 
 
@@ -186,7 +201,9 @@ If /I "%disk_cleanup%"=="a" (
 	set reboot="n"
 	set solid_color_background="y"
 	set chkdsk="y"
-	set disablehidesystemtray="y"
+	set disable_hide_systemtray="y"
+	set disable_folder_templates="y"
+	set disable_application_experience="y"
 	goto begin
 )
 
@@ -272,8 +289,22 @@ set /P solid_color_background=Type input: %=%
 ECHO.
 ECHO Do you want to disable hiding items in system tray (will not be reenable-able from settings)?
 ECHO Press Y or N and then ENTER:
-set disablehidesystemtray=
-set /P disablehidesystemtray=Type input: %=%
+set disable_hide_systemtray=
+set /P disable_hide_systemtray=Type input: %=%
+
+
+ECHO.
+ECHO Do you want to set all folders to the 'General Items' template (remove music-oriented folder layouts)?
+ECHO Press Y or N and then ENTER:
+set disable_folder_templates=
+set /P disable_folder_templates=Type input: %=%
+
+
+ECHO.
+ECHO Do you disable Application Experience (required for running old applications, disabling can speed up program launch)?
+ECHO Press Y or N and then ENTER:
+set disable_application_experience=
+set /P disable_application_experience=Type input: %=%
 
 
 
@@ -304,7 +335,7 @@ REM *** Begin main changes: ***
 
 REM Show all items in system tray:
 
-If /I "%disablehidesystemtray%"=="y" (
+If /I "%disable_hide_systemtray%"=="y" (
 	ECHO Disable hiding of items in system tray:
 	REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
 )
@@ -314,6 +345,21 @@ If /I "%disablehidesystemtray%"=="y" (
 If /I "%solid_color_background%"=="y" (
 	ECHO Changing desktop background to solid color:
 	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
+)
+
+
+
+If /I "%disable_folder_templates%"=="y" (
+	ECHO Remove per-folder layout templates:
+	REG ADD "HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" /V FolderType /T REG_SZ /D NotSpecified /F
+)
+
+
+
+If /I "%disable_application_experience%"=="y" (
+	ECHO Disable application experience:
+	REG ADD HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows /v CEIPEnable /d 0 /t REG_DWORD /f
+	REG ADD HKLM\Software\Microsoft\SQMClient\Windows /v CEIPEnable /d 0 /t REG_DWORD /f
 )
 
 
@@ -484,8 +530,7 @@ If /I "%disk_cleanup%"=="y" (
 	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Upgrade Log Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
 
 	REM Run cleanup
-
-	IF EXIST %SystemRoot%\SYSTEM32\cleanmgr.exe %SystemRoot%\SYSTEM32\cleanmgr.exe /sagerun:100
+	%SystemRoot%\SYSTEM32\cleanmgr.exe /sagerun:100
 )
 
 
