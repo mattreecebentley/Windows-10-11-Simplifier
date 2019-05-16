@@ -57,7 +57,6 @@ IF "%~1"=="" goto questions
 REM Skip questions if specified on command line:
 IF "%1"=="-all" (
 	ECHO All options enabled
-	set disk_cleanup="y"
 	set hibernate_off="y"
 	set disable_notifications="y"
 	set disable_defender="y"
@@ -80,7 +79,6 @@ IF "%1"=="-all" (
 
 IF "%1"=="-none" (
 	ECHO All options disabled
-	set disk_cleanup="n"
 	set hibernate_off="n"
 	set mydefrag="n"
 	set disable_notifications="n"
@@ -97,7 +95,6 @@ IF "%1"=="-none" (
 
 
 REM Process all command line arguments:
-set disk_cleanup="n"
 set hibernate_off="n"
 set mydefrag="n"
 set disable_notifications="n"
@@ -112,11 +109,6 @@ set disable_application_experience="n"
 
 
 FOR %%A IN (%*) DO (
-	IF "%%A"=="-cleanup" (
-		ECHO Disk cleanup enabled
-		set disk_cleanup="y"
-	)
-
 	IF "%%A"=="-defrag" (
 		ECHO Defrag enabled
 		set mydefrag="y"
@@ -185,28 +177,6 @@ REM *** Ask questions: ***
 ECHO.
 ECHO Questions section. Note: either lowercase or uppercase letters are both fine for all answers.
 
-ECHO.
-ECHO Do you want to run Windows Disk Cleanup at end of scripts? Previous windows installations will be deleted automatically, Downloads folder will be left alone.
-ECHO Press Y or N and then ENTER (or A to say 'yes' to All subsequent questions):
-set disk_cleanup=
-set /P disk_cleanup=Type input: %=%
-
-
-If /I "%disk_cleanup%"=="a" (
-	set disk_cleanup="y"
-	set hibernate_off="y"
-	set mydefrag="y"
-	set disable_notifications="y"
-	set disable_defender="y"
-	set reboot="n"
-	set solid_color_background="y"
-	set chkdsk="y"
-	set disable_hide_systemtray="y"
-	set disable_folder_templates="y"
-	set disable_application_experience="y"
-	goto begin
-)
-
 
 set mydefrag="n"
 
@@ -216,8 +186,22 @@ setlocal EnableDelayedExpansion
 IF EXIST "%~dp0\MyDefrag.exe" (
 	ECHO.
 	ECHO Do you want defrag C: using MyDefrag Monthly script at end of scripts? Do not if C: is a SSD.
-	ECHO Press Y or N and then ENTER:
+	ECHO Press Y or N and then ENTER (or A to say 'yes' to All subsequent questions):
 	set /P mydefrag=Type input: %=%
+
+	If /I "%mydefrag%"=="a" (
+		set hibernate_off="y"
+		set mydefrag="y"
+		set disable_notifications="y"
+		set disable_defender="y"
+		set reboot="n"
+		set solid_color_background="y"
+		set chkdsk="y"
+		set disable_hide_systemtray="y"
+		set disable_folder_templates="y"
+		set disable_application_experience="y"
+		goto begin
+	)
 
 	If /I "!mydefrag!"=="y" (
 		ECHO.
@@ -489,48 +473,6 @@ IF EXIST "%~dp0\OOSU10.exe" (
 IF EXIST "%~dp0\SpeedyFox.exe" (
 	ECHO Running SpeedyFox:
 	%~dp0\SpeedyFox.exe /Firefox:all /Thunderbird:all /Chrome:all /Skype:all /Opera:all
-)
-
-
-
-If /I "%disk_cleanup%"=="y" (
-	ECHO Running Disk Cleanup!
-
-	REM Enable components to cleanup
-
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Active Setup Temp Folders" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\BranchCache" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Downloaded Program Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\GameNewsFiles" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\GameStatisticsFiles" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\GameUpdateFiles" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Internet Cache Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Memory Dump Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Offline Pages Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Old ChkDsk Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Previous Installations" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Recycle Bin" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Service Pack Cleanup" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Setup Log Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\System error memory dump files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\System error minidump files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Temporary Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Temporary Setup Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Temporary Sync Files" /V StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Update Cleanup" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Upgrade Discarded Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\User file versions" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Defender" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Error Reporting Archive Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Error Reporting Queue Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Error Reporting System Archive Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Error Reporting System Queue Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows ESD installation files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Upgrade Log Files" /v StateFlags0100 /d 2 /t REG_DWORD /f
-
-	REM Run cleanup
-	%SystemRoot%\SYSTEM32\cleanmgr.exe /sagerun:100
 )
 
 

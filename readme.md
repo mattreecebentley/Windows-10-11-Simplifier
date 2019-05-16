@@ -82,7 +82,6 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Turns on Night Light with the on/off times set to 9pm and 7am respectively
-* Runs Windows Disk Cleanup - 'Downloads' folder will not be touched, but previous windows versions will be removed (OPTIONAL)
 * Changes desktop background to a solid color (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
@@ -118,7 +117,6 @@ The following can be used to run the script without prompts:
 If either of the above are specified, the rest of the command line options will be ignored.
 If any other command line options below are specified, it is assumed that any unspecified options are 'off' (same as '-none' above). The individual command line options are:
 
-* -cleanup - enables disk cleanup at end of scripts
 * -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
@@ -143,8 +141,7 @@ I have not included any scripts to check for updates because from 1803 onwards W
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
-You can leave a freshly-installed computer for half an hour or so to automatically download and install updates/drivers before applying this script, so that the disk cleanup process has more junk to get rid of. Or alternatively you can always run disk clean up manually later at your leisure once updates have completed.
-Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
+I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 version. But you can always run disk clean up manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
 
