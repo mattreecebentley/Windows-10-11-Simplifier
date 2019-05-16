@@ -141,7 +141,7 @@ I have not included any scripts to check for updates because from 1803 onwards W
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
-I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 version. But you can always run disk clean up manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
+I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 versions. But you can always run disk clean up manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
 
