@@ -180,28 +180,14 @@ ECHO Questions section. Note: either lowercase or uppercase letters are both fin
 
 set mydefrag="n"
 
-
+n
 setlocal EnableDelayedExpansion
 
 IF EXIST "%~dp0\MyDefrag.exe" (
 	ECHO.
 	ECHO Do you want defrag C: using MyDefrag Monthly script at end of scripts? Do not if C: is a SSD.
-	ECHO Press Y or N and then ENTER (or A to say 'yes' to All subsequent questions):
+	ECHO Press Y or N and then ENTER
 	set /P mydefrag=Type input: %=%
-
-	If /I "%mydefrag%"=="a" (
-		set hibernate_off="y"
-		set mydefrag="y"
-		set disable_notifications="y"
-		set disable_defender="y"
-		set reboot="n"
-		set solid_color_background="y"
-		set chkdsk="y"
-		set disable_hide_systemtray="y"
-		set disable_folder_templates="y"
-		set disable_application_experience="y"
-		goto begin
-	)
 
 	If /I "!mydefrag!"=="y" (
 		ECHO.
