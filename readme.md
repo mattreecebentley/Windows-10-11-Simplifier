@@ -126,7 +126,7 @@ If any other command line options below are specified, it is assumed that any un
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
 * -showtrayitems - disable hiding of system tray icons
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
-* -disableae - disable Application Experience (required for some older apps)
+* -disableae - disable Application Experience (this service is required for some older apps)
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
