@@ -180,7 +180,6 @@ ECHO Questions section. Note: either lowercase or uppercase letters are both fin
 
 set mydefrag="n"
 
-n
 setlocal EnableDelayedExpansion
 
 IF EXIST "%~dp0\MyDefrag.exe" (
@@ -194,16 +193,16 @@ IF EXIST "%~dp0\MyDefrag.exe" (
 		ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
 		set reboot="n"
 	)
-) ELSE (
-	IF NOT "%reboot%"=="n" (
-		ECHO.
-		ECHO Do you want Reboot after the script completes?
-		ECHO Press Y or N and then ENTER:
-		set /P reboot=Type input: %=%
-	)
 )
 
-setlocal DisableDelayedExpansion
+
+
+IF /I "%mydefrag%"=="n" (
+	ECHO.
+	ECHO Do you want Reboot after the script completes?
+	ECHO Press Y or N and then ENTER:
+	set /P reboot=Type input: %=%
+)
 
 
 

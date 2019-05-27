@@ -82,7 +82,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Turns on Night Light with the on/off times set to 9pm and 7am respectively
-* Changes desktop background to a solid color (OPTIONAL)
+* Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
 
@@ -141,7 +141,7 @@ I have not included any scripts to check for updates because from 1803 onwards W
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
-I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 versions. But you can always run disk clean up manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
+I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
 
