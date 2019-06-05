@@ -40,6 +40,7 @@ This script disables:
 * people and task view buttons on taskbar
 * zip/cab folders (if 7z installer present, see below)
 * auto-hide scrollbars
+* search button/tool on taskbar
 * quick access folders in explorer
 * duplicate instances of external/USB drives visible in explorer
 * the ability for windows to change the sound scheme when changing themes
@@ -73,7 +74,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Tells windows update to automatically download updates but notify for installation
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
-* Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
+* Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch) - (1803 and 1809 only)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
@@ -81,7 +82,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
-* Turns on Night Light with the on/off times set to 9pm and 7am respectively
+* Turns on Night Light with the on/off times set to 7pm and 7am respectively - (1803 and 1809 only)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
@@ -133,10 +134,17 @@ The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag
 
 
 
+Current bugs:
+--------------
+
+On Win10 ver 1903, night light and update timing changes do not function.
+
+
+
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 10 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/

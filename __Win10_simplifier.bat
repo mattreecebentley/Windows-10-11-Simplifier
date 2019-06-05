@@ -178,23 +178,21 @@ ECHO.
 ECHO Questions section. Note: either lowercase or uppercase letters are both fine for all answers.
 
 
-set mydefrag="n"
-
-setlocal EnableDelayedExpansion
+set mydefrag=n
 
 IF EXIST "%~dp0\MyDefrag.exe" (
 	ECHO.
 	ECHO Do you want defrag C: using MyDefrag Monthly script at end of scripts? Do not if C: is a SSD.
 	ECHO Press Y or N and then ENTER
 	set /P mydefrag=Type input: %=%
-
-	If /I "!mydefrag!"=="y" (
-		ECHO.
-		ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
-		set reboot="n"
-	)
 )
 
+
+If /I "mydefrag"=="y" (
+	ECHO.
+	ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
+	set reboot="n"
+)
 
 
 IF /I "%mydefrag%"=="n" (
@@ -313,6 +311,7 @@ If /I "%disable_hide_systemtray%"=="y" (
 
 If /I "%solid_color_background%"=="y" (
 	ECHO Changing desktop background to solid color:
+	REG ADD "HKEY_CURRENT_USER\Control Panel\Colors" /v Background /t REG_SZ /d "50 50 100" /f
 	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
 )
 
