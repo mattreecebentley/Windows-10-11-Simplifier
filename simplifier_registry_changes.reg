@@ -438,3 +438,8 @@ Windows Registry Editor Version 5.00
 ; Set remaining visual fx settings (https://www.tenforums.com/tutorials/6377-change-visual-effects-settings-windows-10-a.html#option2):
 [HKEY_CURRENT_USER\Control Panel\Desktop]
 "UserPreferencesMask"=hex:90,32,07,80,10,00,00,00
+
+
+; Disable taskbar search button
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
+"SearchboxTaskbarMode"=dword:00000000

@@ -32,7 +32,7 @@ Function Set-BlueLightReductionSettings {
 }
 
 
-Set-BlueLightReductionSettings -StartHour 21 -StartMinutes 0 -EndHour 7 -EndMinutes 00 -Enabled $true -NightColorTemperature 4500
+Set-BlueLightReductionSettings -StartHour 19 -StartMinutes 0 -EndHour 7 -EndMinutes 00 -Enabled $true -NightColorTemperature 4500
 
 
 
