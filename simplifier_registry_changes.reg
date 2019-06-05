@@ -443,3 +443,11 @@ Windows Registry Editor Version 5.00
 ; Disable taskbar search button
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
 "SearchboxTaskbarMode"=dword:00000000
+
+
+; Pin ribbon bar in explorer
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon]
+"MinimizedStateTabletModeOn"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon]
+"MinimizedStateTabletModeOff"=dword:00000000

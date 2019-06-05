@@ -82,6 +82,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
+* Sets the Explorer ribbon to be shown by default
 * Turns on Night Light with the on/off times set to 7pm and 7am respectively - (1803 and 1809 only)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
@@ -145,7 +146,7 @@ Additional Notes:
 -----------------
 
 This script has been tested on Windows 10 1903, 1809 and 1803, but not 1709 or lower.
-I have not included any scripts to check for updates because from 1803 onwards Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
+I have not included any scripts to check for updates because from 1803 to 1809 Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
