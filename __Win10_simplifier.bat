@@ -57,20 +57,20 @@ IF "%~1"=="" goto questions
 REM Skip questions if specified on command line:
 IF "%1"=="-all" (
 	ECHO All options enabled
-	set hibernate_off="y"
-	set disable_notifications="y"
-	set disable_defender="y"
-	set reboot="y"
-	set mydefrag="n"
-	set solid_color_background="y"
-	set chkdsk="y"
-	set disable_hide_systemtray="y"
-	set disable_folder_templates="y"
-	set disable_application_experience="y"
+	set hibernate_off=y
+	set disable_notifications=y
+	set disable_defender=y
+	set reboot=y
+	set mydefrag=n
+	set solid_color_background=y
+	set chkdsk=y
+	set disable_hide_systemtray=y
+	set disable_folder_templates=y
+	set disable_application_experience=y
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
-		set mydefrag="y"
-		set reboot="n"
+		set mydefrag=y
+		set reboot=n
 	)
 
 	goto begin
@@ -79,90 +79,90 @@ IF "%1"=="-all" (
 
 IF "%1"=="-none" (
 	ECHO All options disabled
-	set hibernate_off="n"
-	set mydefrag="n"
-	set disable_notifications="n"
-	set disable_defender="n"
-	set reboot="n"
-	set solid_color_background="n"
-	set chkdsk="n"
-	set disable_hide_systemtray="n"
-	set disable_folder_templates="n"
-	set disable_application_experience="n"
+	set hibernate_off=n
+	set mydefrag=n
+	set disable_notifications=n
+	set disable_defender=n
+	set reboot=n
+	set solid_color_background=n
+	set chkdsk=n
+	set disable_hide_systemtray=n
+	set disable_folder_templates=n
+	set disable_application_experience=n
 	goto begin
 )
 
 
 
 REM Process all command line arguments:
-set hibernate_off="n"
-set mydefrag="n"
-set disable_notifications="n"
-set disable_defender="n"
-set reboot="n"
-set solid_color_background="n"
-set chkdsk="n"
-set disable_hide_systemtray="n"
-set disable_folder_templates="n"
-set disable_application_experience="n"
+set hibernate_off=n
+set mydefrag=n
+set disable_notifications=n
+set disable_defender=n
+set reboot=n
+set solid_color_background=n
+set chkdsk=n
+set disable_hide_systemtray=n
+set disable_folder_templates=n
+set disable_application_experience=n
 
 
 
 FOR %%A IN (%*) DO (
 	IF "%%A"=="-defrag" (
 		ECHO Defrag enabled
-		set mydefrag="y"
+		set mydefrag=y
 	)
 
 	IF "%%A"=="-disablenotifications" (
 		ECHO Notification disabling enabled
-		set disable_notifications="y"
+		set disable_notifications=y
 	)
 
 	IF "%%A"=="-disablehibernation" (
 		ECHO Hibernation/fast boot disabling enabled
-		set hibernate_off="y"
+		set hibernate_off=y
 	)
 
 	IF "%%A"=="-disabledefender" (
 		ECHO Defender disabling enabled
-		set disable_defender="y"
+		set disable_defender=y
 	)
 
 	IF "%%A"=="-reboot" (
 		ECHO Reboot at end of script enabled (will be disabled if -defrag specified)
-		set reboot="y"
+		set reboot=y
 	)
 
 	IF "%%A"=="-solidcolordesktop" (
 		ECHO Solid color desktop background enabled
-		set solid_color_background="y"
+		set solid_color_background=y
 	)
 
 	IF "%%A"=="-chkdsk" (
 		ECHO Chkdsk for bad sectors on reboot enabled
-		set chkdsk="y"
+		set chkdsk=y
 	)
 
 	IF "%%A"=="-showtrayitems" (
 		ECHO Disable hiding of system tray items enabled
-		set disable_hide_systemtray="y"
+		set disable_hide_systemtray=y
 	)
 
 	IF "%%A"=="-disablefoldertemplates" (
 		ECHO Disable hiding of system tray items enabled
-		set disable_folder_templates="y"
+		set disable_folder_templates=y
 	)
 
 	IF "%%A"=="-disableae" (
 		ECHO Disable hiding of system tray items enabled
-		set disable_application_experience="y"
+		set disable_application_experience=y
 	)
 )
 
 
 If /I "%mydefrag%"=="y" (
-	set reboot="n"
+	set reboot=n
 )
 
 
@@ -268,7 +268,7 @@ set /P disable_folder_templates=Type input: %=%
 
 
 ECHO.
-ECHO Do you disable Application Experience (required for running old applications, disabling can speed up program launch)?
+ECHO Do you want to disable Application Experience (required for running old applications, disabling can speed up program launch)?
 ECHO Press Y or N and then ENTER:
 set disable_application_experience=
 set /P disable_application_experience=Type input: %=%
@@ -410,26 +410,25 @@ REM *** Run External Programs: ***
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
-set 7z_exists="n"
-IF EXIST "%~dp0\7z.exe" set 7z_exists="y"
-IF EXIST "%~dp0\7z-x64.exe" set 7z_exists="y"
+set sevenzip_exists=n
+IF EXIST "%~dp0\7z.exe" set sevenzip_exists=y
+IF EXIST "%~dp0\7z-x64.exe" set sevenzip_exists=y
 
 
-IF "%7z_exists%"=="y" (
+IF "%sevenzip_exists%"=="y" (
 	ECHO Disabling zip/cab folders
-	REG DELETE HKCU\CompressedFolder\CLSID /f
-	REG DELETE HKCU\SystemFileAssociations\.zip\CLSID /f
+	REG DELETE HKCR\CompressedFolder\CLSID /f
+	REG DELETE HKCR\SystemFileAssociations\.zip\CLSID /f
 
 	ECHO Installing 7-zip!
 	IF "%ProgramFiles(x86)%"=="" (
 		REM 32-bit system:
-		start %~dp0\7z.exe /S /D="%ProgramFiles%7-Zip"
+		start %~dp0\7z.exe /S /D="%ProgramFiles%\7-Zip"
 	) ELSE (
 		REM 64-bit system:
-		start %~dp0\7z-x64.exe /S /D="%ProgramFiles%7-Zip"
+		start %~dp0\7z-x64.exe /S /D="%ProgramFiles%\7-Zip"
 	)
 )
-
 
 
 
