@@ -139,6 +139,7 @@ Current bugs:
 --------------
 
 On Win10 ver 1903, night light and update timing changes do not function.
+Also, not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, set WlanSvc service to automatic and start it, then set the icssvc service to manual. Feel free to complain at the author.
 
 
 
