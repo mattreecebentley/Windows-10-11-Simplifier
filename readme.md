@@ -82,7 +82,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
-* Sets the Explorer ribbon to be shown by default
+* Pins the Explorer ribbon
 * Turns on Night Light with the on/off times set to 7pm and 7am respectively - (1803 and 1809 only)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
@@ -102,7 +102,7 @@ Other scripts/executables this script will run, if present in the same folder:
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana)
 * Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
-* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optional - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. Since this program runs at the end of the script, you can edit the Scripts/Settings.myd and change the line "WhenFinished(wait)" to "WhenFinished(reboot)". This will reboot the computer and the registry changes will be applied on next boot.
+* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optional - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. Since this program runs at the end of the script, you can edit the Scripts/Settings.myd and change the line "WhenFinished(wait)" to "WhenFinished(Shutdown)". This will shutdown the computer and the registry changes will be applied on next boot.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell restarts the explorer.exe process, which also kills the cmd window, thus why this installer is run at the Very end of the script.
 
@@ -139,7 +139,6 @@ Current bugs:
 --------------
 
 On Win10 ver 1903, night light and update timing changes do not function.
-Also, not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, set WlanSvc service to automatic and start it, then set the icssvc service to manual. Feel free to complain at the author.
 
 
 

@@ -1,12 +1,12 @@
 @ECHO OFF
 
 ECHO Warning: this may also revert any changes that've been made to your computer post-Simplifier, including program installations, settings changes and suchforth. Are you sure you want to continue?
-ECHO Press Y or N and then ENTER (keys other than 'Y'/'y' will be intepreted as 'N'):
+ECHO Press Y or N and then ENTER:
 set continue=
 set /P continue=Type input: %=%
 
 
-If NOT /I "%continue%"=="y" (
+If /I "%continue%"=="n" (
 	ECHO Cancelling...
 	goto :end
 )
