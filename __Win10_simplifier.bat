@@ -76,6 +76,7 @@ IF "%1"=="-all" (
 	set disable_folder_templates=y
 	set disable_application_experience=y
 	set clear_pinned_apps=y
+	set disable_autoplay=y
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag=y
@@ -99,6 +100,7 @@ IF "%1"=="-none" (
 	set disable_folder_templates=n
 	set disable_application_experience=n
 	set clear_pinned_apps=n
+	set disable_autoplay=n
 	goto begin
 )
 
@@ -116,6 +118,7 @@ set disable_hide_systemtray=n
 set disable_folder_templates=n
 set disable_application_experience=n
 set clear_pinned_apps=n
+set disable_autoplay=n
 
 
 
@@ -173,6 +176,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-clearpinnedapps" (
 		ECHO Clear all pinned apps from taskbar enabled
 		set clear_pinned_apps=y
+	)
+
+	IF "%%A"=="-disableautoplay" (
+		ECHO Disabling autoplay and autorun enabled
+		set disable_autoplay=y
 	)
 )
 
@@ -297,6 +305,14 @@ set clear_pinned_apps=
 set /P clear_pinned_apps=Type input: %=%
 
 
+ECHO.
+ECHO Do you want to disable autoplay and autorun on removable drives?
+ECHO Press Y or N and then ENTER:
+set disable_autoplay=
+set /P disable_autoplay=Type input: %=%
+
+
+
 
 :begin
 
@@ -364,14 +380,18 @@ If /I "%clear_pinned_apps%"=="y" (
 
 
 
+If /I "%disable_autoplay%"=="y" (
+	ECHO Disable autoplay and autorun:
+	REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoDriveTypeAutorun" /t REG_DWORD /d "255" /f
+)
+
+
+
 If /I "%disable_defender%"=="y" (
 	ECHO Disabling Windows Defender - restart required to see change:
 	REM from https://pastebin.com/kYCVzZPz
 	REM Disable Tamper Protection First!
 	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
-
-	REM To disable System Guard Runtime Monitor Broker
-	reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
 
 	REM To disable Windows Defender Security Center include this
 	reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f

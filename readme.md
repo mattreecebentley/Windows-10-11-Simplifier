@@ -65,6 +65,7 @@ This script disables:
 * hiding of system tray icons (OPTIONAL)
 * automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
+* Autoplay/autorun on all drives (OPTIONAL)
 
 
 
