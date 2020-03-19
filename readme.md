@@ -130,6 +130,7 @@ If any other command line options below are specified, it is assumed that any un
 * -showtrayitems - disable hiding of system tray icons
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
+* -clearpinnedapps - clears all currently-pinned apps from the taskbar
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
