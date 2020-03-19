@@ -49,7 +49,7 @@ This script disables:
 * combining of taskbar buttons
 * transparency of windows and taskbar
 * windows startup sound
-* windows sounds (sound scheme is set to 'No Sounds')
+* windows sounds (sound scheme is set to 'No Sounds', sound scheme tab is removed)
 * remote assistance (does not affect apps like teamviewer)
 * Window animation
 * Taskbar animations
@@ -59,7 +59,7 @@ This script disables:
 * Smooth-scroll list boxes
 * Sliding comboboxes
 * notification center and background apps (OPTIONAL)
-* windows defender (OPTIONAL)
+* windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * hibernation and removes the hibernation file (OPTIONAL)
 * hiding of system tray icons (OPTIONAL)
@@ -83,10 +83,10 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
-* Turns on Night Light with the on/off times set to 7pm and 7am respectively - (1803 and 1809 only)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
+* Clears pinned apps from taskbar (OPTIONAL)
 
 
 
@@ -95,6 +95,7 @@ Other scripts/executables this script will run, if present in the same folder:
 
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version
 * HDDScan (http://hddscan.com/) to check hard drive health
+* Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
 * Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds) on automatic settings (ie. whatever settings you last used with ccleaner portable) will run in the background while the rest of the tasks complete, if extracted to the same folder as Win10-simplifier. If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
 * PC Decrapifier 2.3.1 (for easy uninstallation of programs)
 * Autoruns by Sysinternals (for easy disabling of startup processes). If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
@@ -102,7 +103,7 @@ Other scripts/executables this script will run, if present in the same folder:
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana)
 * Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
-* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optional - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. Since this program runs at the end of the script, you can edit the Scripts/Settings.myd and change the line "WhenFinished(wait)" to "WhenFinished(Shutdown)". This will shuw down the computer and the registry changes will be applied on next boot.
+* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell restarts the explorer.exe process, which also kills the cmd window, thus why this installer is run at the Very end of the script.
 
@@ -123,7 +124,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
 * -disabledefender - disables Windows Defender
-* -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run. See mydefrag notes above for how to reboot after mydefrag is done.
+* -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
 * -showtrayitems - disable hiding of system tray icons
@@ -138,15 +139,14 @@ The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag
 Current bugs:
 --------------
 
-On Win10 ver 1903, night light and update timing changes do not function.
-Also, not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, set WlanSvc service to automatic and start it, then set the icssvc service to manual. Feel free to complain at the author.
+Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, set WlanSvc service to automatic and start it, then set the icssvc service to manual. Feel free to complain at the author.
 
 
 
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 1903, 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 10 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 to 1809 Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
@@ -159,4 +159,4 @@ This script is under a Creative Commons Attribution 3.0 New Zealand License (htt
 
 Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
-Matt Bentley 2019
+Matt Bentley 2020

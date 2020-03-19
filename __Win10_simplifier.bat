@@ -49,6 +49,14 @@ IF EXIST "%~dp0\autoruns.exe" (
 )
 
 
+
+IF EXIST "%~dp0\StopResettingMyApps.exe" (
+	ECHO Stop Resetting My Apps found, running ...
+	start %~dp0\StopResettingMyApps.exe
+)
+
+
+
 REM If no command line arguments, go straight to questions:
 IF "%~1"=="" goto questions
 
@@ -67,6 +75,7 @@ IF "%1"=="-all" (
 	set disable_hide_systemtray=y
 	set disable_folder_templates=y
 	set disable_application_experience=y
+	set clear_pinned_apps=y
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag=y
@@ -89,6 +98,7 @@ IF "%1"=="-none" (
 	set disable_hide_systemtray=n
 	set disable_folder_templates=n
 	set disable_application_experience=n
+	set clear_pinned_apps=n
 	goto begin
 )
 
@@ -105,6 +115,7 @@ set chkdsk=n
 set disable_hide_systemtray=n
 set disable_folder_templates=n
 set disable_application_experience=n
+set clear_pinned_apps=n
 
 
 
@@ -157,6 +168,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-disableae" (
 		ECHO Disable hiding of system tray items enabled
 		set disable_application_experience=y
+	)
+
+	IF "%%A"=="-clearpinnedapps" (
+		ECHO Clear all pinned apps from taskbar enabled
+		set clear_pinned_apps=y
 	)
 )
 
@@ -238,7 +254,7 @@ set /P hibernate_off=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable Windows Defender (only do this if you're installing another virus scanner)?
+ECHO Do you want to disable Windows Defender and Security Center (only do this if you're installing another virus scanner)?
 ECHO Press Y or N and then ENTER:
 set disable_defender=
 set /P disable_defender=Type input: %=%
@@ -272,6 +288,13 @@ ECHO Do you want to disable Application Experience (required for running old app
 ECHO Press Y or N and then ENTER:
 set disable_application_experience=
 set /P disable_application_experience=Type input: %=%
+
+
+ECHO.
+ECHO Do you want to clear the currently pinned apps from the taskbar?
+ECHO Press Y or N and then ENTER:
+set clear_pinned_apps=
+set /P clear_pinned_apps=Type input: %=%
 
 
 
@@ -326,19 +349,75 @@ If /I "%disable_folder_templates%"=="y" (
 
 If /I "%disable_application_experience%"=="y" (
 	ECHO Disable application experience:
-	REG ADD HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows /v CEIPEnable /d 0 /t REG_DWORD /f
-	REG ADD HKLM\Software\Microsoft\SQMClient\Windows /v CEIPEnable /d 0 /t REG_DWORD /f
+	schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable
+)
+
+
+
+If /I "%clear_pinned_apps%"=="y" (
+	ECHO Clear pinned apps from taskbar:
+	DEL /F /S /Q /A "%AppData%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\*"
+	REG DELETE HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband /F
+	taskkill /f /im explorer.exe
+	start explorer.exe
 )
 
 
 
 If /I "%disable_defender%"=="y" (
 	ECHO Disabling Windows Defender - restart required to see change:
-	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /d 1 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /f
-	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableBehaviorMonitoring /d 1 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableOnAccessProtection /d 1 /t REG_DWORD /f
-	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableOnDisableScanOnRealtimeEnableAccessProtection /d 1 /t REG_DWORD /f
+	REM from https://pastebin.com/kYCVzZPz
+	REM Disable Tamper Protection First!
+	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
+
+	REM To disable System Guard Runtime Monitor Broker
+	reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
+
+	REM To disable Windows Defender Security Center include this
+	reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+
+	REM 1 - Disable Real-time protection
+	reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f
+
+	REM 0 - Disable Logging
+	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
+	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
+
+	REM Disable WD Tasks
+	schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+
+	REM Disable WD systray icon
+	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth" /f
+	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f
+
+	REM Remove WD context menu
+	reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
+	reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
+	reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
+
+	REM Disable WD services
+	reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
 )
 
 
