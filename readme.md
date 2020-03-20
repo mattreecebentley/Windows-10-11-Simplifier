@@ -124,7 +124,7 @@ If any other command line options below are specified, it is assumed that any un
 * -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
-* -disabledefender - disables Windows Defender
+* -disabledefender - disables Windows Defender and Security Center
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
