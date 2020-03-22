@@ -58,6 +58,11 @@ This script disables:
 * Fade in/out UI objects
 * Smooth-scroll list boxes
 * Sliding comboboxes
+* Background picture on login screen
+* Notifications on lock screen
+* Reminders on lock screen
+* "Tips, tricks and suggestions" after you receive updates
+* The windows 10 "welcome experience" after large updates
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
