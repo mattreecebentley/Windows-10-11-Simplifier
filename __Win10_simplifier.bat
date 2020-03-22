@@ -76,7 +76,7 @@ IF "%1"=="-all" (
 	set disable_folder_templates=y
 	set disable_application_experience=y
 	set clear_pinned_apps=y
-	set disable_autoplay=y
+	set disable_uac=y
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag=y
@@ -100,7 +100,7 @@ IF "%1"=="-none" (
 	set disable_folder_templates=n
 	set disable_application_experience=n
 	set clear_pinned_apps=n
-	set disable_autoplay=n
+	set disable_uac=n
 	goto begin
 )
 
@@ -118,8 +118,7 @@ set disable_hide_systemtray=n
 set disable_folder_templates=n
 set disable_application_experience=n
 set clear_pinned_apps=n
-set disable_autoplay=n
-
+set disable_uac=n
 
 
 FOR %%A IN (%*) DO (
@@ -178,9 +177,9 @@ FOR %%A IN (%*) DO (
 		set clear_pinned_apps=y
 	)
 
-	IF "%%A"=="-disableautoplay" (
-		ECHO Disabling autoplay and autorun enabled
-		set disable_autoplay=y
+	IF "%%A"=="-disableuac" (
+		ECHO Clear all pinned apps from taskbar enabled
+		set disable_uac=y
 	)
 )
 
@@ -262,7 +261,7 @@ set /P hibernate_off=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable Windows Defender and Security Center (only do this if you're installing another virus scanner)?
+ECHO Do you want to disable Windows Defender (only do this if you're installing another virus scanner)?
 ECHO Press Y or N and then ENTER:
 set disable_defender=
 set /P disable_defender=Type input: %=%
@@ -306,10 +305,10 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable autoplay and autorun on removable drives?
+ECHO Do you want to disable UAC (to get rid of those annoying popups every time you run a program)?
 ECHO Press Y or N and then ENTER:
-set disable_autoplay=
-set /P disable_autoplay=Type input: %=%
+set disable_uac=
+set /P disable_uac=Type input: %=%
 
 
 
@@ -339,7 +338,13 @@ REG SAVE "HKCU\AppEvents" %~dp0\HKCUapp_events.HIV /y
 REM *** Begin main changes: ***
 
 
-REM Show all items in system tray:
+
+If /I "%disable_uac%"=="y" (
+	ECHO Disable User Account Control:
+	REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+)
+
+
 
 If /I "%disable_hide_systemtray%"=="y" (
 	ECHO Disable hiding of items in system tray:
@@ -364,7 +369,7 @@ If /I "%disable_folder_templates%"=="y" (
 
 
 If /I "%disable_application_experience%"=="y" (
-	ECHO Disable application experience:
+	ECHO Disable application experience/Microsoft Compatibility Appraiser:
 	schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable
 )
 
@@ -380,21 +385,17 @@ If /I "%clear_pinned_apps%"=="y" (
 
 
 
-If /I "%disable_autoplay%"=="y" (
-	ECHO Disable autoplay and autorun:
-	REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoDriveTypeAutorun" /t REG_DWORD /d "255" /f
-)
-
-
-
 If /I "%disable_defender%"=="y" (
 	ECHO Disabling Windows Defender - restart required to see change:
-	REM from https://pastebin.com/kYCVzZPz
-	REM Disable Tamper Protection First!
+	REM from: https://pastebin.com/kYCVzZPz
+	REM Disable Tamper Protection First !!!!!
 	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
 
+	REM To disable System Guard Runtime Monitor Broker
+	REM reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
+
 	REM To disable Windows Defender Security Center include this
-	reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+	REM reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
 
 	REM 1 - Disable Real-time protection
 	reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
@@ -411,27 +412,27 @@ If /I "%disable_defender%"=="y" (
 	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
 	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
 	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f
-
+	
 	REM 0 - Disable Logging
 	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
 	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
-
+	
 	REM Disable WD Tasks
 	schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
 	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
 	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
 	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
 	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
-
+	
 	REM Disable WD systray icon
 	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth" /f
 	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f
-
+	
 	REM Remove WD context menu
 	reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
 	reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
 	reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
-
+	
 	REM Disable WD services
 	reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
 	reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
@@ -579,5 +580,6 @@ If /I "%reboot%"=="y" (
 	shutdown /r
 ) ELSE (
 	ECHO Simplifier Finished!
+	start explorer.exe
 	pause
 )

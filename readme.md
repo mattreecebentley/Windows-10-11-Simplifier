@@ -66,7 +66,7 @@ This script disables:
 * automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
-
+* User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
 
 
 Other changes this script makes (for all versions of Windows 10):
@@ -132,6 +132,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
+* -disableuac - disables User Account Control
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
