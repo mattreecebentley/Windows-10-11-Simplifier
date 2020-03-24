@@ -58,11 +58,6 @@ This script disables:
 * Fade in/out UI objects
 * Smooth-scroll list boxes
 * Sliding comboboxes
-* Background picture on login screen
-* Notifications on lock screen
-* Reminders on lock screen
-* "Tips, tricks and suggestions" after you receive updates
-* The windows 10 "welcome experience" after large updates
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
@@ -71,7 +66,7 @@ This script disables:
 * automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
-* User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
+
 
 
 Other changes this script makes (for all versions of Windows 10):
@@ -129,7 +124,7 @@ If any other command line options below are specified, it is assumed that any un
 * -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
-* -disabledefender - disables Windows Defender and Security Center
+* -disabledefender - disables Windows Defender
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
@@ -137,7 +132,6 @@ If any other command line options below are specified, it is assumed that any un
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
-* -disableuac - disables User Account Control
 
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
@@ -161,6 +155,9 @@ https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-install
 
 I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
+
+Since some people might want to re-enable Windows Defender at a later point without reverting all other changes (and subsequent changes to the OS since running the script),
+I've included a re-enable_windows_defender.bat script. Right-click, run as Administrator. Both it and the windows defender disabling code are written by https://github.com/AndyFul/
 
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)
