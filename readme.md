@@ -84,6 +84,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
+* Enables PS2 mouse/keyboard support (after reboot)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)

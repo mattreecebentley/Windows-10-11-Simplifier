@@ -480,3 +480,8 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon]
 "MinimizedStateTabletModeOff"=dword:00000000
+
+
+; Enable PS2 mouse/keyboard support
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\i8042prt]
+"Start"=dword:00000001
