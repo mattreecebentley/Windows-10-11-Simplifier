@@ -75,7 +75,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Tells windows update to automatically download updates but notify for installation
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
-* Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch) - (1803 and 1809 only)
+* Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
