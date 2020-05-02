@@ -509,6 +509,28 @@ powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 REM *** Run External Programs: ***
 
 
+REM Disable Windows Search and install Agent Ransack, if Agent Ransack is present:
+set agentransack_exists=n
+IF EXIST "%~dp0\agentransack.msi" set agentransack_exists=y
+
+
+IF "%agentransack_exists%"=="y" (
+	ECHO Disabling Windows Search
+	sc stop "WSearch"
+	sc config "WSearch" start= disabled
+
+	ECHO Installing Agent Ransack!
+	IF "%ProgramFiles(x86)%"=="" (
+		REM 32-bit system:
+		start %~dp0\agentransack.msi /quiet
+	) ELSE (
+		REM 64-bit system:
+		start %~dp0\agentransack-x64.msi /quiet
+	)
+)
+
+
+
 REM Disable zip/cab folders and install 7zip, if 7zip present:
 set sevenzip_exists=n
 IF EXIST "%~dp0\7z.exe" set sevenzip_exists=y

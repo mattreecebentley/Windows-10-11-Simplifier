@@ -100,6 +100,7 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will run, if present in the same folder:
 ------------------------------------------------------------------------------
 
+* Agent Ransack (https://www.mythicsoft.com/agentransack/download/) for better search capability. Will be installed silently, and Windows Search service disabled (which wastes tons of CPU time and disk access scanning the hard drive regularly), if detected in the same folder. Only the .msi versions of the installers are supported. Please rename 32-bit version of installer 'agentransack.msi' and 64-bit version 'agentransack-x64.msi'. If 64-bit win10 is detected it will install the 64-bit version, ditto 32-bit.
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version
 * HDDScan (http://hddscan.com/) to check hard drive health
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
