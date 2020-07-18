@@ -63,6 +63,8 @@ This script disables:
 * Reminders on lock screen
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
+* The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
+* Cortana icon on taskbar
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
@@ -100,7 +102,7 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will run, if present in the same folder:
 ------------------------------------------------------------------------------
 
-* Agent Ransack (https://www.mythicsoft.com/agentransack/download/) for better search capability. Will be installed silently, and Windows Search service disabled (which wastes tons of CPU time and disk access scanning the hard drive regularly), if detected in the same folder. Only the .msi versions of the installers are supported. Please rename 32-bit version of installer 'agentransack.msi' and 64-bit version 'agentransack-x64.msi'. If 64-bit win10 is detected it will install the 64-bit version, ditto 32-bit.
+* Agent Ransack or FileLocator will be installed silently (& Windows Search service disabled) if they are present in the same folder under the names "agentransack.exe" or "filelocator.exe".
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version
 * HDDScan (http://hddscan.com/) to check hard drive health
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
@@ -156,12 +158,12 @@ Not a bug for my script, but currently the 'safe' setting of madbomb's blackvipe
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 1909, 1903, 1809 and 1803, but not 1709 or lower.
-I have not included any scripts to check for updates because from 1803 to 1809 Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
+This script has been tested on Windows 10 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+I have not included any scripts to check for updates because from 1803 onwards, Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
-I originally automated disk cleanup, but it was not possible to reliably get it to clean up Update storage between win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
+I originally automated disk cleanup, but it was not possible to reliably get it to clean up 'Update storage' or 'Old Windows installation' between Win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
 Since some people might want to re-enable Windows Defender at a later point without reverting all other changes (and subsequent changes to the OS since running the script),
