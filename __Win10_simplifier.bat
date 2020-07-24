@@ -99,6 +99,7 @@ IF "%1"=="-none" (
 	set disable_hide_systemtray=n
 	set disable_folder_templates=n
 	set disable_application_experience=n
+	set disable_superfetch=n
 	set clear_pinned_apps=n
 	set disable_uac=n
 	goto begin
@@ -117,14 +118,21 @@ set chkdsk=n
 set disable_hide_systemtray=n
 set disable_folder_templates=n
 set disable_application_experience=n
+set disable_superfetch=n
 set clear_pinned_apps=n
 set disable_uac=n
+
 
 
 FOR %%A IN (%*) DO (
 	IF "%%A"=="-defrag" (
 		ECHO Defrag enabled
 		set mydefrag=y
+	)
+
+	IF "%%A"=="-disablesuperfetch" (
+		ECHO Notification disabling enabled
+		set disable_superfetch=y
 	)
 
 	IF "%%A"=="-disablenotifications" (
@@ -311,6 +319,12 @@ set disable_uac=
 set /P disable_uac=Type input: %=%
 
 
+ECHO.
+ECHO Do you want to disable Superfetch?
+ECHO Press Y or N and then ENTER:
+set disable_superfetch=
+set /P disable_superfetch=Type input: %=%
+
 
 
 :begin
@@ -336,6 +350,14 @@ REG SAVE "HKCU\AppEvents" %~dp0\HKCUapp_events.HIV /y
 
 
 REM *** Begin main changes: ***
+
+
+
+If /I "%disable_superfetch%"=="y" (
+	ECHO Disable User Account Control:
+	sc stop “SysMain”
+	sc config “SysMain” start=disabled
+)
 
 
 

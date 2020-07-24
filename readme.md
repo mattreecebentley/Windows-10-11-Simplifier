@@ -74,6 +74,8 @@ This script disables:
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
+* Superfetch (sysmain) (OPTIONAL)
+
 
 
 Other changes this script makes (for all versions of Windows 10):
@@ -110,6 +112,7 @@ Other scripts/executables this script will run, if present in the same folder:
 * PC Decrapifier 2.3.1 (for easy uninstallation of programs)
 * Autoruns by Sysinternals (for easy disabling of startup processes). If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit win10 is detected it will install the 64-bit version, so include both executables.
+* F.lux (justgetflux.com) will be installed silently if flux-setup.exe is placed in folder.
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana)
 * Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
