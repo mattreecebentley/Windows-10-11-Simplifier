@@ -482,8 +482,8 @@ regedit.exe /S %~dp0\simplifier_registry_changes.reg
 
 
 
-ECHO Doing the Powershell-based changes!
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_powershell_scripts.ps1" -Verb RunAs
+ECHO Disabling system sounds
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
 
 
 
