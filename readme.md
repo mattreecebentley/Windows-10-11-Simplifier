@@ -104,7 +104,7 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will run, if present in the same folder:
 ------------------------------------------------------------------------------
 
-* Agent Ransack or FileLocator will be installed silently (& Windows Search service disabled) if they are present in the same folder under the names "agentransack.exe" or "filelocator.exe".
+* Agent Ransack will be installed silently (& Windows Search service disabled) if both 32-bit and 64-bit MSI installer files are present in the same folder under the names "agentransack.msi" and "agentransack-x64.msi".
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version
 * HDDScan (http://hddscan.com/) to check hard drive health
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
