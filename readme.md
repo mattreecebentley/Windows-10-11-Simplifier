@@ -67,6 +67,7 @@ This script disables:
 * Cortana/Bing searches
 * Cortana icon on taskbar
 * Xbox Gamebar and game monitoring
+* Language bar and onscreen-keyboard icons in system tray
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
