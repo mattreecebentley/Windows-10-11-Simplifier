@@ -50,7 +50,7 @@ This script disables:
 * transparency of windows and taskbar
 * windows startup sound
 * windows sounds (sound scheme is set to 'No Sounds', sound scheme tab is removed)
-* remote assistance (does not affect apps like teamviewer)
+* Remote assistance (does not affect apps like teamviewer)
 * Window animation
 * Taskbar animations
 * Control/element animation
@@ -64,7 +64,9 @@ This script disables:
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
+* Cortana/Bing searches
 * Cortana icon on taskbar
+* Xbox Gamebar and game monitoring
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)

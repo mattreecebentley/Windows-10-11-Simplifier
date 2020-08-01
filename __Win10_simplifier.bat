@@ -579,7 +579,7 @@ IF "%sevenzip_exists%"=="y" (
 
 IF EXIST "%~dp0\_Win10-BlackViper.bat" (
 	ECHO Running Windows 10 Black Viper Services Tweaks - Safe settings Only:
-	call %~dp0\_Win10-BlackViper.bat -auto -safe -sbc -sec
+	call %~dp0\_Win10-BlackViper.bat -auto -safe -sbc -secp -sech -sds
 )
 
 
