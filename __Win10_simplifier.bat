@@ -354,9 +354,9 @@ REM *** Begin main changes: ***
 
 
 If /I "%disable_superfetch%"=="y" (
-	ECHO Disable User Account Control:
-	sc stop “SysMain”
-	sc config “SysMain” start=disabled
+	ECHO Disable Superfetch:
+	sc stop "SysMain"
+	sc config "SysMain" start=disabled
 )
 
 
@@ -586,7 +586,7 @@ IF EXIST "%~dp0\_Win10-BlackViper.bat" (
 
 IF EXIST "%~dp0\Windows10SysPrepDebloater.ps1" (
 	ECHO Running Windows10 Debloater:
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\Windows10SysPrepDebloater.ps1 -SysPrep -Privacy -Debloat -StopEdgePDF" -Verb RunAs
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\Windows10SysPrepDebloater.ps1 -SysPrep -Privacy -Debloat" -Verb RunAs
 )
 
 

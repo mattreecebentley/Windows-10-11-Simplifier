@@ -513,11 +513,3 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\xbgm]
 "Start"=dword:00000004
-
-
-; Disable language bar and touch keyboard system tray icons:
-[HKEY_CURRENT_USER\Software\Microsoft\CTF\LangBar]
-"ShowStatus"=dword:00000003
-
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7]
-"TipbandDesiredVisibility "=dword:00000000
