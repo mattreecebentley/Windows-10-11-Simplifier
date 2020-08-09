@@ -75,6 +75,7 @@ IF "%1"=="-all" (
 	set disable_hide_systemtray=y
 	set disable_folder_templates=y
 	set disable_application_experience=y
+	set disable_superfetch=y
 	set clear_pinned_apps=y
 	set disable_uac=y
 
