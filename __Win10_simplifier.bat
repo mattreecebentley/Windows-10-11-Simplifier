@@ -354,14 +354,6 @@ REM *** Begin main changes: ***
 
 
 
-If /I "%disable_superfetch%"=="y" (
-	ECHO Disable Superfetch:
-	sc stop "SysMain"
-	sc config "SysMain" start=disabled
-)
-
-
-
 If /I "%disable_uac%"=="y" (
 	ECHO Disable User Account Control:
 	REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
@@ -581,6 +573,14 @@ IF "%sevenzip_exists%"=="y" (
 IF EXIST "%~dp0\_Win10-BlackViper.bat" (
 	ECHO Running Windows 10 Black Viper Services Tweaks - Safe settings Only:
 	call %~dp0\_Win10-BlackViper.bat -auto -safe -sbc -secp -sech -sds
+)
+
+
+
+If /I "%disable_superfetch%"=="y" (
+	ECHO Disable Superfetch:
+	sc stop "SysMain"
+	sc config "SysMain" start=disabled
 )
 
 
