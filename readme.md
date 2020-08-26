@@ -66,6 +66,7 @@ This script disables:
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
 * Cortana/Bing searches
 * Cortana icon on taskbar
+* Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
 * notification center and background apps (OPTIONAL)
 * windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)

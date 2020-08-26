@@ -479,6 +479,10 @@ ECHO Disabling system sounds
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
 
 
+ECHO Disabling web search in taskbar/start:
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
+
+
 
 REM *** Do Power Management Changes ***
 
@@ -616,7 +620,7 @@ IF EXIST "%~dp0\MyDefrag.exe" (
 
 IF EXIST "%~dp0\OpenShellSetup.exe" (
 	ECHO Installing OpenShell!
-	start %~dp0\OpenShellSetup.exe /qn ADDLOCAL=StartMenu
+	start %~dp0\OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
 )
 
 
