@@ -343,7 +343,7 @@ ECHO.
 
 IF EXIST "%~dp0\TDSSKiller.exe" (
 	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
-	%~dp0\TDSSKiller.exe -L %~dp0\TDSSKiller_log.txt -silent -tdlfs -dcexact
+	%~dp0\TDSSKiller.exe -L %~dp0\TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
 )
 
 
