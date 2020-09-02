@@ -275,6 +275,12 @@ ECHO Press Y or N and then ENTER:
 set disable_defender=
 set /P disable_defender=Type input: %=%
 
+IF /I "%disable_defender%"=="y" (
+	ECHO.
+	ECHO Please note that Defender can only be disabled in Win10 v2004 and upwards if Tamper Protection is disabled.
+	ECHO This setting can be found in Window Security settings. Please do this now and then,
+	pause
+)
 
 
 ECHO.
@@ -470,62 +476,6 @@ If /I "%disable_notifications%"=="y" (
 
 
 
-ECHO Doing the registry changes!
-regedit.exe /S %~dp0\simplifier_registry_changes.reg
-
-
-
-ECHO Disabling system sounds
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
-
-
-ECHO Disabling web search in taskbar/start:
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
-
-
-
-REM *** Do Power Management Changes ***
-
-If /I "%hibernate_off%"=="y" (
-	ECHO.
-	ECHO Disabling Hibernation/Fast Boot!
-	powercfg -h off
-)
-
-
-ECHO Setting the 'Power Management' to Balanced!
-powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
-
-
-ECHO Setting the unplugged settings to 'Never'!
-powercfg.exe -change -monitor-timeout-dc 5
-powercfg.exe -change -standby-timeout-dc 15
-powercfg.exe -change -hibernate-timeout-dc 0
-
-
-ECHO Setting the plugged in settings to 'Never'!
-powercfg.exe -change -monitor-timeout-ac 15
-powercfg.exe -change -standby-timeout-ac 0
-powercfg.exe -change -hibernate-timeout-ac 0
-
-
-ECHO Setting the 'Dim Timeout' to Never!
-powercfg -SETDCVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
-powercfg -SETACVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
-
-
-ECHO Set windows to do nothing when the lid is closed and it's plugged in, sleep when it's not:
-powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
-powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 3
-
-
-ECHO Set windows to actually shut down when you press the power button, not just sleep:
-powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
-powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
-
-
-
-
 REM *** Run External Programs: ***
 
 
@@ -622,6 +572,68 @@ IF EXIST "%~dp0\OpenShellSetup.exe" (
 	ECHO Installing OpenShell!
 	start %~dp0\OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
 )
+
+
+
+
+REM ***** Other changes *****
+
+ECHO Doing the registry changes!
+regedit.exe /S %~dp0\simplifier_registry_changes.reg
+
+
+ECHO Enabling F8 boot options!
+bcdedit /set {current} bootmenupolicy Legacy
+
+
+ECHO Disabling system sounds
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
+
+
+ECHO Disabling web search in taskbar/start:
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
+
+
+
+REM *** Do Power Management Changes ***
+
+If /I "%hibernate_off%"=="y" (
+	ECHO.
+	ECHO Disabling Hibernation/Fast Boot!
+	powercfg -h off
+)
+
+
+ECHO Setting the 'Power Management' to Balanced!
+powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
+
+
+ECHO Setting the unplugged settings to 'Never'!
+powercfg.exe -change -monitor-timeout-dc 5
+powercfg.exe -change -standby-timeout-dc 15
+powercfg.exe -change -hibernate-timeout-dc 0
+
+
+ECHO Setting the plugged in settings to 'Never'!
+powercfg.exe -change -monitor-timeout-ac 15
+powercfg.exe -change -standby-timeout-ac 0
+powercfg.exe -change -hibernate-timeout-ac 0
+
+
+ECHO Setting the 'Dim Timeout' to Never!
+powercfg -SETDCVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
+powercfg -SETACVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
+
+
+ECHO Set windows to do nothing when the lid is closed and it's plugged in, sleep when it's not:
+powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
+powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 3
+
+
+ECHO Set windows to actually shut down when you press the power button, not just sleep:
+powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
+powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
+
 
 
 

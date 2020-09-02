@@ -32,9 +32,9 @@ Windows Registry Editor Version 5.00
 
 ; Disable Task view button on taskbar:
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\MultiTaskingView\AllUpView]
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MultiTaskingView\AllUpView]
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "ShowTaskViewButton"=dword:00000000
 
 
@@ -482,10 +482,15 @@ Windows Registry Editor Version 5.00
 "UserPreferencesMask"=hex:90,32,07,80,10,00,00,00
 
 
+; Disable apps stealing focus
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"ForegroundLockTimeout"=dword:00030d40
+
+
 ; Disable taskbar search button
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
 "SearchboxTaskbarMode"=dword:00000000
-
+                        
 
 ; Pin ribbon bar in explorer
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon]

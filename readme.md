@@ -64,12 +64,12 @@ This script disables:
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
-* Cortana/Bing searches
+* Cortana searches
 * Cortana icon on taskbar
 * Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
 * notification center and background apps (OPTIONAL)
-* windows defender and security center (OPTIONAL - note this will also disable the security center in Settings)
+* windows defender and security center (OPTIONAL - note this will also disable the security center in Settings) (note: Tamper Protection must be disabled for this to work in WIn10 v2004 and onwards)
 * fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * hibernation and removes the hibernation file (OPTIONAL)
 * hiding of system tray icons (OPTIONAL)
@@ -97,6 +97,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
+* Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
@@ -147,7 +148,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
 * -disableuac - disables User Account Control
-
+* -disablesuperfetch - disables Superfetch (sysmain)
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
 
