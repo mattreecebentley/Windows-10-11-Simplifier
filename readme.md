@@ -66,6 +66,7 @@ This script disables:
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
 * Cortana searches
 * Cortana icon on taskbar
+* 3D Objects folder in explorer
 * Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
 * notification center and background apps (OPTIONAL)
@@ -78,6 +79,7 @@ This script disables:
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
+* Onedrive (OPTIONAL)
 
 
 
@@ -117,12 +119,12 @@ Other scripts/executables this script will run, if present in the same folder:
 * Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit win10 is detected it will install the 64-bit version, so include both executables.
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana).
-* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only.
+* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. 
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
 * MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird.
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell installation restarts the explorer.exe process, thus why this installer is run at the very end of the script.
-
+* Old Windows Calculator (https://winaero.com/blog/get-calculator-from-windows-8-and-windows-7-in-windows-10/) will be installed if the installer is in the same folder and renamed to oldcalc.exe.
 
 
 Additional Command Line Options:
@@ -149,6 +151,7 @@ If any other command line options below are specified, it is assumed that any un
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
+* -uninstallonedrive - uninstalls Onedrive
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
 
@@ -157,7 +160,8 @@ The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag
 Current bugs:
 --------------
 
-Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, set WlanSvc service to automatic and start it, then set the icssvc service to manual. Feel free to complain at the author.
+Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
+And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app.
 
 
 

@@ -78,6 +78,7 @@ IF "%1"=="-all" (
 	set disable_superfetch=y
 	set clear_pinned_apps=y
 	set disable_uac=y
+	set uninstall_onedrive=y
 
 	IF EXIST "%~dp0\MyDefrag.exe" (
 		set mydefrag=y
@@ -103,6 +104,7 @@ IF "%1"=="-none" (
 	set disable_superfetch=n
 	set clear_pinned_apps=n
 	set disable_uac=n
+	set uninstall_onedrive=n
 	goto begin
 )
 
@@ -122,6 +124,7 @@ set disable_application_experience=n
 set disable_superfetch=n
 set clear_pinned_apps=n
 set disable_uac=n
+set uninstall_onedrive=n
 
 
 
@@ -189,6 +192,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-disableuac" (
 		ECHO Clear all pinned apps from taskbar enabled
 		set disable_uac=y
+	)
+
+	IF "%%A"=="-uninstallonedrive" (
+		ECHO Uninstalling onedrive enabled
+		set uninstall_onedrive=y
 	)
 )
 
@@ -334,6 +342,14 @@ set /P disable_superfetch=Type input: %=%
 
 
 
+ECHO.
+ECHO Do you want to uninstall Onedrive?
+ECHO Press Y or N and then ENTER:
+set uninstall_onedrive=
+set /P uninstall_onedrive=Type input: %=%
+
+
+
 :begin
 
 ECHO.
@@ -360,123 +376,15 @@ REM *** Begin main changes: ***
 
 
 
-If /I "%disable_uac%"=="y" (
-	ECHO Disable User Account Control:
-	REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
-)
-
-
-
-If /I "%disable_hide_systemtray%"=="y" (
-	ECHO Disable hiding of items in system tray:
-	REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
-)
-
-
-
-If /I "%solid_color_background%"=="y" (
-	ECHO Changing desktop background to solid color:
-	REG ADD "HKEY_CURRENT_USER\Control Panel\Colors" /v Background /t REG_SZ /d "50 50 100" /f
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
-)
-
-
-
-If /I "%disable_folder_templates%"=="y" (
-	ECHO Remove per-folder layout templates:
-	REG ADD "HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" /V FolderType /T REG_SZ /D NotSpecified /F
-)
-
-
-
-If /I "%disable_application_experience%"=="y" (
-	ECHO Disable application experience/Microsoft Compatibility Appraiser:
-	schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable
-)
-
-
-
-If /I "%clear_pinned_apps%"=="y" (
-	ECHO Clear pinned apps from taskbar:
-	DEL /F /S /Q /A "%AppData%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\*"
-	REG DELETE HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband /F
-	taskkill /f /im explorer.exe
-	start explorer.exe
-)
-
-
-
-If /I "%disable_defender%"=="y" (
-	ECHO Disabling Windows Defender - restart required to see change:
-	REM from: https://pastebin.com/kYCVzZPz
-	REM Disable Tamper Protection First !!!!!
-	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
-
-	REM To disable System Guard Runtime Monitor Broker
-	REM reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
-
-	REM To disable Windows Defender Security Center include this
-	REM reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
-
-	REM 1 - Disable Real-time protection
-	reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f
-	
-	REM 0 - Disable Logging
-	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
-	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
-	
-	REM Disable WD Tasks
-	schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
-	
-	REM Disable WD systray icon
-	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth" /f
-	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f
-	
-	REM Remove WD context menu
-	reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
-	reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
-	reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
-	
-	REM Disable WD services
-	reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
-)
-
-
-
-If /I "%disable_notifications%"=="y" (
-	ECHO Disabling notification center:
-	REG ADD "HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableNotificationCenter /t REG_DWORD /d 1 /f
-	REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\PushNotifications" /v ToastEnabled /t REG_DWORD /d 0 /f
-
-	ECHO Disabling background apps:
-	Reg Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 1 /f
-	Reg Add HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v BackgroundAppGlobalToggle /t REG_DWORD /d 0 /f
-)
-
-
 
 REM *** Run External Programs: ***
+
+
+IF EXIST "%~dp0\oldcalc.exe" (
+	ECHO Installing old version of Calc:
+	start %~dp0\oldcalc.exe
+)
+
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
@@ -487,8 +395,10 @@ IF EXIST "%~dp0\7z-x64.exe" set sevenzip_exists=y
 
 IF "%sevenzip_exists%"=="y" (
 	ECHO Disabling zip/cab folders
-	REG DELETE HKCR\CompressedFolder\CLSID /f
-	REG DELETE HKCR\SystemFileAssociations\.zip\CLSID /f
+	REG DELETE HKEY_CLASSES_ROOT\CompressedFolder\CLSID /f	
+	REG DELETE HKEY_CLASSES_ROOT\CABFolder\CLSID /f
+	REG DELETE HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\CLSID /f
+	REG DELETE HKEY_CLASSES_ROOT\SystemFileAssociations\.cab\CLSID /f
 
 	ECHO Installing 7-zip!
 	IF "%ProgramFiles(x86)%"=="" (
@@ -560,14 +470,6 @@ IF EXIST "%~dp0\SpeedyFox.exe" (
 
 
 
-IF EXIST "%~dp0\MyDefrag.exe" (
-	If /I "%mydefrag%"=="y" (
-		ECHO Running MyDefrag Monthly script on C:
-		start %~dp0\MyDefrag.exe -v C -r %~dp0\Scripts\SystemDiskMonthly.MyD
-	)
-)
-
-
 IF EXIST "%~dp0\OpenShellSetup.exe" (
 	ECHO Installing OpenShell!
 	start %~dp0\OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
@@ -577,6 +479,138 @@ IF EXIST "%~dp0\OpenShellSetup.exe" (
 
 
 REM ***** Other changes *****
+
+
+If /I "%disable_uac%"=="y" (
+	ECHO Disable User Account Control:
+	REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+)
+
+
+
+If /I "%disable_hide_systemtray%"=="y" (
+	ECHO Disable hiding of items in system tray:
+	REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
+)
+
+
+
+If /I "%solid_color_background%"=="y" (
+	ECHO Changing desktop background to solid color:
+	REG ADD "HKEY_CURRENT_USER\Control Panel\Colors" /v Background /t REG_SZ /d "50 50 100" /f
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
+)
+
+
+
+If /I "%disable_folder_templates%"=="y" (
+	ECHO Remove per-folder layout templates:
+	REG ADD "HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" /V FolderType /T REG_SZ /D NotSpecified /F
+)
+
+
+
+If /I "%disable_application_experience%"=="y" (
+	ECHO Disable application experience/Microsoft Compatibility Appraiser:
+	schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable
+)
+
+
+
+If /I "%clear_pinned_apps%"=="y" (
+	ECHO Clear pinned apps from taskbar:
+	DEL /F /S /Q /A "%AppData%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\*"
+	REG DELETE HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband /F
+	taskkill /f /im explorer.exe
+	start explorer.exe
+)
+
+
+
+If /I "%disable_defender%"=="y" (
+	ECHO Disabling Windows Defender - restart required to see change:
+	REM from: https://pastebin.com/kYCVzZPz
+	REM Disable Tamper Protection First - on WIn10 vers which allow for this (not from 2004 onwards)
+	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
+
+	REM To disable System Guard Runtime Monitor Broker
+	REM reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
+
+	REM To disable Windows Defender Security Center include this
+	REM reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+
+	REM 1 - Disable Real-time protection
+	reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f
+	
+	REM 0 - Disable Logging
+	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
+	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
+	
+	REM Disable WD Tasks
+	schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
+	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+	
+	REM Disable WD systray icon
+	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth" /f
+	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f
+	
+	REM Remove WD context menu
+	reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
+	reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
+	reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
+	
+	REM Disable WD services
+	reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
+	reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
+)
+
+
+
+If /I "%disable_notifications%"=="y" (
+	ECHO Disabling notification center:
+	REG ADD "HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableNotificationCenter /t REG_DWORD /d 1 /f
+	REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\PushNotifications" /v ToastEnabled /t REG_DWORD /d 0 /f
+
+	ECHO Disabling background apps:
+	Reg Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 1 /f
+	Reg Add HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v BackgroundAppGlobalToggle /t REG_DWORD /d 0 /f
+)
+
+
+
+If /I "%uninstall_onedrive%"=="y" (
+	ECHO Uninstalling OneDrive!
+	taskkill /f /im OneDrive.exe
+
+	IF "%ProgramFiles(x86)%"=="" (
+		REM 32-bit system:
+		start %systemroot%\System32\OneDriveSetup.exe /uninstall
+	) ELSE (
+		REM 64-bit system:
+		start %systemroot%\SysWOW64\OneDriveSetup.exe /uninstall
+	)
+)
+
+
 
 ECHO Doing the registry changes!
 regedit.exe /S %~dp0\simplifier_registry_changes.reg
@@ -602,6 +636,7 @@ If /I "%hibernate_off%"=="y" (
 	ECHO Disabling Hibernation/Fast Boot!
 	powercfg -h off
 )
+
 
 
 ECHO Setting the 'Power Management' to Balanced!
@@ -634,6 +669,15 @@ ECHO Set windows to actually shut down when you press the power button, not just
 powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
+
+
+REM Optionally run mydefrag:
+IF EXIST "%~dp0\MyDefrag.exe" (
+	If /I "%mydefrag%"=="y" (
+		ECHO Running MyDefrag Monthly script on C:
+		start %~dp0\MyDefrag.exe -v C -r %~dp0\Scripts\SystemDiskMonthly.MyD
+	)
+)
 
 
 
