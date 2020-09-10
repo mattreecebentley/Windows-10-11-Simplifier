@@ -86,7 +86,6 @@ This script disables:
 Other changes this script makes (for all versions of Windows 10):
 -----------------------------------------------------------------
 
-* Tells windows update to automatically download updates but notify for installation
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
 * Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
@@ -159,6 +158,8 @@ The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag
 
 Current bugs:
 --------------
+
+I've noticed that the enabling of F8 on boot doesn't work on some machines, windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. However this is rare.
 
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
 And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app.
