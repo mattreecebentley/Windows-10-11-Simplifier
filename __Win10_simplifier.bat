@@ -175,7 +175,7 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-disablefoldertemplates" (
-		ECHO Disable hiding of system tray items enabled
+		ECHO Folder templates disabled
 		set disable_folder_templates=y
 	)
 
@@ -190,7 +190,7 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-disableuac" (
-		ECHO Clear all pinned apps from taskbar enabled
+		ECHO UAC disabled
 		set disable_uac=y
 	)
 
