@@ -69,12 +69,14 @@ This script disables:
 * 3D Objects folder in explorer
 * Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
-* notification center and background apps (OPTIONAL)
-* windows defender and security center (OPTIONAL - note this will also disable the security center in Settings) (note: Tamper Protection must be disabled for this to work in WIn10 v2004 and onwards)
-* fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
-* hibernation and removes the hibernation file (OPTIONAL)
-* hiding of system tray icons (OPTIONAL)
-* automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
+* 'Shake window to minimize' feature
+* Edge desktop shortcut on new user accounts
+* Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
+* Windows defender and security center (OPTIONAL - note this will also disable the security center in Settings and the security icon in the system tray) (note: Tamper Protection must be disabled for this to work in Win10 v2004 and onwards)
+* Fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
+* Hibernation and removes the hibernation file (OPTIONAL)
+* Hiding of system tray icons (OPTIONAL)
+* Automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
@@ -94,6 +96,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
 * Tells windows to shutdown when the power button is pressed, instead of sleep (regardless of whether it's plugged in or a laptop)
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
+* Makes 'This PC' the default opening point of windows explorer
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
