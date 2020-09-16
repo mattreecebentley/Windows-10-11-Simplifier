@@ -12,10 +12,15 @@ IF EXIST "%~dp0\HDDscan.exe" (
 	%~dp0\HDDscan.exe
 )
 
+IF EXIST "%~dp0\TDSSKiller.exe" (
+	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
+	%~dp0\TDSSKiller.exe -L %~dp0\TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
+)
 
 
 
-REM Run initial cleanup programs that require user input:
+REM Run initial cleanup programs:
+
 
 IF EXIST "%~dp0\CCleaner.exe" (
 	ECHO Ccleaner portable found, Running in background...
@@ -28,6 +33,7 @@ IF EXIST "%~dp0\CCleaner.exe" (
 		start %~dp0\CCleaner64.exe /AUTO
 	)
 )
+
 
 
 IF EXIST "%~dp0\pc-decrapifier-2.3.1.exe" (
@@ -53,6 +59,12 @@ IF EXIST "%~dp0\autoruns.exe" (
 IF EXIST "%~dp0\StopResettingMyApps.exe" (
 	ECHO Stop Resetting My Apps found, running ...
 	start %~dp0\StopResettingMyApps.exe
+)
+
+
+IF EXIST "%~dp0\oldcalc.exe" (
+	ECHO Installing old version of Calc:
+	start %~dp0\oldcalc.exe
 )
 
 
@@ -357,10 +369,6 @@ ECHO.
 ECHO ***Starting Changes:***
 ECHO.
 
-IF EXIST "%~dp0\TDSSKiller.exe" (
-	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
-	%~dp0\TDSSKiller.exe -L %~dp0\TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
-)
 
 
 ECHO Backing up registry...
@@ -378,13 +386,6 @@ REM *** Begin main changes: ***
 
 
 REM *** Run External Programs: ***
-
-
-IF EXIST "%~dp0\oldcalc.exe" (
-	ECHO Installing old version of Calc:
-	start %~dp0\oldcalc.exe
-)
-
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:

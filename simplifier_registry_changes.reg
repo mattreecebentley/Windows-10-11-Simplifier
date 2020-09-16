@@ -1,5 +1,24 @@
 Windows Registry Editor Version 5.00
 
+; Disable 3D objects folder in explorer:
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}]
+
+
+; Disable aero 'shake to minimize' feature and make 'This PC' the default opening point of explorer:
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"DisallowShaking"=dword:00000001
+"LaunchTo"=dword:00000001
+
+
+
+; Disable Edge desktop shortcut on new user accounts:
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer]
+"DisableEdgeDesktopShortcutCreation"=dword:00000001
+
+
 
 ; Disable background picture on login screen:
 
