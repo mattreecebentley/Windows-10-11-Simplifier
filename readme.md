@@ -79,7 +79,7 @@ This script disables:
 * Automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
-* User Account Control (that annoying warning that pops up every time you try to launch a program) (OPTIONAL)
+* User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
 * Onedrive (OPTIONAL)
 
@@ -88,6 +88,7 @@ This script disables:
 Other changes this script makes (for all versions of Windows 10):
 -----------------------------------------------------------------
 
+* Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
 * Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
@@ -109,8 +110,8 @@ Other changes this script makes (for all versions of Windows 10):
 
 
 
-Other scripts/executables this script will run, if present in the same folder:
-------------------------------------------------------------------------------
+Other scripts/executables this script will optionally run, if present in the same folder:
+-----------------------------------------------------------------------------------------
 
 * Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if both 32-bit and 64-bit MSI installer files are present in the same folder under the names "agentransack.msi" and "agentransack-x64.msi".
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
@@ -121,12 +122,13 @@ Other scripts/executables this script will run, if present in the same folder:
 * Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit win10 is detected it will install the 64-bit version, so include both executables.
 * Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana).
-* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. 
+* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder.
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
 * MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird.
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell installation restarts the explorer.exe process, thus why this installer is run at the very end of the script.
 * Old Windows Calculator (https://winaero.com/blog/get-calculator-from-windows-8-and-windows-7-in-windows-10/) will be installed if the installer is in the same folder and renamed to oldcalc.exe.
+* Windows 7 versions of games (https://www.majorgeeks.com/files/details/windows_7_games_for_windows_10.html) will be installed if the installer is in the same folder and renamed to win7games.exe.
 
 
 Additional Command Line Options:

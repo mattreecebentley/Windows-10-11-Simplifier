@@ -13,6 +13,7 @@
     "Microsoft.WebMediaExtensions"
     "Microsoft.WebpImageExtension"
     "Microsoft.DesktopAppInstaller"
+    "Microsoft.WindowsFeedbackHub"
     "*Nvidia*"
     "Microsoft.MixedReality.Portal"
 )
@@ -47,7 +48,6 @@ $global:Bloatware = @(
     "Microsoft.Whiteboard"
     "Microsoft.WindowsAlarms"
     "microsoft.windowscommunicationsapps"
-    "Microsoft.WindowsFeedbackHub"
     "Microsoft.WindowsMaps"
     "Microsoft.WindowsSoundRecorder"
     "Microsoft.Xbox.TCUI"
