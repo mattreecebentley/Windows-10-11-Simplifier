@@ -350,7 +350,7 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable UAC?
+ECHO Do you want to disable UAC (to get rid of those annoying popups every time you run a program)?
 ECHO Press Y or N and then ENTER:
 set disable_uac=
 set /P disable_uac=Type input: %=%
@@ -457,7 +457,7 @@ If /I "%disable_superfetch%"=="y" (
 
 IF EXIST "Windows10SysPrepDebloater.ps1" (
 	ECHO Running Windows10 Debloater:
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& Windows10SysPrepDebloater.ps1 -SysPrep -Privacy -Debloat" -Verb RunAs
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\Windows10SysPrepDebloater.ps1 -SysPrep -Privacy -Debloat" -Verb RunAs
 )
 
 
@@ -504,7 +504,9 @@ If /I "%disable_hide_systemtray%"=="y" (
 If /I "%solid_color_background%"=="y" (
 	ECHO Changing desktop background to solid color:
 	REG ADD "HKEY_CURRENT_USER\Control Panel\Colors" /v Background /t REG_SZ /d "50 50 100" /f
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& simplifier_desktop_to_solid_color.ps1" -Verb RunAs
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_desktop_to_solid_color.ps1" -Verb RunAs
+	taskkill /f /im explorer.exe
+	start explorer.exe
 )
 
 
@@ -626,7 +628,6 @@ If /I "%uninstall_onedrive%"=="y" (
 REM *** Begin main changes: ***
 
 
-
 ECHO Doing the registry changes
 regedit.exe /S simplifier_registry_changes.reg
 
@@ -636,11 +637,11 @@ bcdedit /set {current} bootmenupolicy Legacy
 
 
 ECHO Disabling system sounds
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& simplifier_disable_system_sounds.ps1" -Verb RunAs
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
 
 
 ECHO Disabling web search in taskbar/start:
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& simplifier_disable_web_search.ps1" -Verb RunAs
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
 
 
 
@@ -685,11 +686,12 @@ powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
 
-ECHO Enabling Group Policy Editor:
-dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
-dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt 
-
-for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
+ECHO Enabling Group Policy Editor if not already present:
+IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
+	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
+	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt 
+	for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
+)
 
 
 REM Optionally run mydefrag:
