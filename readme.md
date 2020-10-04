@@ -69,6 +69,7 @@ This script disables:
 * 3D Objects folder in explorer
 * Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
+* 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with' and 'Restore previous version' from right-click context menu in Explorer
 * 'Shake window to minimize' feature
 * Edge desktop shortcut on new user accounts
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
