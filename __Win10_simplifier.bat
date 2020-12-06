@@ -292,7 +292,7 @@ IF /I "%chkdsk%"=="y" (
 
 
 ECHO.
-ECHO Do you want to disable the notifications center (action center) and disallow apps from running in the background?
+ECHO Do you want to disable the notifications center (action center) and prevent closed Microsoft apps like Camera from running in the background?
 ECHO Press Y or N and then ENTER:
 set disable_notifications=
 set /P disable_notifications=Type input: %=%
@@ -683,7 +683,7 @@ IF EXIST "Outlook (1).lnk" del /F "Outlook (1).lnk"
 IF EXIST "Word (1).lnk" del /F "Word (1).lnk"
 IF EXIST "Powerpoint (1).lnk" del /F "Powerpoint (1).lnk"
 cd ..
-IF EXIST del /F "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website"
+IF EXIST "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website" del /F "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website"
 pushd "%~dp0"
 
 
