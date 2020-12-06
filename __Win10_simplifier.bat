@@ -101,6 +101,7 @@ IF "%1"=="-all" (
 	set clear_pinned_apps=y
 	set disable_uac=y
 	set uninstall_onedrive=y
+	set uninstall_edge=y
 
 	IF EXIST "MyDefrag.exe" (
 		set mydefrag=y
@@ -127,6 +128,7 @@ IF "%1"=="-none" (
 	set clear_pinned_apps=n
 	set disable_uac=n
 	set uninstall_onedrive=n
+	set uninstall_edge=n
 	goto begin
 )
 
@@ -147,6 +149,7 @@ set disable_superfetch=n
 set clear_pinned_apps=n
 set disable_uac=n
 set uninstall_onedrive=n
+set uninstall_edge=n
 
 
 
@@ -219,6 +222,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-uninstallonedrive" (
 		ECHO Uninstalling onedrive enabled
 		set uninstall_onedrive=y
+	)
+
+	IF "%%A"=="-uninstalledge" (
+		ECHO Uninstalling edge enabled
+		set uninstall_edge=y
 	)
 )
 
@@ -350,7 +358,7 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable UAC (to get rid of those annoying popups every time you run a program)?
+ECHO Do you want to disable UAC (reduces overall security, disables application launch popups?
 ECHO Press Y or N and then ENTER:
 set disable_uac=
 set /P disable_uac=Type input: %=%
@@ -369,6 +377,14 @@ ECHO Do you want to uninstall Onedrive?
 ECHO Press Y or N and then ENTER:
 set uninstall_onedrive=
 set /P uninstall_onedrive=Type input: %=%
+
+
+
+ECHO.
+ECHO Do you want to burn and destroy Edge Browser?
+ECHO Press Y or N and then ENTER:
+set uninstall_edge=
+set /P uninstall_edge=Type input: %=%
 
 
 
@@ -401,7 +417,7 @@ IF EXIST "7z-x64.exe" set sevenzip_exists=y
 
 IF "%sevenzip_exists%"=="y" (
 	ECHO Disabling zip/cab folders
-	REG DELETE HKEY_CLASSES_ROOT\CompressedFolder\CLSID /f	
+	REG DELETE HKEY_CLASSES_ROOT\CompressedFolder\CLSID /f
 	REG DELETE HKEY_CLASSES_ROOT\CABFolder\CLSID /f
 	REG DELETE HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\CLSID /f
 	REG DELETE HKEY_CLASSES_ROOT\SystemFileAssociations\.cab\CLSID /f
@@ -623,6 +639,17 @@ If /I "%uninstall_onedrive%"=="y" (
 
 
 
+If /I "%uninstall_edge%"=="y" (
+	ECHO Uninstalling Chromium Edge and/or preventing it from being installed again
+	popd
+	cd "C:\Program Files (x86)\Microsoft\Edge\Application\"
+	FORFILES /S /M setup.exe /C "cmd /c call @file -uninstall -system-level -verbose-logging -force-uninstall"
+	Reg Add HKLM\Software\Microsoft\EdgeUpdate /f
+	Reg Add HKLM\Software\Microsoft\EdgeUpdate /v DoNotUpdateToEdgeWithChromium /t REG_DWORD /d 1 /f
+	pushd "%~dp0"
+)
+
+
 
 
 REM *** Begin main changes: ***
@@ -644,6 +671,22 @@ ECHO Disabling web search in taskbar/start:
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
 
 
+ECHO Remove M$ in-start-menu advertising for it's own online services:
+popd
+cd "%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\
+IF EXIST "Excel.lnk" del /F "Excel.lnk"
+IF EXIST "Outlook.lnk" del /F "Outlook.lnk"
+IF EXIST "Word.lnk" del /F "Word.lnk"
+IF EXIST "Powerpoint.lnk" del /F "Powerpoint.lnk"
+IF EXIST "Excel (1).lnk" del /F "Excel (1).lnk"
+IF EXIST "Outlook (1).lnk" del /F "Outlook (1).lnk"
+IF EXIST "Word (1).lnk" del /F "Word (1).lnk"
+IF EXIST "Powerpoint (1).lnk" del /F "Powerpoint (1).lnk"
+cd ..
+IF EXIST del /F "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website"
+pushd "%~dp0"
+
+
 
 REM *** Do Power Management Changes ***
 
@@ -654,18 +697,17 @@ If /I "%hibernate_off%"=="y" (
 )
 
 
-
 ECHO Setting the 'Power Management' to Balanced
 powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
 
 
-ECHO Setting the unplugged settings to 'Never'
+ECHO Setting the unplugged settings to never hibernate
 powercfg.exe -change -monitor-timeout-dc 5
 powercfg.exe -change -standby-timeout-dc 15
 powercfg.exe -change -hibernate-timeout-dc 0
 
 
-ECHO Setting the plugged in settings to 'Never'
+ECHO Setting the plugged in settings to never sleep
 powercfg.exe -change -monitor-timeout-ac 15
 powercfg.exe -change -standby-timeout-ac 0
 powercfg.exe -change -hibernate-timeout-ac 0

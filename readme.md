@@ -61,6 +61,7 @@ This script disables:
 * Background picture on login screen
 * Notifications on lock screen
 * Reminders on lock screen
+* Microsoft Office web app links on start menu
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
@@ -69,7 +70,6 @@ This script disables:
 * 3D Objects folder in explorer
 * Web searchs from taskbar search
 * Xbox Gamebar and game monitoring
-* 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with' and 'Restore previous version' from right-click context menu in Explorer
 * 'Shake window to minimize' feature
 * Edge desktop shortcut on new user accounts
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
@@ -83,6 +83,7 @@ This script disables:
 * User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
 * Onedrive (OPTIONAL)
+* Microsoft Edge (OPTIONAL)
 
 
 
