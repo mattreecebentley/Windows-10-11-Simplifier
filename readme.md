@@ -65,6 +65,7 @@ This script disables:
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
+* Right-click context menu explorer options 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with', 'Cast to Device' and 'Restore previous version'.
 * Cortana searches
 * Cortana icon on taskbar
 * 3D Objects folder in explorer

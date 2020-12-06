@@ -659,6 +659,10 @@ ECHO Doing the registry changes
 regedit.exe /S simplifier_registry_changes.reg
 
 
+ECHO Removing "Cast to Device" from righht-click context menu
+REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /V {7AD84985-87B4-4a16-BE58-8B72A5B390F7} /T REG_SZ /D "Play to Menu" /F
+
+
 ECHO Enabling F8 boot options
 bcdedit /set {current} bootmenupolicy Legacy
 
@@ -667,11 +671,11 @@ ECHO Disabling system sounds
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_system_sounds.ps1" -Verb RunAs
 
 
-ECHO Disabling web search in taskbar/start:
+ECHO Disabling web search in taskbar/start
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disable_web_search.ps1" -Verb RunAs
 
 
-ECHO Remove M$ in-start-menu advertising for it's own online services:
+ECHO Remove M$ in-start-menu advertising for it's own online services
 popd
 cd "%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\
 IF EXIST "Excel.lnk" del /F "Excel.lnk"
@@ -718,17 +722,17 @@ powercfg -SETDCVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17
 powercfg -SETACVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
 
 
-ECHO Set windows to do nothing when the lid is closed and it's plugged in, sleep when it's not:
+ECHO Set windows to do nothing when the lid is closed and it's plugged in, sleep when it's not
 powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 3
 
 
-ECHO Set windows to actually shut down when you press the power button, not just sleep:
+ECHO Set windows to actually shut down when you press the power button, not just sleep
 powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
 
-ECHO Enabling Group Policy Editor if not already present:
+ECHO Enabling Group Policy Editor if not already present
 IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
 	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
 	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt 
@@ -736,7 +740,7 @@ IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
 )
 
 
-REM Optionally run mydefrag:
+REM Optionally run mydefrag
 IF EXIST "MyDefrag.exe" (
 	If /I "%mydefrag%"=="y" (
 		ECHO Running MyDefrag Monthly script on System drive
@@ -745,12 +749,12 @@ IF EXIST "MyDefrag.exe" (
 )
 
 
-REM Change working directory to back to original directory:
+REM Change working directory to back to original directory
 popd
 
 
 If /I "%reboot%"=="y" (
-	ECHO Script finished, Rebooting:
+	ECHO Script finished, Rebooting
 	shutdown /r
 ) ELSE (
 	ECHO Simplifier Finished!
