@@ -65,7 +65,7 @@ This script disables:
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
-* Right-click context menu explorer options 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with', 'Cast to Device' and 'Restore previous version'.
+* Right-click context menu explorer options 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with', 'Cast to Device' and 'Restore previous version'
 * Cortana searches
 * Cortana icon on taskbar
 * 3D Objects folder in explorer
@@ -73,8 +73,9 @@ This script disables:
 * Xbox Gamebar and game monitoring
 * 'Shake window to minimize' feature
 * Edge desktop shortcut on new user accounts
+* "Meet Now" button on taskbar
+* Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
-* Windows defender and security center (OPTIONAL - note this will also disable the security center in Settings and the security icon in the system tray) (note: Tamper Protection must be disabled for this to work in Win10 v2004 and onwards)
 * Fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hibernation and removes the hibernation file (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
@@ -116,7 +117,7 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will optionally run, if present in the same folder:
 -----------------------------------------------------------------------------------------
 
-* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if both 32-bit and 64-bit MSI installer files are present in the same folder under the names "agentransack.msi" and "agentransack-x64.msi".
+* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if both 32-bit and 64-bit MSI installer files are present in the same folder under the names "agentransack.msi" and "agentransack-x64.msi". Windows Search will only be disabled if Outlook is not present on the system.
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
 * HDDScan (http://hddscan.com/) to check hard drive health.
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
@@ -148,7 +149,6 @@ If any other command line options below are specified, it is assumed that any un
 * -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
-* -disabledefender - disables Windows Defender and Security Center
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
@@ -159,6 +159,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -uninstallonedrive - uninstalls Onedrive
+* -uninstalledge - removes Chromium Edge and/or prevents it from being installed
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
 
@@ -177,7 +178,7 @@ And again, not a bug for my script, but Win10debloater removes the camera app by
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 10 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards, Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
@@ -185,8 +186,7 @@ https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-install
 I originally automated disk cleanup, but it was not possible to reliably get it to clean up 'Update storage' or 'Old Windows installation' between Win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
-Since some people might want to re-enable Windows Defender at a later point without reverting all other changes (and subsequent changes to the OS since running the script),
-I've included a re-enable_windows_defender.bat script. Right-click, run as Administrator. Both it and the windows defender disabling code are written by https://github.com/AndyFul/
+Unfortunately I've had to move the optional Windows defender disabling component outside of the main script, as too many antivirus engines were detecting it as malware! This is disable_windows_defender.bat. The corresponding script is re-enable_windows_defender.bat. Right-click, run as Administrator. Both it and the windows defender disabling code are written by https://github.com/AndyFul/
 
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)

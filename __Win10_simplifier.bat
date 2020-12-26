@@ -89,7 +89,6 @@ IF "%1"=="-all" (
 	ECHO All options enabled
 	set hibernate_off=y
 	set disable_notifications=y
-	set disable_defender=y
 	set reboot=y
 	set mydefrag=n
 	set solid_color_background=y
@@ -117,7 +116,6 @@ IF "%1"=="-none" (
 	set hibernate_off=n
 	set mydefrag=n
 	set disable_notifications=n
-	set disable_defender=n
 	set reboot=n
 	set solid_color_background=n
 	set chkdsk=n
@@ -138,7 +136,6 @@ REM Process all command line arguments:
 set hibernate_off=n
 set mydefrag=n
 set disable_notifications=n
-set disable_defender=n
 set reboot=n
 set solid_color_background=n
 set chkdsk=n
@@ -172,11 +169,6 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-disablehibernation" (
 		ECHO Hibernation/fast boot disabling enabled
 		set hibernate_off=y
-	)
-
-	IF "%%A"=="-disabledefender" (
-		ECHO Defender disabling enabled
-		set disable_defender=y
 	)
 
 	IF "%%A"=="-reboot" (
@@ -308,20 +300,6 @@ set /P hibernate_off=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable Windows Defender (only do this if you're installing another virus scanner)?
-ECHO Press Y or N and then ENTER:
-set disable_defender=
-set /P disable_defender=Type input: %=%
-
-IF /I "%disable_defender%"=="y" (
-	ECHO.
-	ECHO Please note that Defender can only be disabled in Win10 v2004 and upwards if Tamper Protection is disabled.
-	ECHO This setting can be found in Window Security settings. Please do this now and then,
-	pause
-)
-
-
-ECHO.
 ECHO Do you want to change the desktop background to a solid color?
 ECHO Press Y or N and then ENTER:
 set solid_color_background=
@@ -358,7 +336,7 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable UAC (reduces overall security, disables application launch popups?
+ECHO Do you want to disable UAC (reduces overall security, disables application launch popups)?
 ECHO Press Y or N and then ENTER:
 set disable_uac=
 set /P disable_uac=Type input: %=%
@@ -441,16 +419,9 @@ IF EXIST "_Win10-BlackViper.bat" (
 
 
 
-REM Disable Windows Search and install Agent Ransack, if Agent Ransack is present:
-set agentransack_exists=n
-IF EXIST "agentransack.msi" set agentransack_exists=y
+REM Disable Windows Search and install Agent Ransack, if Agent Ransack is present and Outlook is not:
 
-
-IF "%agentransack_exists%"=="y" (
-	ECHO Disabling Windows Search
-	sc stop "WSearch"
-	sc config "WSearch" start= disabled
-
+IF EXIST "agentransack.msi" (
 	ECHO Installing Agent Ransack
 	IF "%ProgramFiles(x86)%"=="" (
 		REM 32-bit system:
@@ -458,6 +429,27 @@ IF "%agentransack_exists%"=="y" (
 	) ELSE (
 		REM 64-bit system:
 		start agentransack-x64.msi /quiet
+	)
+
+	set outlook=false
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office12\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office13\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office14\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office15\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office16\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office17\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office12\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office13\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office14\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office15\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office16\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office17\Outlook.exe"	set outlook=true
+	IF EXIST "%systemdrive%\ProgramData\Microsoft\Windows\Start Menu\Programs\Outlook.lnk" set outlook=true
+
+	IF "%outlook%"=="false" (
+		ECHO Outlook not installed, disabling Windows Search
+		sc stop "WSearch"
+		sc config "WSearch" start= disabled
 	)
 )
 
@@ -551,71 +543,9 @@ If /I "%clear_pinned_apps%"=="y" (
 
 
 
-If /I "%disable_defender%"=="y" (
-	ECHO Disabling Windows Defender - restart required to see change:
-	REM from: https://pastebin.com/kYCVzZPz
-	REM Disable Tamper Protection First - on WIn10 vers which allow for this (not from 2004 onwards)
-	reg add "HKLM\Software\Microsoft\Windows Defender\Features" /v "TamperProtection" /t REG_DWORD /d "0" /f
-
-	REM To disable System Guard Runtime Monitor Broker
-	REM reg add "HKLM\System\CurrentControlSet\Services\SgrmBroker" /v "Start" /t REG_DWORD /d "4" /f
-
-	REM To disable Windows Defender Security Center include this
-	REM reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
-
-	REM 1 - Disable Real-time protection
-	reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
-	reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f
-
-	REM 0 - Disable Logging
-	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
-	reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
-
-	REM Disable WD Tasks
-	schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
-	schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
-
-	REM Disable WD systray icon
-	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth" /f
-	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f
-
-	REM Remove WD context menu
-	reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
-	reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
-	reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
-
-	REM Disable WD services
-	reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
-	reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
-
-	REM Disable Security system tray icon
-	reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray" /v "HideSystray" /t REG_DWORD /d "1" /f
-)
-
-
-
 If /I "%disable_notifications%"=="y" (
 	ECHO Disabling notification center:
 	REG ADD "HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableNotificationCenter /t REG_DWORD /d 1 /f
-	REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\PushNotifications" /v ToastEnabled /t REG_DWORD /d 0 /f
 
 	ECHO Disabling background apps:
 	Reg Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 1 /f
@@ -641,12 +571,16 @@ If /I "%uninstall_onedrive%"=="y" (
 
 If /I "%uninstall_edge%"=="y" (
 	ECHO Uninstalling Chromium Edge and/or preventing it from being installed again
-	popd
-	cd "C:\Program Files (x86)\Microsoft\Edge\Application\"
-	FORFILES /S /M setup.exe /C "cmd /c call @file -uninstall -system-level -verbose-logging -force-uninstall"
+	IF EXIST "%programfiles% (x86)\Microsoft\Edge\Application\" (
+		popd
+		%systemdrive%
+		cd "%ProgramFiles(x86)%\Microsoft\Edge\Application\"
+		FORFILES /S /M setup.exe /C "cmd /c call @file -uninstall -system-level -verbose-logging -force-uninstall"
+		pushd "%~dp0"
+	)
+
 	Reg Add HKLM\Software\Microsoft\EdgeUpdate /f
 	Reg Add HKLM\Software\Microsoft\EdgeUpdate /v DoNotUpdateToEdgeWithChromium /t REG_DWORD /d 1 /f
-	pushd "%~dp0"
 )
 
 
@@ -659,7 +593,7 @@ ECHO Doing the registry changes
 regedit.exe /S simplifier_registry_changes.reg
 
 
-ECHO Removing "Cast to Device" from righht-click context menu
+ECHO Removing "Cast to Device" from right-click context menu
 REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /V {7AD84985-87B4-4a16-BE58-8B72A5B390F7} /T REG_SZ /D "Play to Menu" /F
 
 
@@ -677,6 +611,7 @@ PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disab
 
 ECHO Remove M$ in-start-menu advertising for it's own online services
 popd
+%systemdrive%
 cd "%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\
 IF EXIST "Excel.lnk" del /F "Excel.lnk"
 IF EXIST "Outlook.lnk" del /F "Outlook.lnk"
