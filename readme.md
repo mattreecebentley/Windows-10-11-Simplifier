@@ -92,6 +92,7 @@ This script disables:
 Other changes this script makes (for all versions of Windows 10):
 -----------------------------------------------------------------
 
+* Re-enables the option to login without password in "control userpasswords2" or netplwiz
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
@@ -193,4 +194,4 @@ This script is under a Creative Commons Attribution 3.0 New Zealand License (htt
 
 Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
-Matt Bentley 2020
+Matt Bentley 2021
