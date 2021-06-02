@@ -359,7 +359,7 @@ set /P uninstall_onedrive=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to burn and destroy Edge Browser?
+ECHO Do you want to uninstall Edge Browser?
 ECHO Press Y or N and then ENTER:
 set uninstall_edge=
 set /P uninstall_edge=Type input: %=%
@@ -570,17 +570,14 @@ If /I "%uninstall_onedrive%"=="y" (
 
 
 If /I "%uninstall_edge%"=="y" (
-	ECHO Uninstalling Chromium Edge and/or preventing it from being installed again
+	ECHO Uninstalling Chromium Edge
 	IF EXIST "%programfiles% (x86)\Microsoft\Edge\Application\" (
 		popd
 		%systemdrive%
 		cd "%ProgramFiles(x86)%\Microsoft\Edge\Application\"
-		FORFILES /S /M setup.exe /C "cmd /c call @file -uninstall -system-level -verbose-logging -force-uninstall"
+		FORFILES /S /M setup.exe /C "cmd /c call @file -uninstall -system-level -force-uninstall"
 		pushd "%~dp0"
 	)
-
-	Reg Add HKLM\Software\Microsoft\EdgeUpdate /f
-	Reg Add HKLM\Software\Microsoft\EdgeUpdate /v DoNotUpdateToEdgeWithChromium /t REG_DWORD /d 1 /f
 )
 
 
