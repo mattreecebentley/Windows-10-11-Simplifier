@@ -61,6 +61,7 @@ This script disables:
 * Background picture on login screen
 * Notifications on lock screen
 * Reminders on lock screen
+* "News and interests" button on taskbar
 * Microsoft Office web app links on start menu
 * "Tips, tricks and suggestions" after you receive updates
 * The windows 10 "welcome experience" after large updates

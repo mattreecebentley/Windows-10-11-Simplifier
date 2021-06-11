@@ -615,3 +615,8 @@ Windows Registry Editor Version 5.00
 ; Re-enable the option to login without password in "control userpasswords2" or netplwiz
 [HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device]
 "DevicePasswordLessBuildVersion"==dword:0000000
+
+
+; Remove 'news and interests' button from taskbar
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
+"EnableFeeds"=dword:00000000
