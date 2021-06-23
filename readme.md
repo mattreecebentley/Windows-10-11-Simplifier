@@ -144,7 +144,7 @@ The following can be used to run the script without prompts:
 
 * -all - enables all options
 * -none - disables all options
-* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge
+* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge, reboot
 * -newcomputer - freshinstall + avoids some additional tasks such as chkdsk
 
 If any of the above are specified, all other command line options will be ignored.
