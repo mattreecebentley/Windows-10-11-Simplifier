@@ -4,83 +4,8 @@ REM Change working directory to script directory:
 pushd "%~dp0"
 
 
-REM Run initial testing software:
-
-IF EXIST "Core Temp.exe" (
-	ECHO Core temp found, running ...
-	"Core Temp.exe"
-)
-
-IF EXIST "HDDscan.exe" (
-	ECHO HDDScan found, running ...
-	HDDscan.exe
-)
-
-IF EXIST "TDSSKiller.exe" (
-	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
-	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
-)
-
-
-
-REM Run initial cleanup programs:
-
-
-IF EXIST "CCleaner.exe" (
-	ECHO Ccleaner portable found, Running in background...
-
-	IF "%ProgramFiles(x86)%"=="" (
-		REM 32-bit system:
-		start CCleaner.exe /AUTO
-	) ELSE (
-		REM 64-bit system:
-		start CCleaner64.exe /AUTO
-	)
-)
-
-
-
-IF EXIST "pc-decrapifier-2.3.1.exe" (
-	ECHO PC Decrapifier 2.3.1 found, running ...
-	start pc-decrapifier-2.3.1.exe
-)
-
-
-IF EXIST "autoruns.exe" (
-	ECHO Autoruns found, running ...
-
-	IF "%ProgramFiles(x86)%"=="" (
-		REM 32-bit system:
-		Autoruns.exe
-	) ELSE (
-		REM 64-bit system:
-		Autoruns64.exe
-	)
-)
-
-
-
-IF EXIST "StopResettingMyApps.exe" (
-	ECHO Stop Resetting My Apps found, running ...
-	start StopResettingMyApps.exe
-)
-
-
-IF EXIST "oldcalc.exe" (
-	ECHO Installing old version of Calc:
-	start oldcalc.exe
-)
-
-
-IF EXIST "win7games.exe" (
-	ECHO Installing old versions of Windows 7 games:
-	start win7games.exe
-)
-
-
-
-REM If no command line arguments, go straight to questions:
-IF "%~1"=="" goto questions
+REM If no command line arguments, skip this
+IF "%~1"=="" goto begin_preliminaries
 
 
 
@@ -101,13 +26,15 @@ IF "%1"=="-all" (
 	set disable_uac=y
 	set uninstall_onedrive=y
 	set uninstall_edge=y
+	set freshinstall=n
+	set newmachine=n
 
 	IF EXIST "MyDefrag.exe" (
 		set mydefrag=y
 		set reboot=n
 	)
 
-	goto begin
+	goto begin_preliminaries
 )
 
 
@@ -127,7 +54,53 @@ IF "%1"=="-none" (
 	set disable_uac=n
 	set uninstall_onedrive=n
 	set uninstall_edge=n
-	goto begin
+	set freshinstall=n
+	set newmachine=n
+	goto begin_preliminaries
+)
+
+
+IF "%1"=="-freshinstall" (
+	ECHO All options disabled
+	set hibernate_off=y
+	set mydefrag=n
+	set disable_notifications=y
+	set reboot=y
+	set solid_color_background=y
+	set chkdsk=y
+	set disable_hide_systemtray=n
+	set disable_folder_templates=n
+	set disable_application_experience=y
+	set disable_superfetch=n
+	set clear_pinned_apps=y
+	set disable_uac=n
+	set uninstall_onedrive=n
+	set uninstall_edge=y
+	set freshinstall=y
+	set newmachine=n
+	goto skip_initial_cleanup
+)
+
+
+IF "%1"=="-newmachine" (
+	ECHO All options disabled
+	set hibernate_off=y
+	set mydefrag=n
+	set disable_notifications=y
+	set reboot=y
+	set solid_color_background=y
+	set chkdsk=n
+	set disable_hide_systemtray=n
+	set disable_folder_templates=n
+	set disable_application_experience=y
+	set disable_superfetch=n
+	set clear_pinned_apps=y
+	set disable_uac=n
+	set uninstall_onedrive=n
+	set uninstall_edge=y
+	set freshinstall=y
+	set newmachine=y
+	goto skip_initial_testing
 )
 
 
@@ -147,6 +120,8 @@ set clear_pinned_apps=n
 set disable_uac=n
 set uninstall_onedrive=n
 set uninstall_edge=n
+set freshinstall=n
+set newmachine=n
 
 
 
@@ -228,6 +203,118 @@ If /I "%mydefrag%"=="y" (
 )
 
 
+
+:begin_preliminaries
+
+REM Run initial testing software:
+
+ECHO.
+ECHO Is this a fresh installation of Windows 10 (ie. not preloaded by factory on a new computer, or an old installation)?
+ECHO Press Y or N and then ENTER:
+set freshinstall=
+set /P freshinstall=Type input: %=%
+
+If /I "%freshinstall%"=="y" (
+	goto skip_initial_cleanup
+)
+
+
+ECHO.
+ECHO Is this a new computer?
+ECHO Press Y or N and then ENTER:
+set newmachine=
+set /P newmachine=Type input: %=%
+
+
+If /I "%newmachine%"=="y" (
+	goto skip_initial_testing
+)
+
+
+
+IF EXIST "Core Temp.exe" (
+	ECHO Core temp found, running ...
+	"Core Temp.exe"
+)
+
+IF EXIST "HDDscan.exe" (
+	ECHO HDDScan found, running ...
+	HDDscan.exe
+)
+
+
+
+REM Run initial cleanup programs:
+
+
+IF EXIST "CCleaner.exe" (
+	ECHO Ccleaner portable found, Running in background...
+
+	IF "%ProgramFiles(x86)%"=="" (
+		REM 32-bit system:
+		start CCleaner.exe /AUTO
+	) ELSE (
+		REM 64-bit system:
+		start CCleaner64.exe /AUTO
+	)
+)
+
+
+
+:skip_initial_testing
+
+IF EXIST "pc-decrapifier-2.3.1.exe" (
+	ECHO PC Decrapifier 2.3.1 found, running ...
+	start pc-decrapifier-2.3.1.exe
+)
+
+
+IF EXIST "autoruns.exe" (
+	ECHO Autoruns found, running ...
+
+	IF "%ProgramFiles(x86)%"=="" (
+		REM 32-bit system:
+		Autoruns.exe
+	) ELSE (
+		REM 64-bit system:
+		Autoruns64.exe
+	)
+)
+
+
+
+IF EXIST "TDSSKiller.exe" (
+	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
+	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
+)
+
+
+
+:skip_initial_cleanup
+
+
+IF EXIST "StopResettingMyApps.exe" (
+	ECHO Stop Resetting My Apps found, running ...
+	start StopResettingMyApps.exe
+)
+
+
+IF EXIST "oldcalc.exe" (
+	ECHO Installing old version of Calc:
+	start oldcalc.exe
+)
+
+
+IF EXIST "win7games.exe" (
+	ECHO Installing old versions of Windows 7 games:
+	start win7games.exe
+)
+
+
+IF "%~1"=="" goto questions
+
+REM If there are command line options, skip questions
+
 goto begin
 
 
@@ -244,7 +331,7 @@ set mydefrag=n
 
 IF EXIST "MyDefrag.exe" (
 	ECHO.
-	ECHO Do you want defrag the system drive using MyDefrag Monthly script at end of scripts? Do not if system drive is a SSD.
+	ECHO Do you want to defrag the system drive using MyDefrag Monthly script at end of scripts? Don't do this on a solid state drive.
 	ECHO Press Y or N and then ENTER
 	set /P mydefrag=Type input: %=%
 )
@@ -477,18 +564,28 @@ IF EXIST "OOSU10.exe" (
 
 
 
-IF EXIST "SpeedyFox.exe" (
-	ECHO Running SpeedyFox:
-	SpeedyFox.exe /Firefox:all /Thunderbird:all /Chrome:all /Skype:all /Opera:all
-)
-
-
-
 IF EXIST "OpenShellSetup.exe" (
 	ECHO Installing OpenShell
 	start OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
 )
 
+
+If /I "%freshinstall%"=="y" (
+	goto skip_speedyfox
+)
+
+
+If /I "%newmachine%"=="y" (
+	goto skip_speedyfox
+)
+
+
+IF EXIST "SpeedyFox.exe" (
+	ECHO Running SpeedyFox:
+	SpeedyFox.exe /Firefox:all /Thunderbird:all /Chrome:all /Skype:all /Opera:all
+)
+
+:skip_speedyfox
 
 
 
@@ -667,7 +764,7 @@ powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 ECHO Enabling Group Policy Editor if not already present
 IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
 	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
-	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt 
+	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt
 	for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
 )
 

@@ -144,8 +144,10 @@ The following can be used to run the script without prompts:
 
 * -all - enables all options
 * -none - disables all options
+* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge
+* -newcomputer - freshinstall + avoids some additional tasks such as chkdsk
 
-If either of the above are specified, the rest of the command line options will be ignored.
+If any of the above are specified, all other command line options will be ignored.
 If any other command line options below are specified, it is assumed that any unspecified options are 'off' (same as '-none' above). The individual command line options are:
 
 * -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
@@ -161,7 +163,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -uninstallonedrive - uninstalls Onedrive
-* -uninstalledge - removes Chromium Edge and/or prevents it from being installed
+* -uninstalledge - removes Chromium Edge
 
 The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
 
