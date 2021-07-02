@@ -261,6 +261,13 @@ IF EXIST "CCleaner.exe" (
 
 
 
+REM Restore Windows image health if necessary, run SFC:
+
+DISM.exe /Online /Cleanup-image /Restorehealth
+sfc /scannow
+
+
+
 :skip_initial_testing
 
 IF EXIST "pc-decrapifier-2.3.1.exe" (

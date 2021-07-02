@@ -107,6 +107,7 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
+* Runs "DISM.exe /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (sometimes, this actually fixes stuff - I know, right?!!)
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
