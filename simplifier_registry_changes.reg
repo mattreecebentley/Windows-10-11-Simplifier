@@ -620,3 +620,4 @@ Windows Registry Editor Version 5.00
 ; Remove 'news and interests' button from taskbar
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
 "EnableFeeds"=dword:00000000
+"ShellFeedsTaskbarOpenOnHover"=dword:00000002
