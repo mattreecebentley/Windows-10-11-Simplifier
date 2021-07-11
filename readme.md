@@ -94,10 +94,12 @@ Other changes this script makes (for all versions of Windows 10):
 -----------------------------------------------------------------
 
 * Re-enables the option to login without password in "control userpasswords2" or netplwiz
+* Changes default control panel view to large icons rather than categorized
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
 * Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
+* Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (sometimes, this actually fixes stuff! Crazy huh)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
@@ -107,7 +109,6 @@ Other changes this script makes (for all versions of Windows 10):
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
-* Runs "DISM.exe /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (sometimes, this actually fixes stuff - I know, right?!!)
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
@@ -145,7 +146,7 @@ The following can be used to run the script without prompts:
 
 * -all - enables all options
 * -none - disables all options
-* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge, reboot
+* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge
 * -newcomputer - freshinstall + avoids some additional tasks such as chkdsk
 
 If any of the above are specified, all other command line options will be ignored.
@@ -191,8 +192,8 @@ https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-install
 I originally automated disk cleanup, but it was not possible to reliably get it to clean up 'Update storage' or 'Old Windows installation' between Win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
-Unfortunately I've had to move the optional Windows defender disabling component outside of the main script, as too many antivirus engines were detecting it as malware! This is disable_windows_defender.bat. The corresponding script is re-enable_windows_defender.bat. Right-click, run as Administrator. Both it and the windows defender disabling code are written by https://github.com/AndyFul/
-
+Unfortunately I've had to move the optional Windows defender disabling component to a different repo, as too many antivirus engines were detecting it as malware!
+See here: https://www.github.com/mattreecebentley/win10_disable_defender
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)
 

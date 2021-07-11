@@ -261,13 +261,6 @@ IF EXIST "CCleaner.exe" (
 
 
 
-REM Restore Windows image health if necessary, run SFC:
-
-DISM.exe /Online /Cleanup-image /Restorehealth
-sfc /scannow
-
-
-
 :skip_initial_testing
 
 IF EXIST "pc-decrapifier-2.3.1.exe" (
@@ -338,7 +331,7 @@ set mydefrag=n
 
 IF EXIST "MyDefrag.exe" (
 	ECHO.
-	ECHO Do you want to defrag the system drive using MyDefrag Monthly script at end of scripts? Don't do this on a solid state drive.
+	ECHO Do you want defrag the system drive using MyDefrag Monthly script at end of scripts? Do not if system drive is a SSD.
 	ECHO Press Y or N and then ENTER
 	set /P mydefrag=Type input: %=%
 )
@@ -481,6 +474,16 @@ REG SAVE "HKCU\AppEvents" HKCUapp_events.HIV /y
 REM *** Run External Programs: ***
 
 
+IF "%newmachine%"=="y" goto skip_dism
+IF "%freshinstall%"=="y" goto skip_dism
+
+ECHO Checking Windows Image and restoring corrupt files if necessary:
+DISM /Online /Cleanup-image /Restorehealth
+sfc /scannow
+
+
+:skip_dism
+
 REM Disable zip/cab folders and install 7zip, if 7zip present:
 set sevenzip_exists=n
 IF EXIST "7z.exe" set sevenzip_exists=y
@@ -532,12 +535,14 @@ IF EXIST "agentransack.msi" (
 	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office15\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office16\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office17\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles(x86)%\Microsoft Office\Office18\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office12\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office13\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office14\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office15\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office16\Outlook.exe"	set outlook=true
 	IF EXIST "%ProgramFiles%\Microsoft Office\Office17\Outlook.exe"	set outlook=true
+	IF EXIST "%ProgramFiles%\Microsoft Office\Office18\Outlook.exe"	set outlook=true
 	IF EXIST "%systemdrive%\ProgramData\Microsoft\Windows\Start Menu\Programs\Outlook.lnk" set outlook=true
 
 	IF "%outlook%"=="false" (
@@ -734,6 +739,8 @@ If /I "%hibernate_off%"=="y" (
 	ECHO.
 	ECHO Disabling Hibernation/Fast Boot
 	powercfg -h off
+	powercfg.exe -change -hibernate-timeout-dc 0
+	powercfg.exe -change -hibernate-timeout-ac 0
 )
 
 
@@ -744,13 +751,11 @@ powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
 ECHO Setting the unplugged settings to never hibernate
 powercfg.exe -change -monitor-timeout-dc 5
 powercfg.exe -change -standby-timeout-dc 15
-powercfg.exe -change -hibernate-timeout-dc 0
 
 
 ECHO Setting the plugged in settings to never sleep
 powercfg.exe -change -monitor-timeout-ac 15
 powercfg.exe -change -standby-timeout-ac 0
-powercfg.exe -change -hibernate-timeout-ac 0
 
 
 ECHO Setting the 'Dim Timeout' to Never
@@ -760,7 +765,7 @@ powercfg -SETACVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 17
 
 ECHO Set windows to do nothing when the lid is closed and it's plugged in, sleep when it's not
 powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
-powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 3
+powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1
 
 
 ECHO Set windows to actually shut down when you press the power button, not just sleep
@@ -776,6 +781,7 @@ IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
 )
 
 
+
 REM Optionally run mydefrag
 IF EXIST "MyDefrag.exe" (
 	If /I "%mydefrag%"=="y" (
@@ -783,6 +789,7 @@ IF EXIST "MyDefrag.exe" (
 		start MyDefrag.exe -v %SystemDrive% -r Scripts\SystemDiskMonthly.MyD
 	)
 )
+
 
 
 REM Change working directory to back to original directory

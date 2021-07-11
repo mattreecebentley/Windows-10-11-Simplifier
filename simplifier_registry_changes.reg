@@ -509,7 +509,7 @@ Windows Registry Editor Version 5.00
 ; Disable taskbar search button
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
 "SearchboxTaskbarMode"=dword:00000000
-                        
+
 
 ; Pin ribbon bar in explorer
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon]
@@ -577,9 +577,6 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PreviousVersions]
 "DisableLocalPage"=-
 
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer]
-"NoPreviousVersionsPage"=-
-
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\PreviousVersions]
 "DisableLocalPage"=-
 
@@ -613,13 +610,16 @@ Windows Registry Editor Version 5.00
 
 
 ; Re-enable the option to login without password in "control userpasswords2" or netplwiz
-[HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device]
-"DevicePasswordLessBuildVersion"==dword:0000000
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device]
+"DevicePasswordLessBuildVersion"=dword:0000000
 
 
-; Remove 'news and interests' button from taskbar
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
-"EnableFeeds"=dword:00000000
+; Make control panel show individual icons rather than grouping them
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"ForceClassicControlPanel"=dword:00000001
 
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds]
-"ShellFeedsTaskbarOpenOnHover"=dword:00000002
+
+; Make control panel use large icons instead of small
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel]
+"AllItemsIconView"=dword:00000000
+"StartupPage"=dword:00000001
