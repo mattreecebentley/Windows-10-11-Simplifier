@@ -28,6 +28,7 @@ IF "%1"=="-all" (
 	set uninstall_edge=y
 	set freshinstall=n
 	set newmachine=n
+	set skipdism=n
 
 	IF EXIST "MyDefrag.exe" (
 		set mydefrag=y
@@ -56,6 +57,7 @@ IF "%1"=="-none" (
 	set uninstall_edge=n
 	set freshinstall=n
 	set newmachine=n
+	set skipdism=y
 	goto begin_preliminaries
 )
 
@@ -78,6 +80,7 @@ IF "%1"=="-freshinstall" (
 	set uninstall_edge=y
 	set freshinstall=y
 	set newmachine=n
+	set skipdism=y
 	goto skip_initial_cleanup
 )
 
@@ -100,6 +103,7 @@ IF "%1"=="-newmachine" (
 	set uninstall_edge=y
 	set freshinstall=y
 	set newmachine=y
+	set skipdism=y
 	goto skip_initial_testing
 )
 
@@ -122,6 +126,7 @@ set uninstall_onedrive=n
 set uninstall_edge=n
 set freshinstall=n
 set newmachine=n
+set skipdism=n
 
 
 
@@ -194,6 +199,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-uninstalledge" (
 		ECHO Uninstalling edge enabled
 		set uninstall_edge=y
+	)
+
+	IF "%%A"=="-skipdism" (
+		ECHO Skipping DISM and SFC testing
+		set skipdism=y
 	)
 )
 
@@ -453,6 +463,14 @@ set /P uninstall_edge=Type input: %=%
 
 
 
+ECHO.
+ECHO Do you want to skip DISM and SFC testing?
+ECHO Press Y or N and then ENTER:
+set skipdism=
+set /P skipdism=Type input: %=%
+
+
+
 :begin
 
 ECHO.
@@ -474,15 +492,12 @@ REG SAVE "HKCU\AppEvents" HKCUapp_events.HIV /y
 REM *** Run External Programs: ***
 
 
-IF "%newmachine%"=="y" goto skip_dism
-IF "%freshinstall%"=="y" goto skip_dism
+IF "%skipdism%"=="n" (
+	ECHO Checking Windows Image and restoring corrupt files if necessary:
+	DISM /Online /Cleanup-image /Restorehealth
+	sfc /scannow
+)
 
-ECHO Checking Windows Image and restoring corrupt files if necessary:
-DISM /Online /Cleanup-image /Restorehealth
-sfc /scannow
-
-
-:skip_dism
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
 set sevenzip_exists=n
@@ -746,6 +761,18 @@ If /I "%hibernate_off%"=="y" (
 
 ECHO Setting the 'Power Management' to Balanced
 powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
+
+
+ECHO Setting min CPU state to 5% and max to 100% both for when on battery and plugged in
+powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN 5
+powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN 5
+powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMAX 100
+powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMAX 100
+
+
+ECHO Setting wireless power settings as Medium for battery, Maximum for plugged in
+powercfg /SETDCVALUEINDEX SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 0
+powercfg /SETDCVALUEINDEX SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 2
 
 
 ECHO Setting the unplugged settings to never hibernate

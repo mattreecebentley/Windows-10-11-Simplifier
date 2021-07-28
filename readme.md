@@ -99,10 +99,12 @@ Other changes this script makes (for all versions of Windows 10):
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
 * Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
-* Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (sometimes, this actually fixes stuff! Crazy huh)
+* Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
+* Sets wireless power use to maximum when plugged in, medium when not
+* Sets minimum and maximum CPU states to 5% and 100% respectively, regardless of whether plugged in
 * Tells windows to shutdown when the power button is pressed, instead of sleep (regardless of whether it's plugged in or a laptop)
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
 * Makes 'This PC' the default opening point of windows explorer
@@ -164,6 +166,7 @@ If any other command line options below are specified, it is assumed that any un
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
+* -skipdism - skips DISM and SFC tests
 * -uninstallonedrive - uninstalls Onedrive
 * -uninstalledge - removes Chromium Edge
 
