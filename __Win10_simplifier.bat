@@ -225,6 +225,7 @@ set freshinstall=
 set /P freshinstall=Type input: %=%
 
 If /I "%freshinstall%"=="y" (
+	set skipdism=y
 	goto skip_initial_cleanup
 )
 
@@ -237,6 +238,7 @@ set /P newmachine=Type input: %=%
 
 
 If /I "%newmachine%"=="y" (
+	set skipdism=y
 	goto skip_initial_testing
 )
 
@@ -460,6 +462,12 @@ ECHO Do you want to uninstall Edge Browser?
 ECHO Press Y or N and then ENTER:
 set uninstall_edge=
 set /P uninstall_edge=Type input: %=%
+
+
+
+If /I "%skipdism%"=="y" (
+	goto begin
+)
 
 
 

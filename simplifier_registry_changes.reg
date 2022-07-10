@@ -628,7 +628,23 @@ Windows Registry Editor Version 5.00
 "ForceClassicControlPanel"=dword:00000001
 
 
-; Make control panel use large icons instead of small
+; Make control panel use large icons instead of the 'categorized' view
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel]
 "AllItemsIconView"=dword:00000000
 "StartupPage"=dword:00000001
+
+
+; Enable installation of Win11 (if you want that POS) even on older computers
+[HKEY_LOCAL_MACHINE\SYSTEM\Setup\MoSetup]
+"AllowUpgradesWithUnsupportedTPMOrCPU"=dword:00000001
+
+
+; Stop Windows Defender from using more than 20% (average) CPU during scans:
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan]
+"AvgCPULoadFactor"=dword:00010100
+
+
+; Change Win10 mode to Dark while keeping apps Light (ie. custom):
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
+"AppsUseLightTheme"=dword:00000001
+"SystemUsesLightTheme"=dword:00000000

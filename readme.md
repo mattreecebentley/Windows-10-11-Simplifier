@@ -44,7 +44,7 @@ This script disables:
 * quick access folders in explorer
 * duplicate instances of external/USB drives visible in explorer
 * the ability for windows to change the sound scheme when changing themes
-* login/lock screen screen photos
+* login/lock-screen photos
 * lock screen
 * combining of taskbar buttons
 * transparency of windows and taskbar
@@ -71,11 +71,14 @@ This script disables:
 * Cortana icon on taskbar
 * 3D Objects folder in explorer
 * Web searchs from taskbar search
-* Xbox Gamebar and game monitoring
 * 'Shake window to minimize' feature
 * Edge desktop shortcut on new user accounts
 * "Meet Now" button on taskbar
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
+* Xbox Gamebar and game monitoring
+* Enable installation of Win11 even on older computers
+* Stop Windows Defender from using more than 20% (average) CPU during scans
+* Change Win10 mode to Dark while keeping apps Light (ie. custom)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hibernation and removes the hibernation file (OPTIONAL)
@@ -123,7 +126,7 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will optionally run, if present in the same folder:
 -----------------------------------------------------------------------------------------
 
-* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if both 32-bit and 64-bit MSI installer files are present in the same folder under the names "agentransack.msi" and "agentransack-x64.msi". Windows Search will only be disabled if Outlook is not present on the system.
+* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the installer file is present in the same folder under the name "agentransack.exe". Windows Search will only be disabled if Outlook is not present on the system.
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
 * HDDScan (http://hddscan.com/) to check hard drive health.
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.

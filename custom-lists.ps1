@@ -16,16 +16,16 @@
     "Microsoft.WindowsFeedbackHub"
     "*Nvidia*"
     "Microsoft.MixedReality.Portal"
-)
-$global:Bloatware = @(
-    "CanonicalGroupLimited.UbuntuonWindows"
-    "MIDIBerry"
     "Microsoft.Xbox.TCUI"
     "Microsoft.XboxApp"
     "Microsoft.XboxGameOverlay"
     "Microsoft.XboxGamingOverlay"
     "Microsoft.XboxIdentityProvider"
     "Microsoft.XboxSpeechToTextOverlay"
+)
+$global:Bloatware = @(
+    "CanonicalGroupLimited.UbuntuonWindows"
+    "MIDIBerry"
     "Microsoft.PPIProjection"
     "Microsoft.BingNews"
     "Microsoft.GetHelp"
@@ -50,12 +50,6 @@ $global:Bloatware = @(
     "microsoft.windowscommunicationsapps"
     "Microsoft.WindowsMaps"
     "Microsoft.WindowsSoundRecorder"
-    "Microsoft.Xbox.TCUI"
-    "Microsoft.XboxApp"
-    "Microsoft.XboxGameOverlay"
-    "Microsoft.XboxGamingOverlay"
-    "Microsoft.XboxIdentityProvider"
-    "Microsoft.XboxSpeechToTextOverlay"
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
     "EclipseManager"
