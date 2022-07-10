@@ -648,3 +648,10 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
 "AppsUseLightTheme"=dword:00000001
 "SystemUsesLightTheme"=dword:00000000
+
+
+; Prevent Machine from automatically upgrading to Win11
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
+"ProductVersion"="Windows 10"
+"TargetReleaseVersion"=dword:00000001
+"TargetReleaseVersionInfo"="21H2"

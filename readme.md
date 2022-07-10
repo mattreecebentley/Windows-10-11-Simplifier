@@ -76,9 +76,6 @@ This script disables:
 * "Meet Now" button on taskbar
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Xbox Gamebar and game monitoring
-* Enable installation of Win11 even on older computers
-* Stop Windows Defender from using more than 20% (average) CPU during scans
-* Change Win10 mode to Dark while keeping apps Light (ie. custom)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hibernation and removes the hibernation file (OPTIONAL)
@@ -116,6 +113,9 @@ Other changes this script makes (for all versions of Windows 10):
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
+* Enables installation of Win11 even on older computers while preventing it from automatically upgrading to it (user choice only)
+* Stops Windows Defender from using more than 20% (average) CPU during scans
+* Changes Win10 mode to Dark while keeping apps Light (ie. custom)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
