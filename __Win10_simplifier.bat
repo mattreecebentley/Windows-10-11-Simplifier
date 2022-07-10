@@ -751,7 +751,7 @@ IF EXIST "Outlook (1).lnk" del /F "Outlook (1).lnk"
 IF EXIST "Word (1).lnk" del /F "Word (1).lnk"
 IF EXIST "Powerpoint (1).lnk" del /F "Powerpoint (1).lnk"
 cd ..
-IF EXIST "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website" del /F "MSN New Zealand  latest news, Hotmail, Outlook, photos and Videos.website"
+IF EXIST "MSN*.website" del /F "MSN*.website"
 pushd "%~dp0"
 
 
