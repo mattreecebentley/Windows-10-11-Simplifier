@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+
+
+; Remove Quick Access:
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer]
+"HubMode"=dword:00000001
