@@ -80,7 +80,7 @@ This script disables:
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
-* Automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
+* Automatically changing of Explorer folder layouts based on folder contents eg. Pictures folder displays thumbnails (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
@@ -111,12 +111,12 @@ Other changes this script makes (for all versions of Windows 10):
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
-* Enables installation of Win11 even on older computers while preventing it from automatically upgrading to it (user choice only)
+* Enable installation of Win11 on older computers without TPM while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes Win10 mode to Dark while keeping apps Light (ie. custom)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10 (OPTIONAL)
-* Runs chkdsk /f or chkdsk /f /r on system drive on next boot (OPTIONAL)
+* Runs chkdsk /f or chkdsk /f /r on system drive on next boot. Runs powershell command to show status of hard drives beforehand (OPTIONAL)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
@@ -145,6 +145,7 @@ Other scripts/executables this script will optionally run, if present in the sam
 * Windows 7 versions of games (https://www.majorgeeks.com/files/details/windows_7_games_for_windows_10.html) will be installed if the installer is in the same folder and renamed to win7games.exe.
 
 
+
 Additional Command Line Options:
 --------------------------------
 
@@ -164,7 +165,7 @@ If any other command line options below are specified, it is assumed that any un
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
-* -chkdskf - check system disk for filesystem errors only on next reboot
+* -chkdskf - check system disk for filesystem errors only on next reboot (useful for SSDs)
 * -showtrayitems - disable hiding of system tray icons
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
@@ -172,6 +173,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -skipdism - skips DISM and SFC tests
+* -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
 * -uninstallonedrive - uninstalls Onedrive
 * -uninstalledge - removes Chromium Edge
 

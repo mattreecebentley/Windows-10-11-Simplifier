@@ -29,13 +29,14 @@ IF "%1"=="-all" (
 	set freshinstall=n
 	set newmachine=n
 	set skipdism=n
+	set installgpedit=y
 
 	IF EXIST "MyDefrag.exe" (
 		set mydefrag=y
 		set reboot=n
 	)
 
-	goto begin_preliminaries
+	goto begin_tests
 )
 
 
@@ -58,7 +59,8 @@ IF "%1"=="-none" (
 	set freshinstall=n
 	set newmachine=n
 	set skipdism=y
-	goto begin_preliminaries
+	set installgpedit=n
+	goto begin_tests
 )
 
 
@@ -81,6 +83,7 @@ IF "%1"=="-freshinstall" (
 	set freshinstall=y
 	set newmachine=n
 	set skipdism=y
+	set installgpedit=y
 	goto skip_initial_cleanup
 )
 
@@ -104,6 +107,7 @@ IF "%1"=="-newmachine" (
 	set freshinstall=y
 	set newmachine=y
 	set skipdism=y
+	set installgpedit=y
 	goto skip_initial_testing
 )
 
@@ -127,6 +131,7 @@ set uninstall_edge=n
 set freshinstall=n
 set newmachine=n
 set skipdism=n
+set installgpedit=n
 
 
 
@@ -137,17 +142,17 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-disablesuperfetch" (
-		ECHO Notification disabling enabled
+		ECHO Superfetch disabled
 		set disable_superfetch=y
 	)
 
 	IF "%%A"=="-disablenotifications" (
-		ECHO Notification disabling enabled
+		ECHO Notifications disabled
 		set disable_notifications=y
 	)
 
 	IF "%%A"=="-disablehibernation" (
-		ECHO Hibernation/fast boot disabling enabled
+		ECHO Hibernation/fast boot disabled
 		set hibernate_off=y
 	)
 
@@ -210,6 +215,11 @@ FOR %%A IN (%*) DO (
 		ECHO Skipping DISM and SFC testing
 		set skipdism=y
 	)
+
+	IF "%%A"=="-installgpedit" (
+		ECHO Skipping installation of group policy editor
+		set installgpedit=y
+	)
 )
 
 
@@ -247,6 +257,8 @@ If /I "%newmachine%"=="y" (
 	goto skip_initial_testing
 )
 
+
+:begin_tests
 
 
 IF EXIST "Core Temp.exe" (
@@ -341,37 +353,18 @@ goto begin
 REM *** Ask questions: ***
 
 ECHO.
+ECHO Getting physical disk information:
+powershell "get-physicaldisk | format-table -autosize"
+
+ECHO.
+ECHO =============================================================================================
 ECHO Questions section. Note: either lowercase or uppercase letters are both fine for all answers.
-
-
-set mydefrag=n
-
-IF EXIST "MyDefrag.exe" (
-	ECHO.
-	ECHO Do you want defrag the system drive using MyDefrag Monthly script at end of scripts? Do not if system drive is a SSD.
-	ECHO Press Y or N and then ENTER
-	set /P mydefrag=Type input: %=%
-)
-
-
-If /I "mydefrag"=="y" (
-	ECHO.
-	ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
-	set reboot="n"
-)
-
-
-IF /I "%mydefrag%"=="n" (
-	ECHO.
-	ECHO Do you want Reboot after the script completes?
-	ECHO Press Y or N and then ENTER:
-	set /P reboot=Type input: %=%
-)
-
+ECHO =============================================================================================
 
 
 ECHO.
 ECHO Do you want to check the system hard drive for bad sectors and filesystem errors on next reboot?
+ECHO Do not check for bad sectors on SSD drives.
 ECHO Press Y or N, or F for just filesystem errors and no bad-sector checks and then ENTER:
 set chkdsk=
 set /P chkdsk=Type input: %=%
@@ -395,9 +388,33 @@ IF /I "%chkdsk%"=="f" (
 
 
 
+set mydefrag=n
+
+IF EXIST "MyDefrag.exe" (
+	ECHO.
+	ECHO Do you want defrag the system drive using MyDefrag Monthly script at end of scripts? Do not do this if the system drive media type is a SSD.
+	ECHO Press Y or N and then ENTER
+	set /P mydefrag=Type input: %=%
+)
+
+
+IF /I "%mydefrag%"=="y" (
+	ECHO.
+	ECHO Defrag enabled - Make sure your scripts/settings.myd file is set to reboot after defrag, if you want that to happen.
+	set reboot="n"
+)
+
+
+IF /I "%mydefrag%"=="n" (
+	ECHO.
+	ECHO Do you want Reboot after the script completes? Many changes will not be visible until after reboot.
+	ECHO Press Y or N and then ENTER:
+	set /P reboot=Type input: %=%
+)
+
 
 ECHO.
-ECHO Do you want to disable the notifications center (action center) and prevent closed Microsoft apps like Camera from running in the background?
+ECHO Do you want to disable the notifications/action center and prevent closed Microsoft apps like Camera from running in the background?
 ECHO Press Y or N and then ENTER:
 set disable_notifications=
 set /P disable_notifications=Type input: %=%
@@ -405,7 +422,7 @@ set /P disable_notifications=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable Fast Boot and Hibernation (to free up disk space and allow Windows updates to process on shutdown)?
+ECHO Do you want to disable Fast Boot and Hibernation? This frees up disk space and allows Windows updates to process on shutdown.
 ECHO Press Y or N and then ENTER:
 set hibernate_off=
 set /P hibernate_off=Type input: %=%
@@ -421,7 +438,7 @@ set /P solid_color_background=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable hiding items in system tray (will not be reenable-able from settings)?
+ECHO Do you want to disable hiding items in system tray? This will not be reenable-able from Settings.
 ECHO Press Y or N and then ENTER:
 set disable_hide_systemtray=
 set /P disable_hide_systemtray=Type input: %=%
@@ -435,7 +452,7 @@ set /P disable_folder_templates=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable Application Experience (required for running old applications, disabling can speed up program launch)?
+ECHO Do you want to disable Application Experience? This is required for running some very old applications, but disabling it can speed up program launch.
 ECHO Press Y or N and then ENTER:
 set disable_application_experience=
 set /P disable_application_experience=Type input: %=%
@@ -449,7 +466,7 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable UAC (reduces overall security, disables application launch popups)?
+ECHO Do you want to disable UAC? This reduces overall security but disables application launch popups.
 ECHO Press Y or N and then ENTER:
 set disable_uac=
 set /P disable_uac=Type input: %=%
@@ -472,24 +489,28 @@ set /P uninstall_onedrive=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to uninstall Edge Browser?
+ECHO Do you want to uninstall Edge Browser? This can interfere with some system updates.
 ECHO Press Y or N and then ENTER:
 set uninstall_edge=
 set /P uninstall_edge=Type input: %=%
 
 
 
-If /I "%skipdism%"=="y" (
-	goto begin
-)
+
+
+ECHO.
+ECHO Do you want to skip DISM and SFC testing?
+ECHO Press Y or N and then ENTER:
+set skipdism=
+set /P skipdism=Type input: %=%
 
 
 
 ECHO.
-ECHO Do you want to skip DISM and SFC testing and enabling Group Policy editor?
+ECHO Do you want to install group policy editor, if it's not already installed?
 ECHO Press Y or N and then ENTER:
-set skipdism=
-set /P skipdism=Type input: %=%
+set installgpedit=
+set /P installgpedit=Type input: %=%
 
 
 
@@ -753,7 +774,6 @@ PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& %~dp0\simplifier_disab
 
 
 ECHO Remove M$ in-start-menu advertising for it's own online services
-popd
 %systemdrive%
 cd "%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\
 IF EXIST "Excel.lnk" del /F "Excel.lnk"
@@ -766,6 +786,7 @@ IF EXIST "Word (1).lnk" del /F "Word (1).lnk"
 IF EXIST "Powerpoint (1).lnk" del /F "Powerpoint (1).lnk"
 cd ..
 IF EXIST "MSN*.website" del /F "MSN*.website"
+popd
 pushd "%~dp0"
 
 
@@ -823,13 +844,13 @@ powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 
 
 ECHO Stop Windows from requiring sign-in when waking from sleep
-powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0 
+powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
 powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
 
 
 ECHO Enabling Group Policy Editor if not already present
-If /I "%skipdism%"=="y" (
-	IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
+IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
+	If /I "%installgpedit%"=="y" (
 		dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
 		dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt
 		for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
