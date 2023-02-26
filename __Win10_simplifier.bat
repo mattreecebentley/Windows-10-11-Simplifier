@@ -166,6 +166,11 @@ FOR %%A IN (%*) DO (
 		set chkdsk=y
 	)
 
+	IF "%%A"=="-chkdskf" (
+		ECHO Chkdsk for filesystem errors only on reboot enabled
+		set chkdsk=f
+	)
+
 	IF "%%A"=="-showtrayitems" (
 		ECHO Disable hiding of system tray items enabled
 		set disable_hide_systemtray=y
@@ -367,7 +372,7 @@ IF /I "%mydefrag%"=="n" (
 
 ECHO.
 ECHO Do you want to check the system hard drive for bad sectors and filesystem errors on next reboot?
-ECHO Press Y or N and then ENTER:
+ECHO Press Y or N, or F for just filesystem errors and no bad-sector checks and then ENTER:
 set chkdsk=
 set /P chkdsk=Type input: %=%
 
@@ -377,6 +382,15 @@ IF /I "%chkdsk%"=="y" (
 	ECHO.
 	ECHO Running chkdsk now, please press Y then Enter at the prompt so it can run on next reboot:
 	chkdsk %SystemDrive% /f /r
+)
+
+
+
+
+IF /I "%chkdsk%"=="f" (
+	ECHO.
+	ECHO Running chkdsk now, please press Y then Enter at the prompt so it can run on next reboot:
+	chkdsk %SystemDrive% /f
 )
 
 
@@ -472,7 +486,7 @@ If /I "%skipdism%"=="y" (
 
 
 ECHO.
-ECHO Do you want to skip DISM and SFC testing?
+ECHO Do you want to skip DISM and SFC testing and enabling Group Policy editor?
 ECHO Press Y or N and then ENTER:
 set skipdism=
 set /P skipdism=Type input: %=%
@@ -808,13 +822,19 @@ powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
 
-ECHO Enabling Group Policy Editor if not already present
-IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
-	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
-	dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt
-	for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
-)
+ECHO Stop Windows from requiring sign-in when waking from sleep
+powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0 
+powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
 
+
+ECHO Enabling Group Policy Editor if not already present
+If /I "%skipdism%"=="y" (
+	IF NOT EXIST "%SystemRoot%\System32\gpedit.msc" (
+		dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >List.txt
+		dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>List.txt
+		for /f %%i in ('findstr /i . List.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
+	)
+)
 
 
 REM Optionally run mydefrag

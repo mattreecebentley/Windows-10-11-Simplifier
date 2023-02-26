@@ -75,10 +75,10 @@ This script disables:
 * Edge desktop shortcut on new user accounts
 * "Meet Now" button on taskbar
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
+* Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar and game monitoring
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
-* Fast boot (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
-* Hibernation and removes the hibernation file (OPTIONAL)
+* Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
 * Automatically changing of Explorer folder layouts based on folder contents eg. mp3s (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
@@ -95,11 +95,9 @@ Other changes this script makes (for all versions of Windows 10):
 
 * Re-enables the option to login without password in "control userpasswords2" or netplwiz
 * Changes default control panel view to large icons rather than categorized
-* Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
 * Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
-* Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
@@ -116,6 +114,9 @@ Other changes this script makes (for all versions of Windows 10):
 * Enables installation of Win11 even on older computers while preventing it from automatically upgrading to it (user choice only)
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes Win10 mode to Dark while keeping apps Light (ie. custom)
+* Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
+* Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10 (OPTIONAL)
+* Runs chkdsk /f or chkdsk /f /r on system drive on next boot (OPTIONAL)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
@@ -163,6 +164,7 @@ If any other command line options below are specified, it is assumed that any un
 * -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
+* -chkdskf - check system disk for filesystem errors only on next reboot
 * -showtrayitems - disable hiding of system tray icons
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
@@ -190,7 +192,7 @@ And again, not a bug for my script, but Win10debloater removes the camera app by
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards, Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
@@ -205,4 +207,4 @@ This script is under a Creative Commons Attribution 3.0 New Zealand License (htt
 
 Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
-Matt Bentley 2021
+Matt Bentley 2023

@@ -1,6 +1,7 @@
 @ECHO OFF
 
-ECHO Warning: this may also revert any changes that've been made to your computer post-Simplifier, including program installations, settings changes and suchforth. Are you sure you want to continue?
+ECHO MAJOR WARNING: If you have made any changes to your system after using win10simplifier eg. installing updates, drivers or programs, making other modifications to the operating system, continuing here may cause your system to no longer boot. Win10simplifier is not responsible for any problems caused by continuing here.
+Are you sure you want to continue?
 ECHO Press Y or N and then ENTER:
 set continue=
 set /P continue=Type input: %=%
