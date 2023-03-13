@@ -1,5 +1,5 @@
-Windows 10 Simplifier Script
-============================
+Windows 10/11 Simplifier Script
+===============================
 
 
 To Download:
@@ -12,10 +12,10 @@ Download from github using the green 'Clone or Download' button. Save the result
 Purpose:
 --------
 
-This is a set of settings changes and tweaks I regularly apply on new Windows 10 machines, primarily to reduce the amount of 'noise' the user has to deal with. Many of my clients are elderly, and small things irk them.
-With this in mind, there are a number of annoying Windows 10 features disabled, some silly default settings corrected, and visual effects are turned off (only those which slow the responsiveness of windows, and are unnecessary). Other than that, some useful scripts and programs external to this script will be run automatically if they're placed in the same folder.
+This is a set of settings changes and tweaks I regularly apply on new Windows machines, primarily to reduce the amount of 'noise' the user has to deal with. Many of my clients are elderly, and small things irk them.
+With this in mind, there are a number of annoying Windows 10/11 features disabled, some silly default settings corrected, and visual effects are turned off (only those which slow the responsiveness of windows, and are unnecessary). Other than that, some useful scripts and programs external to this script will be run automatically if they're placed in the same folder.
 
-Almost all of the settings can be changed back manually in 'Settings' or the Control Panel (the real "settings"). In addition, all settings are backed up in registry files prior to execution and will be restored if the user runs the 'unsimplifier' .bat. However those registry files are written to the same folder, so will be overwritten if you use the script, for example, on more than one computer from an external drive.
+Almost all of the settings can be changed back manually in 'Settings' or the Control Panel. In addition, a System Restore point is created on each run, so you can restore the system to exactly how it was prior to simplifying.
 
 This script does not aim to be suitable for all people - so if there's a setting you dislike, edit the registry file, powershell file, or .bat file. Most settings are in the registry file, and all are clearly labeled.
 
@@ -24,19 +24,22 @@ This script does not aim to be suitable for all people - so if there's a setting
 To Run:
 -------
 
-Right-click on __Win10_simplifier.bat and then left-click on "Run as Administrator". Follow the prompts.
+Right-click on __Win1x_simplifier.bat and then left-click on "Run as Administrator". Follow the prompts.
 Once the script is complete, you will need to restart the computer to see some of the changes (eg. visual effect changes).
 
-Alternatively, run __Win10_simplifier.bat from the command line with either "-all" or "-none" (without quotes) to respectively enable or disable all options (and avoid prompts). More command line options are available at bottom of page. You can use nircmd (http://www.nirsoft.net/utils/nircmd.html) to elevate this script to 'Run As Administrator' from the command prompt.
+Alternatively, run __Win1x_simplifier.bat from the command line with either "-all" or "-none" (without quotes) to respectively enable or disable all options (and avoid prompts). More command line options are available at bottom of page. You can use nircmd (http://www.nirsoft.net/utils/nircmd.html) to elevate this script to 'Run As Administrator' from the command prompt.
 
-To revert changes, right-click on __Win10_unsimplifier.bat and then left-click on "Run as Administrator". The registry settings will be restored. Any changes made by external scripts or programs may or may not be reverted. You will be prompted to restart the computer.
+Win1x simplifier attempts to create a system restore point every time it runs. So to revert changes, simply run system restore (under windows settings) and restore to the restore point which matches the time you ran the script. Alternatively you can launch __Win1x_unsimplifier.bat (right-click then left-click "Run as Administrator") which attempts to launch system restore.
+
+If you don't have system restore enabled on your computer, simplifier creates a backup of the registry in the simplifier folder under registry_backups\%computer_name% just in case. If you need to revert settings in this scenario, again run __Win1x_unsimplifier.bat and it will correctly select the specific registry backup based on the computer name. If multiple computers have the same internal name, they could overwrite each other's registry backup. Be warned, if you have made any major system changes after running simplifier this could brick your machine on restart. So where possible, have system restore enabled and use that instead.
+
+If you run the scripts and later find that you liked having the Quick Access tree available in File Explorer, double-click on and Merge the _re-enable_quick_access.reg file, this will restore quick access. This is a common enough scenario that I've decided to include it.
 
 
 
 This script disables:
 ---------------------
 
-* game mode notifications
 * people and task view buttons on taskbar
 * zip/cab folders (if 7z installer present, see below)
 * auto-hide scrollbars
@@ -64,7 +67,7 @@ This script disables:
 * "News and interests" button on taskbar
 * Microsoft Office web app links on start menu
 * "Tips, tricks and suggestions" after you receive updates
-* The windows 10 "welcome experience" after large updates
+* The "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
 * Right-click context menu explorer options 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with', 'Cast to Device' and 'Restore previous version'
 * Cortana searches
@@ -76,7 +79,7 @@ This script disables:
 * "Meet Now" button on taskbar
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Requiring the user to login when waking from sleep/hibernate mode
-* Xbox Gamebar and game monitoring
+* Xbox Gamebar, game monitoring and notifications
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
@@ -86,12 +89,11 @@ This script disables:
 * User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
 * Onedrive (OPTIONAL)
-* Microsoft Edge (OPTIONAL)
 
 
 
-Other changes this script makes (for all versions of Windows 10):
------------------------------------------------------------------
+Other changes this script makes:
+--------------------------------
 
 * Re-enables the option to login without password in "control userpasswords2" or netplwiz
 * Changes default control panel view to large icons rather than categorized
@@ -111,11 +113,17 @@ Other changes this script makes (for all versions of Windows 10):
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
-* Enable installation of Win11 on older computers without TPM while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
+* Enable installation of Win11 on older computers running Win10 without TPM, while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
 * Stops Windows Defender from using more than 20% (average) CPU during scans
-* Changes Win10 mode to Dark while keeping apps Light (ie. custom)
+* Changes colour mode to Dark while keeping apps Light (ie. custom)
+* Cleans the WinSxS folder of redundant files using DISM
+* (Win11) Move start menu to left instead of center
+* (Win11) Ungroup Taskbar Icons / Enable Text Labels
+* (Win11) Get Win10-style right-click explorer menu back
+* (Win11) Changes two-finger touchpad scroll direction to the win10 default ie. the one that makes sense
+* Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
-* Enables Group Policy Editor (gpedit.msc) for all versions of Windows 10 (OPTIONAL)
+* Enables Group Policy Editor (gpedit.msc) for all versions of Windows (OPTIONAL)
 * Runs chkdsk /f or chkdsk /f /r on system drive on next boot. Runs powershell command to show status of hard drives beforehand (OPTIONAL)
 * Changes desktop background to a solid color - plum color by default (OPTIONAL)
 * Reboots once script has finished (OPTIONAL)
@@ -127,18 +135,19 @@ Other changes this script makes (for all versions of Windows 10):
 Other scripts/executables this script will optionally run, if present in the same folder:
 -----------------------------------------------------------------------------------------
 
-* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the installer file is present in the same folder under the name "agentransack.exe". Windows Search will only be disabled if Outlook is not present on the system.
+* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the MSI versions of the installers is present in the same folder under the names "agentransack_x86.exe" and "agentransack_x64.msi" for the 32-bit and 64-bit versions respectively. Windows Search will only be disabled if Outlook is not present on the system.
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
 * HDDScan (http://hddscan.com/) to check hard drive health.
-* Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference.
-* Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds) on automatic settings (ie. whatever settings you last used with ccleaner portable) will run in the background while the rest of the tasks complete, if extracted to the same folder as Win10-simplifier. If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
+* Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference. Note: I strongly recommend against using Method 2 in this app, as it tends to screw up associations, use Method 1 instead.
+* Bleachbit portable (https://bleachbit.org), if extracted to the subfolder "bleachbit" under the Win1x-simplifier folder.
+* Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds) on automatic settings (ie. whatever settings you last used with ccleaner portable) will run in the background while the rest of the tasks complete, if extracted to the subfolder "ccleaner" under the Win1x-simplifier folder. If 64-bit windows is detected it will run the 64-bit version, so include both executables. If the system is already running ccleaner (eg. in system tray) it will be terminated before running ccleaner portable.
 * PC Decrapifier 2.3.1 (https://www.bleepingcomputer.com/download/pc-decrapifier/) for easy uninstallation of programs. File must be named "pc-decrapifier-2.3.1.exe".
-* Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit win10 is detected it will run the 64-bit version, so include both executables.
-* 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit win10 is detected it will install the 64-bit version, so include both executables.
-* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana).
-* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder.
-* ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win10-simplifier. Note that settings will differ between home and pro versions of Win10.
-* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win10-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility.
+* Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit windows is detected it will run the 64-bit version, so include both executables.
+* 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit windows is detected it will install the 64-bit version, so include both executables.
+* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana). As of time of writing this script also works fine with Win11.
+* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. As of time of writing this script also works fine with Win11.
+* ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win1x-simplifier. Note that settings will differ between home and pro versions of Win10. At time of writing this tool also works with Win11.
+* MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win1x-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. You can customise the scripts so that the program will exit once the defrag is complete, look up it's documentation to achieve this.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird.
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell installation restarts the explorer.exe process, thus why this installer is run at the very end of the script.
 * Old Windows Calculator (https://winaero.com/blog/get-calculator-from-windows-8-and-windows-7-in-windows-10/) will be installed if the installer is in the same folder and renamed to oldcalc.exe.
@@ -153,16 +162,16 @@ The following can be used to run the script without prompts:
 
 * -all - enables all options
 * -none - disables all options
-* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, uninstalledge, avoids some tests and dism/sfc
+* -freshinstall - enables disablenotifications, reboot, solidcolordesktop, disableae, clearpinnedapps, avoids some tests and dism/sfc
 * -newcomputer - freshinstall + avoids some additional tasks such as chkdsk
 
 If any of the above are specified, all other command line options will be ignored.
 If any other command line options below are specified, it is assumed that any unspecified options are 'off' (same as '-none' above). The individual command line options are:
 
-* -defrag - enables defrag using mydefrag with a monthly script at end of all scripts
+* -defrag - enables defrag/optimization/trim of all drives in computer. Uses windows defrag, or mydefrag.exe if present.
 * -disablenotifications - disables notifications center and prevents background apps from running
 * -disablehibernation - disables hibernation/fast boot
-* -reboot - reboot computer once script is finished. Will only occur if mydefrag is not run.
+* -reboot - reboot computer once script is finished.
 * -solidcolordesktop - changes windows desktop background to a solid color
 * -chkdsk - check system disk for filesystem errors and bad sectors on next reboot
 * -chkdskf - check system disk for filesystem errors only on next reboot (useful for SSDs)
@@ -172,19 +181,16 @@ If any other command line options below are specified, it is assumed that any un
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
 * -disableuac - disables User Account Control
 * -disablesuperfetch - disables Superfetch (sysmain)
-* -skipdism - skips DISM and SFC tests
+* -dismsfc - runs DISM and SFC tests
 * -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
 * -uninstallonedrive - uninstalls Onedrive
-* -uninstalledge - removes Chromium Edge
-
-The -reboot and -defrag options are mutually exclusive. Specifically, if -defrag is specified, -reboot will be disabled.
 
 
 
 Current bugs:
 --------------
 
-I've noticed that the enabling of F8 on boot doesn't work on some machines, windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. However this is rare.
+I've noticed that the enabling of F8 on boot doesn't work on some machines, as windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. The same case applies for defrag.exe. However this is rare.
 
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
 And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app.
@@ -194,8 +200,8 @@ And again, not a bug for my script, but Win10debloater removes the camera app by
 Additional Notes:
 -----------------
 
-This script has been tested on Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
-I have not included any scripts to check for updates because from 1803 onwards, Windows 10 puts the user into a beta-tester role if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!!!! Top marks
+This script has been tested on Windows 11 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+I have not included any scripts to check for updates because from 1803 onwards, Windows 10/11 puts the user's computer in an update beta-tester channel if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
@@ -207,6 +213,6 @@ See here: https://www.github.com/mattreecebentley/win10_disable_defender
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)
 
-Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
+Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums/elevenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
 Matt Bentley 2023
