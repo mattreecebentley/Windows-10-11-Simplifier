@@ -80,6 +80,7 @@ This script disables:
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar, game monitoring and notifications
+* (Win11) Chat button 
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
@@ -118,9 +119,7 @@ Other changes this script makes:
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
 * Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
-* (Win11) Ungroup Taskbar Icons / Enable Text Labels
 * (Win11) Get Win10-style right-click explorer menu back
-* (Win11) Changes two-finger touchpad scroll direction to the win10 default ie. the one that makes sense
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows (OPTIONAL)
