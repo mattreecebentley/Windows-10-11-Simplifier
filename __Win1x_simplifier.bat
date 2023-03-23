@@ -4,6 +4,14 @@ REM Change working directory to script directory:
 pushd "%~dp0"
 
 
+ECHO Detecting windows version...
+set winver=10
+
+systeminfo | findstr /i /c:"windows 11" > nul && set winver=11
+
+ECHO Windows %winver% detected
+
+
 REM If no command line arguments, skip this
 IF "%~1"=="" goto begin_preliminaries
 
@@ -219,7 +227,7 @@ goto begin_tests
 REM Run initial testing software:
 
 ECHO.
-ECHO Is this a fresh installation of Windows 10 (ie. not preloaded by factory on a new computer, or an old installation)?
+ECHO Is this a fresh installation of Windows %winver% (ie. not preloaded by factory on a new computer, or an old installation)?
 ECHO Press Y or N and then ENTER:
 set freshinstall=
 set /P freshinstall=Type input: %=%
@@ -428,11 +436,15 @@ set /P solid_color_background=Type input: %=%
 
 
 
-ECHO.
-ECHO Do you want to disable hiding items in system tray? This will not be reenable-able from Settings.
-ECHO Press Y or N and then ENTER:
-set disable_hide_systemtray=
-set /P disable_hide_systemtray=Type input: %=%
+set disable_hide_systemtray=n
+
+If /I "%winver%"=="10" (
+  ECHO.
+  ECHO Do you want to disable hiding items in system tray? This will not be reenable-able from Settings.
+  ECHO Press Y or N and then ENTER:
+  set /P disable_hide_systemtray=Type input: %=%
+)
+
 
 
 ECHO.
@@ -479,6 +491,8 @@ set /P uninstall_onedrive=Type input: %=%
 
 
 
+IF /I "%dismsfc%"=="n" goto skip_dism
+
 ECHO.
 ECHO Do you want to run DISM and SFC testing?
 ECHO Press Y or N and then ENTER:
@@ -486,6 +500,7 @@ set dismsfc=
 set /P dismsfc=Type input: %=%
 
 
+:skip_dism
 
 ECHO.
 ECHO Do you want to install group policy editor, if it's not already installed?
@@ -579,7 +594,7 @@ IF "%sevenzip_exists%"=="y" (
 
 
 IF EXIST "_Win10-BlackViper.bat" (
-	ECHO Running Windows 10 Black Viper Services Tweaks - Safe settings Only:
+	ECHO Running Black Viper Services Tweaks - Safe settings Only:
 	call _Win10-BlackViper.bat -auto -safe -sbc -secp -sech -sds
 )
 
@@ -641,10 +656,8 @@ IF EXIST "OOSU10.exe" (
 
 
 IF EXIST "OpenShellSetup.exe" (
-	If /I "%winver%"=="11" (
-		ECHO Installing OpenShell
-		start OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
-	)
+	ECHO Installing OpenShell
+	start OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
 )
 
 
@@ -747,14 +760,12 @@ If /I "%uninstall_onedrive%"=="y" (
 
 REM *** Begin main changes: ***
 
-set winver=10
-systeminfo | findstr /i /c:"windows 11" > nul && set winver=11
 
 ECHO Doing the registry changes
 If /I "%winver%"=="11" (
 	regedit.exe /S simplifier_registry_changes_win11.reg
 ) ELSE (
-	regedit.exe /S simplifier_registry_changes_win10.reg
+  regedit.exe /S simplifier_registry_changes_win10.reg
 )
 
 

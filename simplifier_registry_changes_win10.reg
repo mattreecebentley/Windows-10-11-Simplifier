@@ -624,7 +624,7 @@ Windows Registry Editor Version 5.00
 "StartupPage"=dword:00000001
 
 
-; Enable installation of Win11 (if you want that POS) even on older computers
+; Enable installation of Win11 (if you want that) even on older computers
 [HKEY_LOCAL_MACHINE\SYSTEM\Setup\MoSetup]
 "AllowUpgradesWithUnsupportedTPMOrCPU"=dword:00000001
 
@@ -644,5 +644,5 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
 "ProductVersion"="Windows 10"
 "TargetReleaseVersion"=dword:00000001
-"TargetReleaseVersionInfo"="21H2"
+"TargetReleaseVersionInfo"="23H2"
 
