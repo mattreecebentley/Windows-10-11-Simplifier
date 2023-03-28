@@ -80,6 +80,8 @@ This script disables:
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar, game monitoring and notifications
+* Annoying touchpad options which tend to create seemingly "random" behaviour to the end user (3/4-finger gestures, edge swipes, pinch zoom)
+* Touchpad when mouse is connected
 * (Win11) Chat button 
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)

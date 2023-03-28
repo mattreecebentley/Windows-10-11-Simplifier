@@ -631,5 +631,43 @@ Windows Registry Editor Version 5.00
 
 
 ; Get rid of chat button
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
-"TaskbarMn"=dword:00000000
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Chat]
+"ChatIcon"=dword:00000003
+
+
+; Turn On or Off Tap Twice and Drag on Touchpad to Multi-Select
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"TapAndDrag"=dword:00000000
+
+
+; Turn three-finger gestures off
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"ThreeFingerSlideEnabled"=dword:00000000
+
+
+; Turn Four finger gestures off:
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"FourFingerSlideEnabled"=dword:00000000
+
+
+; Turn off pinch-zoom:
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"ZoomEnabled"=dword:00000000
+
+
+; Turn off touchpad edge-swipes:
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"EnableEdgy"=dword:00000000
+
+
+
+
+; Turn off touchpad when mouse is connected:
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
+"LeaveOnWithMouse"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Synaptics\SynTPEnh]
+"DisableIntPDFeature"=dword:00000022
+
+[HKEY_CURRENT_USER\Software/Elantech/Othersetting]
+"DisableWhenDetectUSBMouse"=dword:00000001
