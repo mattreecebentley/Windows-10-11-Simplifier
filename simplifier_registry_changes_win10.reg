@@ -1,8 +1,10 @@
 Windows Registry Editor Version 5.00
 
 ; Disable 3D objects folder in explorer:
+
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}]
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}]
+
 
 
 ; Disable aero 'shake to minimize' feature and make 'This PC' the default opening point of explorer:
@@ -390,7 +392,7 @@ Windows Registry Editor Version 5.00
 "BranchReadinessLevel"=dword:00000020
 "DeferQualityUpdates"=dword:00000001
 "DeferFeatureUpdates"=dword:00000001
-"DeferFeatureUpdatesPeriodInDays"=dword:0000016d
+"DeferFeatureUpdatesPeriodInDays"=dword:0000008d
 "DeferQualityUpdatesPeriodInDays"=dword:0000001e
 
 

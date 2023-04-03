@@ -186,7 +186,7 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-disableae" (
-		ECHO Disable hiding of system tray items enabled
+		ECHO Disable Application Experience
 		set disable_application_experience=y
 	)
 
@@ -393,7 +393,7 @@ IF /I "%chkdsk%"=="f" (
 
 
 set driveoptimize=n
-	ECHO.
+ECHO.
 
 
 IF EXIST "MyDefrag.exe" (
@@ -526,7 +526,7 @@ set redo=
 set /P redo=Type input: %=%
 
 IF "%redo%"=="y" (
-	ECHO Please go into control panel, Recovery, and enable system restore for your system drive, then
+	ECHO Please go into control panel or settings, look for Recovery, and enable system restore for your system drive, then
 	pause
 	goto begin
 )
@@ -565,7 +565,7 @@ IF "%dismsfc%"=="y" (
 
 
 ECHO Cleaning up the WinSxS folder:
-Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+Dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
@@ -690,9 +690,11 @@ If /I "%disable_uac%"=="y" (
 
 
 
-If /I "%disable_hide_systemtray%"=="y" (
-	ECHO Disable hiding of items in system tray:
-	REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
+If /I "%winver%"=="10" (
+	If /I "%disable_hide_systemtray%"=="y" (
+		ECHO Disable hiding of items in system tray:
+		REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer /v NoAutoTrayNotify /d 1 /t REG_DWORD /f
+	)
 )
 
 
@@ -744,14 +746,19 @@ If /I "%disable_notifications%"=="y" (
 
 If /I "%uninstall_onedrive%"=="y" (
 	ECHO Uninstalling OneDrive
-	taskkill /f /im OneDrive.exe
 
-	IF "%ProgramFiles(x86)%"=="" (
-		REM 32-bit system:
+	If /I "%winver%"=="11" (
 		start %systemroot%\System32\OneDriveSetup.exe /uninstall
 	) ELSE (
-		REM 64-bit system:
-		start %systemroot%\SysWOW64\OneDriveSetup.exe /uninstall
+		taskkill /f /im OneDrive.exe
+
+		IF "%ProgramFiles(x86)%"=="" (
+			REM 32-bit system:
+			start %systemroot%\System32\OneDriveSetup.exe /uninstall
+		) ELSE (
+			REM 64-bit system:
+			start %systemroot%\SysWOW64\OneDriveSetup.exe /uninstall
+		)
 	)
 )
 

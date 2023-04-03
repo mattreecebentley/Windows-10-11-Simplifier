@@ -80,13 +80,11 @@ This script disables:
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar, game monitoring and notifications
-* Annoying touchpad options which tend to create seemingly "random" behaviour to the end user (3/4-finger gestures, edge swipes, pinch zoom)
-* Touchpad when mouse is connected
-* (Win11) Chat button 
+* (Win11) Chat button
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
-* Automatically changing of Explorer folder layouts based on folder contents eg. Pictures folder displays thumbnails (OPTIONAL)
+* Automatic changing of Explorer folder layouts based on folder contents eg. Pictures folder displays thumbnails (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
@@ -136,23 +134,29 @@ Other changes this script makes:
 Other scripts/executables this script will optionally run, if present in the same folder:
 -----------------------------------------------------------------------------------------
 
-* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the MSI versions of the installers is present in the same folder under the names "agentransack_x86.exe" and "agentransack_x64.msi" for the 32-bit and 64-bit versions respectively. Windows Search will only be disabled if Outlook is not present on the system.
+* Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the MSI versions of the installers are present in the same folder under the names "agentransack_x86.exe" and "agentransack_x64.msi" for 32-bit and 64-bit versions respectively. Windows Search will only be disabled if Outlook is not present on the system.
 * Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
 * HDDScan (http://hddscan.com/) to check hard drive health.
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference. Note: I strongly recommend against using Method 2 in this app, as it tends to screw up associations, use Method 1 instead.
-* Bleachbit portable (https://bleachbit.org), if extracted to the subfolder "bleachbit" under the Win1x-simplifier folder.
-* Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds) on automatic settings (ie. whatever settings you last used with ccleaner portable) will run in the background while the rest of the tasks complete, if extracted to the subfolder "ccleaner" under the Win1x-simplifier folder. If 64-bit windows is detected it will run the 64-bit version, so include both executables. If the system is already running ccleaner (eg. in system tray) it will be terminated before running ccleaner portable.
 * PC Decrapifier 2.3.1 (https://www.bleepingcomputer.com/download/pc-decrapifier/) for easy uninstallation of programs. File must be named "pc-decrapifier-2.3.1.exe".
 * Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit windows is detected it will run the 64-bit version, so include both executables.
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit windows is detected it will install the 64-bit version, so include both executables.
-* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater) with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana). As of time of writing this script also works fine with Win11.
-* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) if placed in same folder - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. As of time of writing this script also works fine with Win11.
+* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater), with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana). As of time of writing this script also works fine with Win11.
+* Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. As of time of writing this script also works fine with Win11.
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win1x-simplifier. Note that settings will differ between home and pro versions of Win10. At time of writing this tool also works with Win11.
 * MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win1x-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. You can customise the scripts so that the program will exit once the defrag is complete, look up it's documentation to achieve this.
 * Speedyfox by Crystal Idea (https://www.crystalidea.com/speedyfox) - will automatically defrag/compact the database files for opera, firefox, chrome, skype, thunderbird.
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell installation restarts the explorer.exe process, thus why this installer is run at the very end of the script.
 * Old Windows Calculator (https://winaero.com/blog/get-calculator-from-windows-8-and-windows-7-in-windows-10/) will be installed if the installer is in the same folder and renamed to oldcalc.exe.
 * Windows 7 versions of games (https://www.majorgeeks.com/files/details/windows_7_games_for_windows_10.html) will be installed if the installer is in the same folder and renamed to win7games.exe.
+
+
+
+Other scripts/executables this script will optionally run, if present in subfolders as described:
+-------------------------------------------------------------------------------------------------
+
+* Bleachbit portable (https://bleachbit.org), if extracted to subfolder "bleachbit" within the simplifier folder.
+* Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds), if extracted to subfolder "ccleaner" within the simplifier folder. Will run on automatic settings (ie. whatever settings you last used with ccleaner portable) in the background while the rest of the tasks complete. If 64-bit windows is detected it will run the 64-bit version, so include both executables. If the system is already running ccleaner (eg. in system tray) it will be terminated before running ccleaner portable.
 
 
 
