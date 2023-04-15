@@ -82,14 +82,14 @@ This script disables:
 * Non-critical Windows Defender notifications
 * Notifications for Chrome and Edge
 * (Win11) Chat button
-* Lock screen (automatic if password is blank, otherwise OPTIONAL)
+* Lock screen (automatic if password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
 * Automatic changing of Explorer folder layouts based on folder contents eg. Pictures folder displays thumbnails (OPTIONAL)
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
-* User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html before disabling) - most noticable impact of this is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
+* User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html regards the risks before disabling) - most noticable impact to the user is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
 * Onedrive (OPTIONAL)
 
@@ -115,13 +115,13 @@ Other changes this script makes:
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
-* Enable installation of Win11 on older computers running Win10 without TPM (via USB Win11 install media running in windows 10), while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
+* Enable installation of Win11 on older computers running Win10 without TPM (via USB Win11 install media running in windows 10), while also preventing Win10 from automatically upgrading to it (upgrade is user choice only). The latter targets Win10 23H2 as the final feature update to be installed, as this is the only measure which will prevent Win11 upgrading
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
 * Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
-* Re-enables the option to be able to login without password in netplwiz (OPTIONAL)
+* Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows (OPTIONAL)
@@ -202,7 +202,7 @@ Current bugs:
 I've noticed that the enabling of F8 on boot doesn't work on some machines, as windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. The same case applies for defrag.exe. However this is rare.
 
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
-And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app. Unfortunately Win10Debloater still removes the mail and xbox overlay apps even when whitelisted but it is easy to reinstall them without issue from the windows app store.
+And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app. Win10Debloater still removes the mail and xbox overlay apps even when whitelisted but it is easy to reinstall those from the windows app store.
 
 
 
