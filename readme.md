@@ -48,7 +48,6 @@ This script disables:
 * duplicate instances of external/USB drives visible in explorer
 * the ability for windows to change the sound scheme when changing themes
 * login/lock-screen photos
-* lock screen
 * combining of taskbar buttons
 * transparency of windows and taskbar
 * windows startup sound
@@ -80,7 +79,10 @@ This script disables:
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar, game monitoring and notifications
+* Non-critical Windows Defender notifications
+* Notifications for Chrome and Edge
 * (Win11) Chat button
+* Lock screen (automatic if password is blank, otherwise OPTIONAL)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
@@ -96,7 +98,6 @@ This script disables:
 Other changes this script makes:
 --------------------------------
 
-* Re-enables the option to login without password in "control userpasswords2" or netplwiz
 * Changes default control panel view to large icons rather than categorized
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
@@ -114,12 +115,13 @@ Other changes this script makes:
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
-* Enable installation of Win11 on older computers running Win10 without TPM, while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
+* Enable installation of Win11 on older computers running Win10 without TPM (via USB Win11 install media running in windows 10), while also preventing Win10 from automatically upgrading to it (upgrade is user choice only)
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
 * Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
+* Re-enables the option to be able to login without password in netplwiz (OPTIONAL)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
 * Enables Group Policy Editor (gpedit.msc) for all versions of Windows (OPTIONAL)
@@ -135,7 +137,7 @@ Other scripts/executables this script will optionally run, if present in the sam
 -----------------------------------------------------------------------------------------
 
 * Agent Ransack (https://www.mythicsoft.com/agentransack/) will be installed silently and the Windows Search service disabled if the MSI versions of the installers are present in the same folder under the names "agentransack_x86.exe" and "agentransack_x64.msi" for 32-bit and 64-bit versions respectively. Windows Search will only be disabled if Outlook is not present on the system.
-* Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version.
+* Coretemp (https://www.alcpu.com/CoreTemp/) to check for CPU overheating. For compatibility across computers I recommend getting the 32-bit portable version (under 'other downloads').
 * HDDScan (http://hddscan.com/) to check hard drive health.
 * Stop Resetting My Apps (https://www.carifred.com/stop_resetting_my_apps/) to prevent windows updates from resetting default apps to Microsoft's preference. Note: I strongly recommend against using Method 2 in this app, as it tends to screw up associations, use Method 1 instead.
 * PC Decrapifier 2.3.1 (https://www.bleepingcomputer.com/download/pc-decrapifier/) for easy uninstallation of programs. File must be named "pc-decrapifier-2.3.1.exe".
@@ -149,6 +151,8 @@ Other scripts/executables this script will optionally run, if present in the sam
 * Openshell by Ivo Beltchev (https://github.com/Open-Shell/Open-Shell-Menu) will be installed silently if the installer is in the same folder and renamed to OpenShellSetup.exe. Only the openshell start menu will be installed. Openshell installation restarts the explorer.exe process, thus why this installer is run at the very end of the script.
 * Old Windows Calculator (https://winaero.com/blog/get-calculator-from-windows-8-and-windows-7-in-windows-10/) will be installed if the installer is in the same folder and renamed to oldcalc.exe.
 * Windows 7 versions of games (https://www.majorgeeks.com/files/details/windows_7_games_for_windows_10.html) will be installed if the installer is in the same folder and renamed to win7games.exe.
+* Kaspersky Rootkit Scanner (https://usa.kaspersky.com/content/custom/global/tdsskiller/tdsskiller.html).
+* Malwarebytes Adware Cleaner (https://www.malwarebytes.com/adwcleaner).
 
 
 
@@ -184,7 +188,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
-* -disableuac - disables User Account Control
+* -convenientinsecurity - disables User Account Control and lock screens, re-enables the option to login without password within netplwiz
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -dismsfc - runs DISM and SFC tests
 * -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
@@ -198,7 +202,7 @@ Current bugs:
 I've noticed that the enabling of F8 on boot doesn't work on some machines, as windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. The same case applies for defrag.exe. However this is rare.
 
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
-And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app.
+And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app. Unfortunately Win10Debloater still removes the mail and xbox overlay apps even when whitelisted but it is easy to reinstall them without issue from the windows app store.
 
 
 

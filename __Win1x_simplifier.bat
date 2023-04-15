@@ -31,7 +31,7 @@ IF "%1"=="-all" (
 	set disable_application_experience=y
 	set disable_superfetch=y
 	set clear_pinned_apps=y
-	set disable_uac=y
+	set ninjaturtles=y
 	set uninstall_onedrive=y
 	set freshinstall=n
 	set newmachine=n
@@ -56,7 +56,7 @@ IF "%1"=="-none" (
 	set disable_application_experience=n
 	set disable_superfetch=n
 	set clear_pinned_apps=n
-	set disable_uac=n
+	set ninjaturtles=n
 	set uninstall_onedrive=n
 	set freshinstall=n
 	set newmachine=n
@@ -79,7 +79,7 @@ IF "%1"=="-freshinstall" (
 	set disable_application_experience=y
 	set disable_superfetch=n
 	set clear_pinned_apps=y
-	set disable_uac=n
+	set ninjaturtles=n
 	set uninstall_onedrive=n
 	set freshinstall=y
 	set newmachine=n
@@ -102,7 +102,7 @@ IF "%1"=="-newmachine" (
 	set disable_application_experience=y
 	set disable_superfetch=n
 	set clear_pinned_apps=y
-	set disable_uac=n
+	set ninjaturtles=n
 	set uninstall_onedrive=n
 	set freshinstall=y
 	set newmachine=y
@@ -125,7 +125,7 @@ set disable_folder_templates=n
 set disable_application_experience=n
 set disable_superfetch=n
 set clear_pinned_apps=n
-set disable_uac=n
+set ninjaturtles=n
 set uninstall_onedrive=n
 set freshinstall=n
 set newmachine=n
@@ -195,9 +195,9 @@ FOR %%A IN (%*) DO (
 		set clear_pinned_apps=y
 	)
 
-	IF "%%A"=="-disableuac" (
-		ECHO UAC disabled
-		set disable_uac=y
+	IF "%%A"=="-convenientinsecurity" (
+		ECHO Convenient-but-insecure options enabled
+		set ninjaturtles=y
 	)
 
 	IF "%%A"=="-uninstallonedrive" (
@@ -251,6 +251,7 @@ If /I "%newmachine%"=="y" (
 )
 
 
+
 :begin_tests
 
 
@@ -294,6 +295,13 @@ IF EXIST "bleachbit\Bleachbit.exe" (
 
 
 
+IF EXIST "adwcleaner.exe" (
+	ECHO Malwarebytes adwcleaner found, running...
+	adwcleaner /eula /clean /noreboot /preinstalled
+)
+
+
+
 :skip_initial_testing
 
 IF EXIST "pc-decrapifier-2.3.1.exe" (
@@ -318,8 +326,9 @@ IF EXIST "autoruns.exe" (
 
 IF EXIST "TDSSKiller.exe" (
 	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
-	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn
+	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn -silent
 )
+
 
 
 
@@ -469,10 +478,10 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable UAC? This reduces overall security but disables application launch popups.
+ECHO Do you want to enable convenience-over-security options (disable UAC and lock screens, enable option to login without password in netplwiz)?
 ECHO Press Y or N and then ENTER:
-set disable_uac=
-set /P disable_uac=Type input: %=%
+set ninjaturtles=
+set /P ninjaturtles=Type input: %=%
 
 
 ECHO.
@@ -569,9 +578,8 @@ Dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
-set sevenzip_exists=n
-IF EXIST "7z.exe" set sevenzip_exists=y
-IF EXIST "7z-x64.exe" set sevenzip_exists=y
+set sevenzip_exists=y
+IF NOT EXIST "7z.exe" IF NOT EXIST "7z-x64.exe" set sevenzip_exists=n
 
 
 IF "%sevenzip_exists%"=="y" (
@@ -602,7 +610,11 @@ IF EXIST "_Win10-BlackViper.bat" (
 
 REM Install Agent Ransack if it is present, Disable Windows Search if Outlook is not installed:
 
-IF EXIST "agentransack.msi" (
+set ransack_exists=y
+IF NOT EXIST "agentransack_x86.msi" IF NOT EXIST "agentransack_x64.msi" set ransack_exists=n
+
+
+IF NOT "%ransack_exists%"=="n" (
 	ECHO Installing Agent Ransack
 	IF "%ProgramFiles(x86)%"=="" (
 		REM 32-bit system:
@@ -683,9 +695,20 @@ IF EXIST "SpeedyFox.exe" (
 REM ***** Optional changes *****
 
 
-If /I "%disable_uac%"=="y" (
+If /I "%ninjaturtles%"=="y" (
 	ECHO Disable User Account Control:
 	REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+
+	ECHO Enable option to login without password and username in netplwiz:
+	REG ADD HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device /v DevicePasswordLessBuildVersion /t REG_DWORD /d 0 /f
+
+	ECHO Disable lock screen:
+	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f
+) ELSE (
+	ECHO Disable or enable lock screen based on whether a blank password is being used or not:
+	net use \\%userdomain% /user:%userdomain%\%username% > temp.txt 2>&1
+	findstr /c:"1327" temp.txt > nul && REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f || REG delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /f
+	del temp.txt
 )
 
 
@@ -769,11 +792,14 @@ REM *** Begin main changes: ***
 
 
 ECHO Doing the registry changes
+regedit.exe /S simplifier_registry_changes_common.reg
+
 If /I "%winver%"=="11" (
 	regedit.exe /S simplifier_registry_changes_win11.reg
 ) ELSE (
-  regedit.exe /S simplifier_registry_changes_win10.reg
+	regedit.exe /S simplifier_registry_changes_win10.reg
 )
+
 
 
 ECHO Removing "Cast to Device" from right-click context menu
