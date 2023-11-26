@@ -33,11 +33,11 @@ IF "%1"=="-all" (
 	set clear_pinned_apps=y
 	set ninjaturtles=y
 	set uninstall_onedrive=y
+	set restore_user_folder_locations=y
 	set freshinstall=n
 	set newmachine=n
 	set dismsfc=y
 	set installgpedit=y
-
 
 	goto begin_tests
 )
@@ -58,6 +58,7 @@ IF "%1"=="-none" (
 	set clear_pinned_apps=n
 	set ninjaturtles=n
 	set uninstall_onedrive=n
+	set restore_user_folder_locations=n
 	set freshinstall=n
 	set newmachine=n
 	set dismsfc=n
@@ -81,6 +82,7 @@ IF "%1"=="-freshinstall" (
 	set clear_pinned_apps=y
 	set ninjaturtles=n
 	set uninstall_onedrive=n
+	set restore_user_folder_locations=n
 	set freshinstall=y
 	set newmachine=n
 	set dismsfc=n
@@ -104,6 +106,7 @@ IF "%1"=="-newmachine" (
 	set clear_pinned_apps=y
 	set ninjaturtles=n
 	set uninstall_onedrive=n
+	set restore_user_folder_locations=n
 	set freshinstall=y
 	set newmachine=y
 	set dismsfc=n
@@ -127,6 +130,7 @@ set disable_superfetch=n
 set clear_pinned_apps=n
 set ninjaturtles=n
 set uninstall_onedrive=n
+set restore_user_folder_locations=n
 set freshinstall=n
 set newmachine=n
 set dismsfc=n
@@ -203,6 +207,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-uninstallonedrive" (
 		ECHO Uninstalling onedrive enabled
 		set uninstall_onedrive=y
+	)
+
+	IF "%%A"=="-restoreuserfolders" (
+		ECHO Uninstalling onedrive enabled
+		set restore_user_folder_locations=y
 	)
 
 	IF "%%A"=="-dismsfc" (
@@ -297,7 +306,8 @@ IF EXIST "bleachbit\Bleachbit.exe" (
 
 IF EXIST "adwcleaner.exe" (
 	ECHO Malwarebytes adwcleaner found, running...
-	adwcleaner /eula /clean /noreboot /preinstalled
+	start adwcleaner /eula /clean /noreboot /preinstalled
+	rmdir c:\adwcleaner /s /q
 )
 
 
@@ -401,9 +411,31 @@ IF /I "%chkdsk%"=="f" (
 
 
 
+ECHO.
+ECHO Getting bitlocker status ...
+set bitlocker=n
+
+powershell Get-BitLockerVolume | findstr /i /c:"Encrypted" > nul && set bitlocker=y
+
+IF /I "%bitlocker%"=="y" (
+	ECHO.
+	ECHO Some of your drives are encrypted, which slows disk access. Would you like to decrypt them?
+	ECHO Press Y or N and then ENTER:
+	set decrypt=
+	set /P decrypt=Type input: %=%
+
+	IF /I "%decrypt%"=="y" (
+		ECHO.
+		ECHO Decryption will begin at end of script and run in background, this will slow down your computer after the script has completed. Probably for 10-30 minutes on an SSD, 60-120 minutes on an HDD.
+	)
+) ELSE (
+	ECHO Bitlocker not enabled on any drives, continuing.
+)
+
+
+
 set driveoptimize=n
 ECHO.
-
 
 IF EXIST "MyDefrag.exe" (
 	ECHO Do you want defrag the system drive using MyDefrag Monthly script at end of scripts? Do not do this if the system drive media type is a SSD.
@@ -478,7 +510,7 @@ set /P clear_pinned_apps=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to enable convenience-over-security options (disable UAC and lock screens, enable option to login without password in netplwiz)?
+ECHO Do you want to enable convenient insecurity options (disable UAC and lock screens, enable option to login without password in netplwiz)?
 ECHO Press Y or N and then ENTER:
 set ninjaturtles=
 set /P ninjaturtles=Type input: %=%
@@ -497,6 +529,19 @@ ECHO Do you want to uninstall Onedrive?
 ECHO Press Y or N and then ENTER:
 set uninstall_onedrive=
 set /P uninstall_onedrive=Type input: %=%
+
+
+set restore_user_folder_locations=n
+
+If /I "%uninstall_onedrive%"=="y" (
+	ECHO Do you want to revert any onedrive-stored user folders, eg. c:\user\Owner\onedrive\Documents, back to their default locations, eg. c:\user\Owner\Documents,
+	ECHO and move all files from Onedrive to these folders?
+	ECHO Note: This could take a long time if many files in Onedrive are stored only in the cloud as files-on-demand.
+	ECHO Press Y or N and then ENTER:
+	set restore_user_folder_locations=
+	set /P restore_user_folder_locations=Type input: %=%
+)
+
 
 
 
@@ -770,19 +815,74 @@ If /I "%disable_notifications%"=="y" (
 If /I "%uninstall_onedrive%"=="y" (
 	ECHO Uninstalling OneDrive
 
+	If /I "%restore_user_folder_locations%"=="y" (
+		ECHO Copying data out of Onedrive:
+
+		if not exist "%UserProfile%\Documents" mkdir "%UserProfile%\Documents"
+		if not exist "%UserProfile%\Documents\onedrive" mkdir "%UserProfile%\Documents\onedrive"
+		if not exist "%UserProfile%\Desktop" mkdir "%UserProfile%\Desktop"
+		if not exist "%UserProfile%\Pictures" mkdir "%UserProfile%\Pictures"
+		if not exist "%UserProfile%\Music" mkdir "%UserProfile%\Music"
+		if not exist "%UserProfile%\Videos" mkdir "%UserProfile%\Videos"
+
+		attrib +r -s -h "%USERPROFILE%\Documents" /S /D
+		attrib +r -s -h "%USERPROFILE%\Desktop" /S /D
+		attrib +r -s -h "%USERPROFILE%\Pictures" /S /D
+		attrib +r -s -h "%USERPROFILE%\Music" /S /D
+		attrib +r -s -h "%USERPROFILE%\Videos" /S /D
+
+		robocopy "%USERPROFILE%\Onedrive\Documents" "%USERPROFILE%\Documents" /E
+		robocopy "%USERPROFILE%\Onedrive\Desktop" "%USERPROFILE%\Desktop" /E
+		robocopy "%USERPROFILE%\Onedrive\Pictures" "%USERPROFILE%\Pictures" /E
+		robocopy "%USERPROFILE%\Onedrive\Music" "%USERPROFILE%\Music" /E
+		robocopy "%USERPROFILE%\Onedrive\Videos" "%USERPROFILE%\Videos" /E
+		robocopy "%USERPROFILE%\Onedrive\" "%USERPROFILE%\Documents\onedrive\"
+	)
+
+
+
 	If /I "%winver%"=="11" (
-		start %systemroot%\System32\OneDriveSetup.exe /uninstall
+		%systemroot%\System32\OneDriveSetup.exe /uninstall
 	) ELSE (
 		taskkill /f /im OneDrive.exe
 
 		IF "%ProgramFiles(x86)%"=="" (
 			REM 32-bit system:
-			start %systemroot%\System32\OneDriveSetup.exe /uninstall
+			%systemroot%\System32\OneDriveSetup.exe /uninstall
 		) ELSE (
 			REM 64-bit system:
-			start %systemroot%\SysWOW64\OneDriveSetup.exe /uninstall
+			%systemroot%\SysWOW64\OneDriveSetup.exe /uninstall
 		)
 	)
+
+
+
+	If /I "%restore_user_folder_locations%"=="y" (
+		ECHO Restoring default locations for system folders
+		taskkill /f /im explorer.exe
+		timeout /t 2 /nobreak >nul
+
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "Personal" /t REG_SZ /d "%USERPROFILE%\Documents" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "{f42ee2d3-909f-4907-8871-4c22fc0bf756}" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Documents" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "Personal" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Documents" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "Desktop" /t REG_SZ /d "%USERPROFILE%\Desktop" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "Desktop" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Desktop" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "My Pictures" /t REG_SZ /d "%USERPROFILE%\Pictures" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "{0DDD015D-B06C-45D5-8C4C-F59713854639}" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Pictures" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "My Pictures" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Pictures" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "My Music" /t REG_SZ /d "%USERPROFILE%\Music" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "{A0C69A99-21C8-4671-8703-7934162FCF1D}" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Music" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "My Music" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Music" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "My Video" /t REG_SZ /d "%USERPROFILE%\Videos" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "{35286A68-3C57-41A1-BBB1-0EAE73D76C95}" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Videos" /f
+		reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "My Video" /t REG_EXPAND_SZ /d %%USERPROFILE%%"\Videos" /f
+
+		rmdir /s /q %USERPROFILE%\Onedrive
+
+		timeout /t 1 /nobreak >nul
+		start explorer.exe
+	)
+
 )
 
 
@@ -852,7 +952,7 @@ powercfg -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260df2e
 
 
 ECHO Setting min CPU state to 5% and max to 100% both for when on battery and plugged in
-powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN 5
+powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN 1
 powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN 5
 powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMAX 100
 powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMAX 100
@@ -888,9 +988,22 @@ powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
 
-ECHO Stop Windows from requiring sign-in when waking from sleep
-powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
-powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
+ECHO Enable 'Minimum core parking' feature in power management settings
+powercfg -attributes SUB_PROCESSOR CPMINCORES -ATTRIB_HIDE
+
+
+ECHO Set minimum parked CPU Cores to 50% on power and 10% on battery
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES 50
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES 10
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 50
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 10
+
+
+If /I "%ninjaturtles%"=="y" (
+	ECHO Stop Windows from requiring sign-in when waking from sleep
+	powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
+	powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0
+)
 
 
 IF NOT EXIST "%SystemRoot%\System32\gpedit.dll" (
@@ -943,6 +1056,14 @@ goto bleachbit_wait_loop
 
 REM Change working directory to back to original directory
 popd
+
+
+IF /I "%decrypt%"=="y" (
+	ECHO.
+	ECHO Drive decryption beginning now, running in background, this will slow down your computer after the script has completed - probably for half an hour on a SSD, a few hours on a HDD.
+	ECHO.
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%simplifier_turn_off_bitlocker_on_all_drives.ps1' -SysPrep -Privacy -Debloat" -Verb RunAs
+)
 
 
 If /I "%reboot%"=="y" (

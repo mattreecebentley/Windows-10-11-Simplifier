@@ -77,12 +77,12 @@ This script disables:
 * Edge desktop shortcut on new user accounts
 * "Meet Now" button on taskbar
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
-* Requiring the user to login when waking from sleep/hibernate mode
 * Xbox Gamebar, game monitoring and notifications
 * Non-critical Windows Defender notifications
 * Notifications for Chrome and Edge
 * (Win11) Chat button
-* Lock screen (automatic if password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
+* (Win11) Snap/arrange bar at top of screen when dragging windows
+* Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
@@ -90,6 +90,7 @@ This script disables:
 * Application Experience (required for some older apps, disabling may speed up program launches) (OPTIONAL)
 * Autoplay/autorun on all drives (OPTIONAL)
 * User Account Control (please read this: https://insights.sei.cmu.edu/cert/2015/07/the-risks-of-disabling-the-windows-uac.html regards the risks before disabling) - most noticable impact to the user is the removal of the box that pops up when you try to install/launch a program (OPTIONAL)
+* Requiring the user to login when waking from sleep/hibernate mode (OPTIONAL)
 * Superfetch (sysmain) (OPTIONAL)
 * Onedrive (OPTIONAL)
 
@@ -109,6 +110,7 @@ Other changes this script makes:
 * Sets minimum and maximum CPU states to 5% and 100% respectively, regardless of whether plugged in
 * Tells windows to shutdown when the power button is pressed, instead of sleep (regardless of whether it's plugged in or a laptop)
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
+* Minimum CPU core parking option enabled in power managment settings (control panel) and set to 10% on battery, 50% on power
 * Makes 'This PC' the default opening point of windows explorer
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
@@ -121,6 +123,7 @@ Other changes this script makes:
 * Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
+* Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
 * Runs "DISM /Online /Cleanup-image /Restorehealth" followed by "sfc /scannow" to fix any potential Windows system file issues (occasionally, this actually fixes stuff) (OPTIONAL)
@@ -130,6 +133,7 @@ Other changes this script makes:
 * Reboots once script has finished (OPTIONAL)
 * Checks disk for filesystem errors and bad sectors on the next reboot (OPTIONAL)
 * Clears pinned apps from taskbar (OPTIONAL)
+* If Onedrive is removed (one of the optional disabling options above), revert user folders like Documents to original location eg. c:\users\username\Documents, and move all data out of the Onedrive subfolders and into those folders. Files stored within the Onedrive root folder (eg. c:\users\Owner\Onedrive\*.*) get moved to a subfolder under Documents called 'onedrive'. (OPTIONAL)
 
 
 
@@ -188,12 +192,12 @@ If any other command line options below are specified, it is assumed that any un
 * -disablefoldertemplates - stop windows from changing explorer folder layouts based on folder contents
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
-* -convenientinsecurity - disables User Account Control and lock screens, re-enables the option to login without password within netplwiz
+* -[convenientinsecurity](https://www.youtube.com/watch?v=38sRaDDMD5A) - disables User Account Control and lock screens, re-enables the option to login without password within netplwiz, disables requiring the user to login when waking from sleep/hibernate mode
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -dismsfc - runs DISM and SFC tests
 * -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
 * -uninstallonedrive - uninstalls Onedrive
-
+* -restoreuserfolders - will only be used if -uninstallonedrive is specified. When Onedrive is uninstalled, revert the user folder locations (eg. Documents) to their default locations (eg. c:\users\Owner\Documents) and move all files from the Onedrive subfolders (eg. c:\users\Owner\Onedrive\Documents) to the default locations. Moves files stored directly within the Onedrive folder itself (eg. c:\users\Owner\Onedrive\*.*) to a subfolder under Documents called 'onedrive'.
 
 
 Current bugs:
@@ -208,6 +212,8 @@ And again, not a bug for my script, but Win10debloater removes the camera app by
 
 Additional Notes:
 -----------------
+
+Report on Bitlocker slowing down SSD drives by up to 45% here: https://www.tomshardware.com/news/windows-software-bitlocker-slows-performance
 
 This script has been tested on Windows 11 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards, Windows 10/11 puts the user's computer in an update beta-tester channel if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!
