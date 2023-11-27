@@ -751,9 +751,9 @@ If /I "%ninjaturtles%"=="y" (
 	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f
 ) ELSE (
 	ECHO Disable or enable lock screen based on whether a blank password is being used or not:
-	net use \\%userdomain% /user:%userdomain%\%username% > temp.txt 2>&1
-	findstr /c:"1327" temp.txt > nul && REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f || REG delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /f
-	del temp.txt
+	net use \\%userdomain% /user:%userdomain%\%username% > "%~dp0temp.txt" 2>&1
+	findstr /c:"1327" "%~dp0temp.txt" > nul && REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f || REG delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /f
+	del "%~dp0temp.txt"
 )
 
 
