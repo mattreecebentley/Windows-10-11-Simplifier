@@ -203,8 +203,6 @@ If any other command line options below are specified, it is assumed that any un
 Current bugs:
 --------------
 
-I've noticed that the enabling of F8 on boot doesn't work on some machines, as windows won't run bcdedit from the elevated batch file even though it'll run it from an elevated command prompt. The same case applies for defrag.exe. However this is rare.
-
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
 And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app. Win10Debloater still removes the mail and xbox overlay apps even when whitelisted but it is easy to reinstall those from the windows app store.
 
