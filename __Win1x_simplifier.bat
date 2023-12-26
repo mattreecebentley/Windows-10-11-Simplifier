@@ -907,7 +907,7 @@ REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
 
 
 ECHO Enabling F8 boot options
-bcdedit /set {current} bootmenupolicy Legacy
+%SystemRoot%\SysNative\bcdedit /set {current} bootmenupolicy Legacy
 
 
 ECHO Disabling system sounds
