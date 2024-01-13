@@ -80,6 +80,7 @@ This script disables:
 * Xbox Gamebar, game monitoring and notifications
 * Non-critical Windows Defender notifications
 * Notifications for Chrome and Edge
+* (Win11) Widgets
 * (Win11) Chat button
 * (Win11) Snap/arrange bar at top of screen when dragging windows
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
@@ -123,6 +124,8 @@ Other changes this script makes:
 * Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
+* (Win11) Allow any apps to be installed by default, not just Windows Store apps
+* (Win11) Add creating a .txt file from right-click menu back into windows:
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
@@ -206,6 +209,7 @@ Current bugs:
 Not a bug for my script, but currently the 'safe' setting of madbomb's blackviper services script turns off wifi on desktop machines. To work around this, I've created my own version of the blackviper.csv file - do not overwrite this. Feel free to complain at the author.
 And again, not a bug for my script, but Win10debloater removes the camera app by default, which some MS webcams rely on for functionality. For this reason I've included my own custom whitelist/blacklist for Win10_debloater which keeps the Camera app. Win10Debloater still removes the mail and xbox overlay apps even when whitelisted but it is easy to reinstall those from the windows app store.
 
+One known script bug: one some machines, when it reaches the section where the script turns off locks screens if the user password is blank, it just pauses for no known reason - pressing Enter makes the script proceed if this happens. It is unknown what causes this at present.
 
 
 Additional Notes:
