@@ -80,6 +80,7 @@ This script disables:
 * Xbox Gamebar, game monitoring and notifications
 * Non-critical Windows Defender notifications
 * Notifications for Chrome and Edge
+* Copilot AI and associated buttons
 * (Win11) Widgets
 * (Win11) Chat button
 * (Win11) Snap/arrange bar at top of screen when dragging windows
@@ -125,7 +126,7 @@ Other changes this script makes:
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
-* (Win11) Add creating a .txt file from right-click menu back into windows:
+* (Win11) Add creating a .txt file from right-click menu back into windows
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
