@@ -83,7 +83,7 @@ This script disables:
 * Copilot AI and associated buttons
 * (Win11) Widgets
 * (Win11) Chat button
-* (Win11) Snap/arrange bar at top of screen when dragging windows
+* (Win11) Snap/arrange bar at top of screen when dragging windows, snap layouts in general
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
@@ -126,7 +126,7 @@ Other changes this script makes:
 * (Win11) Get Win10-style right-click explorer menu back
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
-* Cleans the WinSxS folder of redundant files using DISM (OPTIONAL) 
+* Cleans the WinSxS folder of redundant files using DISM (OPTIONAL)
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
@@ -197,6 +197,7 @@ If any other command line options below are specified, it is assumed that any un
 * -disableae - disable Application Experience (this service is required for some older apps)
 * -clearpinnedapps - clears all currently-pinned apps from the taskbar
 * -[convenientinsecurity](https://www.youtube.com/watch?v=38sRaDDMD5A) - disables User Account Control and lock screens, re-enables the option to login without password within netplwiz, disables requiring the user to login when waking from sleep/hibernate mode
+* -cleanwinsxs - cleans windows winsxs folder of old updates and drivers.
 * -disablesuperfetch - disables Superfetch (sysmain)
 * -dismsfc - runs DISM and SFC tests
 * -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
@@ -218,7 +219,7 @@ Additional Notes:
 
 Report on Bitlocker slowing down SSD drives by up to 45% here: https://www.tomshardware.com/news/windows-software-bitlocker-slows-performance
 
-This script has been tested on Windows 11 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 11 22H3, 22H2 and Windows 10 22H3, 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards, Windows 10/11 puts the user's computer in an update beta-tester channel if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
@@ -226,11 +227,10 @@ https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-install
 I originally automated disk cleanup, but it was not possible to reliably get it to clean up 'Update storage' or 'Old Windows installation' between Win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
-Unfortunately I've had to move the optional Windows defender disabling component to a different repo, as too many antivirus engines were detecting it as malware!
-See here: https://www.github.com/mattreecebentley/win10_disable_defender
+Unfortunately I've had to remove the optional Windows defender disabling component, as too many antivirus engines were detecting it as malware! Look up "Dcontrol" on the net as an alternative.
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)
 
 Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums/elevenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
-Matt Bentley 2023
+Matt Bentley 2024
