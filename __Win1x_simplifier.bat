@@ -38,6 +38,7 @@ IF "%1"=="-all" (
 	set newmachine=n
 	set dismsfc=y
 	set installgpedit=y
+	set cleanwinsxs=y
 
 	goto begin_tests
 )
@@ -63,6 +64,7 @@ IF "%1"=="-none" (
 	set newmachine=n
 	set dismsfc=n
 	set installgpedit=n
+	set cleanwinsxs=n
 	goto begin_tests
 )
 
@@ -87,6 +89,7 @@ IF "%1"=="-freshinstall" (
 	set newmachine=n
 	set dismsfc=n
 	set installgpedit=y
+	set cleanwinsxs=n
 	goto skip_initial_cleanup
 )
 
@@ -111,6 +114,7 @@ IF "%1"=="-newmachine" (
 	set newmachine=y
 	set dismsfc=n
 	set installgpedit=y
+	set cleanwinsxs=y
 	goto skip_initial_testing
 )
 
@@ -135,6 +139,7 @@ set freshinstall=n
 set newmachine=n
 set dismsfc=n
 set installgpedit=n
+set cleanwinsxs=n
 
 
 
@@ -220,8 +225,13 @@ FOR %%A IN (%*) DO (
 	)
 
 	IF "%%A"=="-installgpedit" (
-		ECHO Skipping installation of group policy editor
+		ECHO Enable installation of group policy editor
 		set installgpedit=y
+	)
+
+	IF "%%A"=="-cleanwinsxs" (
+		ECHO Enable cleaning of Winsxs folder
+		set cleanwinsxs=y
 	)
 )
 
@@ -243,6 +253,7 @@ set /P freshinstall=Type input: %=%
 
 If /I "%freshinstall%"=="y" (
 	set dismsfc=n
+	set cleanwinsxs=n
 	goto skip_initial_cleanup
 )
 
@@ -256,6 +267,7 @@ set /P newmachine=Type input: %=%
 
 If /I "%newmachine%"=="y" (
 	set dismsfc=n
+	set cleanwinsxs=y
 	goto skip_initial_testing
 )
 
@@ -556,6 +568,18 @@ set /P dismsfc=Type input: %=%
 
 :skip_dism
 
+
+IF /I "%cleanwinsxs%"=="n" goto skip_sxs
+
+ECHO.
+ECHO Do you want to clean the WinSxS folder? This stores windows updates, old driver and system file versions.
+ECHO Press Y or N and then ENTER:
+set cleanwinsxs=
+set /P cleanwinsxs=Type input: %=%
+
+:skip_sxs
+
+
 ECHO.
 ECHO Do you want to install group policy editor, if it's not already installed?
 ECHO Press Y or N and then ENTER:
@@ -618,8 +642,11 @@ IF "%dismsfc%"=="y" (
 )
 
 
-ECHO Cleaning up the WinSxS folder:
-Dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
+IF "%cleanwinsxs%"=="y" (
+	ECHO Cleaning up the WinSxS folder:
+	Dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
+)
+
 
 
 REM Disable zip/cab folders and install 7zip, if 7zip present:
@@ -750,7 +777,7 @@ If /I "%ninjaturtles%"=="y" (
 	ECHO Disable lock screen:
 	REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f
 ) ELSE (
-	ECHO Disable or enable lock screen based on whether a blank password is being used or not (press ENTER if this process pauses):
+	ECHO Disable or enable lock screen based on whether a blank password is being used or not, press ENTER if the process stops at this point:
 	net use \\%userdomain% /user:%userdomain%\%username% > "%~dp0temp.txt" 2>&1
 	findstr /c:"1327" "%~dp0temp.txt" > nul && REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f || REG delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /f
 	del "%~dp0temp.txt"
@@ -900,6 +927,11 @@ If /I "%winver%"=="11" (
 	regedit.exe /S simplifier_registry_changes_win10.reg
 )
 
+
+If /I "%winver%"=="11" (
+        ECHO Disabling Win11 widgets
+        PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_disable_widgets.ps1'" -Verb RunAs
+)
 
 
 ECHO Removing "Cast to Device" from right-click context menu

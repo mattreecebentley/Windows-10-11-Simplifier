@@ -122,11 +122,11 @@ Other changes this script makes:
 * Enable installation of Win11 on older computers running Win10 without TPM (via USB Win11 install media running in windows 10), while also preventing Win10 from automatically upgrading to it (upgrade is user choice only). The latter targets Win10 23H2 as the final feature update to be installed, as this is the only measure which will prevent Win11 upgrading
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
-* Cleans the WinSxS folder of redundant files using DISM
 * (Win11) Move start menu to left instead of center
 * (Win11) Get Win10-style right-click explorer menu back
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
+* Cleans the WinSxS folder of redundant files using DISM (OPTIONAL) 
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
 * Defrags/Optimizes all hard drives in computer. Uses mydefrag.exe if present, otherwise will use defrag.exe and only run TRIM command on SSD drives (OPTIONAL)
