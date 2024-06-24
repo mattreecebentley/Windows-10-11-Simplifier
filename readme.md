@@ -79,6 +79,7 @@ This script disables:
 * Hiding of filename extensions (eg. .bat, .doc etcetera)
 * Xbox Gamebar, game monitoring and notifications
 * Non-critical Windows Defender notifications
+* Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
 * Copilot AI and associated buttons
 * (Win11) Widgets

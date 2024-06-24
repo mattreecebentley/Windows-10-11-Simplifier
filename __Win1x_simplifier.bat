@@ -1095,14 +1095,16 @@ IF /I "%decrypt%"=="y" (
 	ECHO Drive decryption beginning now, running in background, this will slow down your computer after the script has completed - probably for half an hour on a SSD, a few hours on a HDD.
 	ECHO.
 	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%simplifier_turn_off_bitlocker_on_all_drives.ps1' -SysPrep -Privacy -Debloat" -Verb RunAs
-)
-
-
-If /I "%reboot%"=="y" (
-	ECHO Script finished, Rebooting
-	shutdown /r
-) ELSE (
 	ECHO Simplifier Finished!
 	start explorer.exe
 	pause
+) ELSE (
+	If /I "%reboot%"=="y" (
+		ECHO Script finished, Rebooting
+		shutdown /r
+	) ELSE (
+		ECHO Simplifier Finished!
+		start explorer.exe
+		pause
+	)
 )
