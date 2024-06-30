@@ -127,6 +127,7 @@ Other changes this script makes:
 * (Win11) Get Win10-style right-click explorer menu back
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
+* (Win11) Restore 'show desktop' button in bottom-right of taskbar
 * Cleans the WinSxS folder of redundant files using DISM (OPTIONAL)
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
