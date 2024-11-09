@@ -9,7 +9,14 @@ set winver=10
 
 systeminfo | findstr /i /c:"windows 11" > nul && set winver=11
 
+
 ECHO Windows %winver% detected
+
+If /I "%winver%"=="11" (
+	ECHO WTD
+	ECHO Adding WMIC to Win11 - needed for rest of procedures:
+	DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
+)
 
 
 REM If no command line arguments, skip this
@@ -89,7 +96,7 @@ IF "%1"=="-freshinstall" (
 	set newmachine=n
 	set dismsfc=n
 	set installgpedit=y
-	set cleanwinsxs=n
+	set cleanwinsxs=y
 	goto skip_initial_cleanup
 )
 
@@ -110,7 +117,7 @@ IF "%1"=="-newmachine" (
 	set ninjaturtles=n
 	set uninstall_onedrive=n
 	set restore_user_folder_locations=n
-	set freshinstall=y
+	set freshinstall=n
 	set newmachine=y
 	set dismsfc=n
 	set installgpedit=y
@@ -253,7 +260,7 @@ set /P freshinstall=Type input: %=%
 
 If /I "%freshinstall%"=="y" (
 	set dismsfc=n
-	set cleanwinsxs=n
+	set cleanwinsxs=y
 	goto skip_initial_cleanup
 )
 
@@ -324,57 +331,6 @@ IF EXIST "adwcleaner.exe" (
 
 
 
-:skip_initial_testing
-
-IF EXIST "pc-decrapifier-2.3.1.exe" (
-	ECHO PC Decrapifier 2.3.1 found, running ...
-	start pc-decrapifier-2.3.1.exe
-)
-
-
-IF EXIST "autoruns.exe" (
-	ECHO Autoruns found, running ...
-
-	IF "%ProgramFiles(x86)%"=="" (
-		REM 32-bit system:
-		Autoruns.exe
-	) ELSE (
-		REM 64-bit system:
-		Autoruns64.exe
-	)
-)
-
-
-
-IF EXIST "TDSSKiller.exe" (
-	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
-	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn -silent
-)
-
-
-
-
-:skip_initial_cleanup
-
-
-IF EXIST "StopResettingMyApps.exe" (
-	ECHO Stop Resetting My Apps found, running ...
-	start StopResettingMyApps.exe
-)
-
-
-IF EXIST "oldcalc.exe" (
-	ECHO Installing old version of Calc:
-	start oldcalc.exe
-)
-
-
-IF EXIST "win7games.exe" (
-	ECHO Installing old versions of Windows 7 games:
-	start win7games.exe
-)
-
-
 IF "%~1"=="" goto questions
 
 REM If there are command line options, skip questions
@@ -421,6 +377,54 @@ IF /I "%chkdsk%"=="f" (
 	chkdsk %SystemDrive% /f
 )
 
+
+
+ECHO.
+ECHO Do you want to run DISM and SFC testing?
+ECHO Press Y or N and then ENTER:
+set dismsfc=
+set /P dismsfc=Type input: %=%
+
+
+ECHO.
+ECHO Do you want to clean the WinSxS folder? This stores windows updates, old driver and system file versions.
+ECHO Press Y or N and then ENTER:
+set cleanwinsxs=
+set /P cleanwinsxs=Type input: %=%
+
+
+
+:skip_initial_testing
+
+IF EXIST "pc-decrapifier-2.3.1.exe" (
+	ECHO PC Decrapifier 2.3.1 found, running ...
+	start pc-decrapifier-2.3.1.exe
+)
+
+
+IF EXIST "autoruns.exe" (
+	ECHO Autoruns found, running ...
+
+	IF "%ProgramFiles(x86)%"=="" (
+		REM 32-bit system:
+		Autoruns.exe
+	) ELSE (
+		REM 64-bit system:
+		Autoruns64.exe
+	)
+)
+
+
+
+IF EXIST "TDSSKiller.exe" (
+	ECHO Kaspersky Rootkit Scanner detected found, running, please wait, threats will be automatically cleaned, log outputted to TDSSKiller_log.txt ...
+	TDSSKiller.exe -L TDSSKiller_log.txt -tdlfs -dcexact -accepteula -accepteulaksn -silent
+)
+
+
+
+
+:skip_initial_cleanup
 
 
 ECHO.
@@ -556,36 +560,15 @@ If /I "%uninstall_onedrive%"=="y" (
 
 
 
+systeminfo | findstr /i /c:" home" > nul && set homeversion=y
 
-IF /I "%dismsfc%"=="n" goto skip_dism
-
-ECHO.
-ECHO Do you want to run DISM and SFC testing?
-ECHO Press Y or N and then ENTER:
-set dismsfc=
-set /P dismsfc=Type input: %=%
-
-
-:skip_dism
-
-
-IF /I "%cleanwinsxs%"=="n" goto skip_sxs
-
-ECHO.
-ECHO Do you want to clean the WinSxS folder? This stores windows updates, old driver and system file versions.
-ECHO Press Y or N and then ENTER:
-set cleanwinsxs=
-set /P cleanwinsxs=Type input: %=%
-
-:skip_sxs
-
-
-ECHO.
-ECHO Do you want to install group policy editor, if it's not already installed?
-ECHO Press Y or N and then ENTER:
-set installgpedit=
-set /P installgpedit=Type input: %=%
-
+IF /I "%homeversion%"=="y" (
+	ECHO.
+	ECHO Do you want to install group policy editor, if it's not already installed?
+	ECHO Press Y or N and then ENTER:
+	set installgpedit=
+	set /P installgpedit=Type input: %=%
+)
 
 
 :begin
@@ -725,11 +708,18 @@ If /I "%disable_superfetch%"=="y" (
 
 
 
-IF EXIST "Windows10SysPrepDebloater.ps1" (
-	ECHO Running Windows10 Debloater:
-	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Windows10SysPrepDebloater.ps1' -SysPrep -Privacy -Debloat" -Verb RunAs
+If /I "%winver%"=="10" (
+	IF EXIST "Windows10SysPrepDebloater.ps1" (
+		ECHO Running Windows10 Debloater:
+		PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Windows10SysPrepDebloater.ps1' -SysPrep -Privacy -Debloat" -Verb RunAs
+	)
 )
-
+) ELSE (
+	IF EXIST "winutil.ps1" (
+		ECHO Running WinUtil
+		PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0winutil.ps1'" -Verb RunAs
+	)
+)
 
 
 IF EXIST "OOSU10.exe" (
@@ -1020,15 +1010,20 @@ powercfg -SETACVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 76
 powercfg -SETDCVALUEINDEX SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 7648efa3-dd9c-4e3e-b566-50f929386280 3
 
 
-ECHO Enable 'Minimum core parking' feature in power management settings
+ECHO Enable Minimum and Maximum core parking features in power management settings
 powercfg -attributes SUB_PROCESSOR CPMINCORES -ATTRIB_HIDE
+powercfg -attributes SUB_PROCESSOR CPMAXCORES -ATTRIB_HIDE
 
 
-ECHO Set minimum parked CPU Cores to 50% on power and 10% on battery
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES 50
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES 10
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 50
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 10
+ECHO Set minimum unparked CPU Cores to 12%/0% and maximum to 100%/100% on power/battery
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES 12
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES 0
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 12
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 0
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMAXCORES 100
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMAXCORES 100
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMAXCORES1 100
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMAXCORES1 100
 
 
 If /I "%ninjaturtles%"=="y" (
@@ -1086,6 +1081,24 @@ goto bleachbit_wait_loop
 
 
 
+IF EXIST "StopResettingMyApps.exe" (
+	ECHO Stop Resetting My Apps found, running ...
+	start StopResettingMyApps.exe
+)
+
+
+IF EXIST "oldcalc.exe" (
+	ECHO Installing old version of Calc:
+	start oldcalc.exe
+)
+
+
+IF EXIST "win7games.exe" (
+	ECHO Installing old versions of Windows 7 games:
+	start win7games.exe
+)
+
+
 REM Change working directory to back to original directory
 popd
 
@@ -1101,7 +1114,7 @@ IF /I "%decrypt%"=="y" (
 ) ELSE (
 	If /I "%reboot%"=="y" (
 		ECHO Script finished, Rebooting
-		shutdown /r
+		shutdown /g
 	) ELSE (
 		ECHO Simplifier Finished!
 		start explorer.exe
