@@ -82,6 +82,7 @@ This script disables:
 * Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
 * Copilot AI and associated buttons
+* "Learn about this picture" icon on desktop
 * (Win11) Widgets
 * (Win11) Chat button
 * (Win11) Snap/arrange bar at top of screen when dragging windows, snap layouts in general
