@@ -13,7 +13,6 @@ systeminfo | findstr /i /c:"windows 11" > nul && set winver=11
 ECHO Windows %winver% detected
 
 If /I "%winver%"=="11" (
-	ECHO WTD
 	ECHO Adding WMIC to Win11 - needed for rest of procedures:
 	DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
 )
@@ -710,16 +709,27 @@ If /I "%disable_superfetch%"=="y" (
 
 If /I "%winver%"=="10" (
 	IF EXIST "Windows10SysPrepDebloater.ps1" (
-		ECHO Running Windows10 Debloater:
+		ECHO Running Windows10 Debloater
 		PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Windows10SysPrepDebloater.ps1' -SysPrep -Privacy -Debloat" -Verb RunAs
+	) ELSE (
+		IF EXIST "Win11Debloat.ps1" (
+			ECHO Running Win11/10 Debloater
+			PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Win11Debloat.ps1' -SysPrep -RemoveAppsCustom -Silent"
+		)
 	)
-)
 ) ELSE (
-	IF EXIST "winutil.ps1" (
-		ECHO Running WinUtil
-		PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0winutil.ps1'" -Verb RunAs
+	IF EXIST "Win11Debloat.ps1" (
+		ECHO Running Win11/10 Debloater
+		PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Win11Debloat.ps1' -RemoveAppsCustom -Silent"
 	)
 )
+
+
+IF EXIST "winutil.ps1" (
+	ECHO Running WinUtil
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0winutil.ps1'" -Verb RunAs
+)
+
 
 
 IF EXIST "OOSU10.exe" (

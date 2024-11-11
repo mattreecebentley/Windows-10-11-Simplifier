@@ -48,6 +48,9 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI]
 "DisableAIDataAnalysis"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI]
+"DisableAIDataAnalysis"=dword:00000001
+
 
 ; Disable search on taskbar
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Search\DisableSearch]
@@ -74,4 +77,9 @@ Windows Registry Editor Version 5.00
 ; Remove Gallery from explorer
 [HKEY_CURRENT_USER\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}]
 "System.IsPinnedToNameSpaceTree"=dword:00000000
+
+
+; Disable widgets
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"TaskbarDa"=dword:00000000
 

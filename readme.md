@@ -82,6 +82,7 @@ This script disables:
 * Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
 * Copilot AI and associated buttons
+* Most telemetry
 * "Learn about this picture" icon on desktop
 * (Win11) Widgets
 * (Win11) Chat button
@@ -155,7 +156,8 @@ Other scripts/executables this script will optionally run, if present in the sam
 * PC Decrapifier 2.3.1 (https://www.bleepingcomputer.com/download/pc-decrapifier/) for easy uninstallation of programs. File must be named "pc-decrapifier-2.3.1.exe".
 * Autoruns by Sysinternals (https://docs.microsoft.com/en-us/sysinternals/downloads/autoruns) for easy disabling of startup processes. If 64-bit windows is detected it will run the 64-bit version, so include both executables.
 * 7zip (https://www.7-zip.org/) will be installed silently and zip/cab folders disabled if installers are placed in folder. Please rename 32-bit version of 7z installer '7z.exe' and 64-bit version '7z-x64.exe'. If 64-bit windows is detected it will install the 64-bit version, so include both executables.
-* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater), with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana). As of time of writing this script also works fine with Win11.
+* Windows 11 Debloater by Raphire (https://github.com/Raphire/Win11Debloat). This works on Win10 also and is preferred to Windows 10 Debloater as it does a better job of not removing selected apps like Mail. Uses the custom list already included in the simplifier folder (do not overwrite unless customising).
+* Windows 10 Debloater by Sycnex (https://github.com/Sycnex/Windows10Debloater), with the following options enabled: -SysPrep -Privacy -Debloat (this will also disable cortana). This is disabled from running on Windows 11 as it causes issues with 24H2. Uses the custom-apps list in the simplifier folder (do not overwrite this). Simplifier will run this instead of Win11 Debloater if it exists in the simplifier folder and Win10 is detected.
 * Windows 10 Black Viper Services Tweaks script by Madbomb122 (https://github.com/madbomb122/BlackViperScript/releases) - Safe values Only. Do Not overwrite the blackviper.csv file already present in the simplifier folder. As of time of writing this script also works fine with Win11.
 * ShutUp10 by O&O (https://www.oo-software.com/en/shutup10/) - user must have exported their desired settings to "ooshutup10.cfg" and both this file and ShutUp10 must be in the same folder as Win1x-simplifier. Note that settings will differ between home and pro versions of Win10. At time of writing this tool also works with Win11.
 * MyDefrag by J.C. Kessels (https://www.majorgeeks.com/files/details/mydefrag.html) - will (optionally - do not use on an SSD) run 'Monthly' defrag script on C: if it and it's "Scripts" folder are in the same folder as Win1x-simplifier. Be aware there is a 64-bit and 32-bit version of mydefrag - it's installer will install the relevant one based on your computer. Use the 32-bit .exe for broader compatibility. You can customise the scripts so that the program will exit once the defrag is complete, look up it's documentation to achieve this.
