@@ -934,6 +934,10 @@ If /I "%winver%"=="11" (
 )
 
 
+ECHO Uninstall Copilot App, if present:
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_remove_copilot.ps1'" -Verb RunAs
+
+
 ECHO Removing "Cast to Device" from right-click context menu
 REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /V {7AD84985-87B4-4a16-BE58-8B72A5B390F7} /T REG_SZ /D "Play to Menu" /F
 

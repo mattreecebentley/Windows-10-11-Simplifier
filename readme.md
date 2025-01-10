@@ -81,13 +81,14 @@ This script disables:
 * Non-critical Windows Defender notifications
 * Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
-* Copilot AI and associated buttons
+* Copilot AI, App and associated buttons
 * Most telemetry
 * "Learn about this picture" icon on desktop
 * (Win11) Widgets
 * (Win11) Chat button
 * (Win11) Snap/arrange bar at top of screen when dragging windows, snap layouts in general
 * (Win11) AI 'Recall' "Feature"
+* (Win11) "Unsupported device" message on desktop
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
@@ -116,14 +117,13 @@ Other changes this script makes:
 * Sets minimum and maximum CPU states to 5% and 100% respectively, regardless of whether plugged in
 * Tells windows to shutdown when the power button is pressed, instead of sleep (regardless of whether it's plugged in or a laptop)
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
-* Minimum/maximum unparked CPU cores option enabled in power management settings (control panel) and set to 0% min on battery, 12% on power
+* Minimum/maximum unparked CPU cores option enabled in power management settings (control panel) and set to 0%/12% min on battery/power
 * Makes 'This PC' the default opening point of windows explorer
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
 * Sets the Explorer ribbon to be shown by default
 * Enables PS2 mouse/keyboard support (after reboot)
 * Enables the F8-button-triggered Advanced boot menu at startup (if fast boot is disabled in UEFI)
-* Enable installation of Win11 on older computers running Win10 without TPM (via USB Win11 install media running in windows 10), while also preventing Win10 from automatically upgrading to it (upgrade is user choice only). The latter targets Win10 23H2 as the final feature update to be installed, as this is the only measure which will prevent Win11 upgrading
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
 * (Win11) Move start menu to left instead of center
