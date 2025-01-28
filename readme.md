@@ -89,6 +89,7 @@ This script disables:
 * (Win11) Snap/arrange bar at top of screen when dragging windows, snap layouts in general
 * (Win11) AI 'Recall' "Feature"
 * (Win11) "Unsupported device" message on desktop
+* (Win11) Popup window when an application installer isn't from the app store
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)

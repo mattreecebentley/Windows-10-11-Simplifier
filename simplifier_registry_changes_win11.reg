@@ -88,3 +88,8 @@ Windows Registry Editor Version 5.00
 ; Remove "unsupported device" rubbish
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 "HideUnsupportedHardwareNotifications"=dword:00000001
+
+
+; Set App install capabilities to 'from anywhere'
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer]
+"AicEnabled"="Anywhere"
