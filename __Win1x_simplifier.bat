@@ -45,6 +45,7 @@ IF "%1"=="-all" (
 	set dismsfc=y
 	set installgpedit=y
 	set cleanwinsxs=y
+	set old_right_click=y
 
 	goto begin_tests
 )
@@ -71,6 +72,7 @@ IF "%1"=="-none" (
 	set dismsfc=n
 	set installgpedit=n
 	set cleanwinsxs=n
+	set old_right_click=n
 	goto begin_tests
 )
 
@@ -96,6 +98,7 @@ IF "%1"=="-freshinstall" (
 	set dismsfc=n
 	set installgpedit=y
 	set cleanwinsxs=y
+	set old_right_click=y
 	goto skip_initial_cleanup
 )
 
@@ -121,6 +124,7 @@ IF "%1"=="-newmachine" (
 	set dismsfc=n
 	set installgpedit=y
 	set cleanwinsxs=y
+	set old_right_click=y
 	goto skip_initial_testing
 )
 
@@ -146,6 +150,7 @@ set newmachine=n
 set dismsfc=n
 set installgpedit=n
 set cleanwinsxs=n
+set old_right_click=n
 
 
 
@@ -238,6 +243,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-cleanwinsxs" (
 		ECHO Enable cleaning of Winsxs folder
 		set cleanwinsxs=y
+	)
+
+	IF "%%A"=="-oldrightclick" (
+		ECHO Enable old right-click menu in explorer
+		set old_right_click=y
 	)
 )
 
@@ -474,6 +484,15 @@ ECHO Press Y or N and then ENTER:
 set disable_notifications=
 set /P disable_notifications=Type input: %=%
 
+
+
+If /I "%winver%"=="11" (
+	ECHO.
+	ECHO Do you want to enable the old-style Windows 10 right-click context menu in explorer?
+	ECHO Press Y or N and then ENTER:
+	set old_right_click=
+	set /P old_right_click=Type input: %=%
+)
 
 
 ECHO.
@@ -909,9 +928,14 @@ If /I "%uninstall_onedrive%"=="y" (
 		timeout /t 1 /nobreak >nul
 		start explorer.exe
 	)
-
 )
 
+
+
+If /I "%old_right_click%"=="y" (
+        ECHO Restoring old right-click menu in explorer
+	REG ADD HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32 /v @ /t REG_SZ /d "" /f
+)
 
 
 
@@ -932,6 +956,7 @@ If /I "%winver%"=="11" (
         ECHO Disabling Win11 widgets
         PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_disable_widgets.ps1'" -Verb RunAs
 )
+
 
 
 ECHO Uninstall Copilot App, if present:

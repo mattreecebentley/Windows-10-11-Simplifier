@@ -128,10 +128,10 @@ Other changes this script makes:
 * Stops Windows Defender from using more than 20% (average) CPU during scans
 * Changes colour mode to Dark while keeping apps Light (ie. custom)
 * (Win11) Move start menu to left instead of center
-* (Win11) Get Win10-style right-click explorer menu back
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
 * (Win11) Restore 'show desktop' button in bottom-right of taskbar
+* (Win11) Get Win10-style right-click explorer menu back (OPTIONAL)
 * Cleans the WinSxS folder of redundant files using DISM (OPTIONAL)
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
 * Re-enables the option to be able to login without password in netplwiz (OPTIONAL - again, do not do this if your computer is likely to be used in a public area or contains sensitive information)
@@ -210,6 +210,7 @@ If any other command line options below are specified, it is assumed that any un
 * -installgpedit - installs group policy editor on all versions of windows (can take a while on slower machines)
 * -uninstallonedrive - uninstalls Onedrive
 * -restoreuserfolders - will only be used if -uninstallonedrive is specified. When Onedrive is uninstalled, revert the user folder locations (eg. Documents) to their default locations (eg. c:\users\Owner\Documents) and move all files from the Onedrive subfolders (eg. c:\users\Owner\Onedrive\Documents) to the default locations. Moves files stored directly within the Onedrive folder itself (eg. c:\users\Owner\Onedrive\*.*) to a subfolder under Documents called 'onedrive'.
+* -oldrightclick - removes the simplified version of the right-click menu in Windows 11, replaces it with the Windows 10-style menu ie. what you get in windows 11 if you click on 'more options'
 
 
 Current bugs:

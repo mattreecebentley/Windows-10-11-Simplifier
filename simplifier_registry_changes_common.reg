@@ -73,13 +73,6 @@ Windows Registry Editor Version 5.00
 
 
 
-; Remove Quick Access:
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer]
-"HubMode"=dword:00000001
-
-
-
 ; Turn off auto-hide scrollbars:
 
 [HKEY_CURRENT_USER\Control Panel\Accessibility]
