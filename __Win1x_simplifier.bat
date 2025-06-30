@@ -46,6 +46,7 @@ IF "%1"=="-all" (
 	set installgpedit=y
 	set cleanwinsxs=y
 	set old_right_click=y
+	set remove_copilot=y
 
 	goto begin_tests
 )
@@ -73,6 +74,7 @@ IF "%1"=="-none" (
 	set installgpedit=n
 	set cleanwinsxs=n
 	set old_right_click=n
+	set remove_copilot=n
 	goto begin_tests
 )
 
@@ -99,6 +101,7 @@ IF "%1"=="-freshinstall" (
 	set installgpedit=y
 	set cleanwinsxs=y
 	set old_right_click=y
+	set remove_copilot=y
 	goto skip_initial_cleanup
 )
 
@@ -125,6 +128,7 @@ IF "%1"=="-newmachine" (
 	set installgpedit=y
 	set cleanwinsxs=y
 	set old_right_click=y
+	set remove_copilot=y
 	goto skip_initial_testing
 )
 
@@ -151,6 +155,7 @@ set dismsfc=n
 set installgpedit=n
 set cleanwinsxs=n
 set old_right_click=n
+set remove_copilot=n
 
 
 
@@ -248,6 +253,11 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="-oldrightclick" (
 		ECHO Enable old right-click menu in explorer
 		set old_right_click=y
+	)
+
+	IF "%%A"=="-removecopilot" (
+		ECHO Remove copilot app
+		set remove_copilot=y
 	)
 )
 
@@ -496,6 +506,13 @@ If /I "%winver%"=="11" (
 
 
 ECHO.
+ECHO Do you want to remove the Copilot AI app?
+ECHO Press Y or N and then ENTER:
+set remove_copilot=
+set /P remove_copilot=Type input: %=%
+
+
+ECHO.
 ECHO Do you want to disable Fast Boot and Hibernation? This frees up disk space and allows Windows updates to process on shutdown.
 ECHO Press Y or N and then ENTER:
 set hibernate_off=
@@ -733,7 +750,7 @@ If /I "%winver%"=="10" (
 	) ELSE (
 		IF EXIST "Win11Debloat.ps1" (
 			ECHO Running Win11/10 Debloater
-			PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Win11Debloat.ps1' -SysPrep -RemoveAppsCustom -Silent"
+			PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Win11Debloat.ps1' -RemoveAppsCustom -Silent"
 		)
 	)
 ) ELSE (
@@ -933,8 +950,8 @@ If /I "%uninstall_onedrive%"=="y" (
 
 
 If /I "%old_right_click%"=="y" (
-        ECHO Restoring old right-click menu in explorer
-	REG ADD HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32 /v @ /t REG_SZ /d "" /f
+   ECHO Restoring old right-click menu in explorer
+	reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 )
 
 
@@ -958,9 +975,10 @@ If /I "%winver%"=="11" (
 )
 
 
-
-ECHO Uninstall Copilot App, if present:
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_remove_copilot.ps1'" -Verb RunAs
+If /I "%removecopilot%"=="y" (
+	ECHO Uninstall Copilot App, if present:
+	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_remove_copilot.ps1'" -Verb RunAs
+}
 
 
 ECHO Removing "Cast to Device" from right-click context menu

@@ -69,7 +69,7 @@ This script disables:
 * The "welcome experience" after large updates
 * The "Get Even More Out of Windows" nagware screen (which tries to force MS account signup etc)
 * Right-click context menu explorer options 'Give access to', 'Add to Libraries', 'Pin to Quick Access', 'Share with', 'Cast to Device' and 'Restore previous version'
-* Cortana searches
+* Cortana/Copilot searches
 * Cortana icon on taskbar
 * 3D Objects folder in explorer
 * Web searchs from taskbar search
@@ -81,7 +81,7 @@ This script disables:
 * Non-critical Windows Defender notifications
 * Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
-* Copilot AI, App and associated buttons
+* Old Copilot AI and associated buttons
 * Most telemetry
 * "Learn about this picture" icon on desktop
 * (Win11) Widgets
@@ -91,6 +91,7 @@ This script disables:
 * (Win11) "Unsupported device" message on desktop
 * (Win11) Popup window when an application installer isn't from the app store
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
+* Copilot App (OPTIONAL)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
 * Fast boot and hibernation (to allow updates to be processed on shutdown rather than forcing restarts) (OPTIONAL)
 * Hiding of system tray icons (OPTIONAL)
