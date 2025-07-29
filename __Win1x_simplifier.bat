@@ -775,9 +775,9 @@ IF EXIST "OOSU10.exe" (
 
 
 
-IF EXIST "OpenShellSetup.exe" (
+IF EXIST "oss.exe" (
 	ECHO Installing OpenShell
-	start OpenShellSetup.exe /quiet /norestart ADDLOCAL=StartMenu
+	start oss.exe /quiet /norestart ADDLOCAL=StartMenu
 )
 
 
