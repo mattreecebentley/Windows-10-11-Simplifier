@@ -834,7 +834,7 @@ If /I "%solid_color_background%"=="y" (
 	ECHO Changing desktop background to solid color:
 	REG ADD "HKEY_CURRENT_USER\Control Panel\Colors" /v Background /t REG_SZ /d "50 50 100" /f
 	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_desktop_to_solid_color.ps1'" -Verb RunAs
-	taskkill /f /im explorer.exe
+rem	taskkill /f /im explorer.exe
 	start explorer.exe
 )
 
@@ -971,14 +971,14 @@ If /I "%winver%"=="11" (
 
 If /I "%winver%"=="11" (
         ECHO Disabling Win11 widgets
-        PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_disable_widgets.ps1'" -Verb RunAs
+        PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& './simplifier_disable_widgets.ps1'" -Verb RunAs
 )
 
 
-If /I "%removecopilot%"=="y" (
+If /I "%remove_copilot%"=="y" (
 	ECHO Uninstall Copilot App, if present:
 	PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_remove_copilot.ps1'" -Verb RunAs
-}
+)
 
 
 ECHO Removing "Cast to Device" from right-click context menu
