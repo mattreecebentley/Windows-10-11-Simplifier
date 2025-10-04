@@ -111,7 +111,6 @@ Other changes this script makes:
 * Changes default control panel view to large icons rather than categorized
 * Quality updates are deferred by 1 month
 * Feature updates are deferred by 1 year
-* Update-Ring level changed to "Semi-Annual Channel" (non-beta-tester "professional" branch)
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
@@ -228,7 +227,7 @@ Additional Notes:
 
 Report on Bitlocker slowing down SSD drives by up to 45% here: https://www.tomshardware.com/news/windows-software-bitlocker-slows-performance
 
-This script has been tested on Windows 11 22H3, 22H2 and Windows 10 22H3, 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
+This script has been tested on Windows 11 24H2, 23H2, 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
 I have not included any scripts to check for updates because from 1803 onwards, Windows 10/11 puts the user's computer in an update beta-tester channel if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/

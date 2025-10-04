@@ -631,10 +631,6 @@ Windows Registry Editor Version 5.00
 "EnableEdgy"=dword:00000000
 
 
-; Turn off touchpad when mouse is connected:
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PrecisionTouchPad]
-"LeaveOnWithMouse"=dword:00000000
-
 [HKEY_CURRENT_USER\SOFTWARE\Synaptics\SynTPEnh]
 "DisableIntPDFeature"=dword:00000022
 
