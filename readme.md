@@ -90,6 +90,7 @@ This script disables:
 * (Win11) AI 'Recall' "Feature"
 * (Win11) "Unsupported device" message on desktop
 * (Win11) Popup window when an application installer isn't from the app store
+* (Win11) Settings page splash screen
 * Lock screen (automatic if user password is blank, otherwise OPTIONAL - do not do this if your computer is likely to be used in a public area)
 * Copilot App (OPTIONAL)
 * Notification center and allowing apps like edge or photos to run in the background when closed (OPTIONAL)
@@ -109,8 +110,6 @@ Other changes this script makes:
 --------------------------------
 
 * Changes default control panel view to large icons rather than categorized
-* Quality updates are deferred by 1 month
-* Feature updates are deferred by 1 year
 * Sets power scheme to 'Balanced'
 * Changes power timeouts for screen off to 15min when plugged in (or a desktop), or 5min when not plugged in
 * Changes power timeouts for sleep to Never when plugged in (or a desktop), or 15min when not plugged in
@@ -131,6 +130,7 @@ Other changes this script makes:
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
 * (Win11) Restore 'show desktop' button in bottom-right of taskbar
+* (Win11) Enables 'verbose' startup/shutdown messages
 * (Win11) Get Win10-style right-click explorer menu back (OPTIONAL)
 * Cleans the WinSxS folder of redundant files using DISM (OPTIONAL)
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)

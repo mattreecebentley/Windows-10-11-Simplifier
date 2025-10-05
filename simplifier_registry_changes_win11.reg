@@ -77,3 +77,14 @@ Windows Registry Editor Version 5.00
 ; Set App install capabilities to 'from anywhere'
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer]
 "AicEnabled"="Anywhere"
+
+
+; Disable Settings splash screen
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"SettingsPageVisibility"="hide:home"
+
+
+; Enable verbose startup/shutdown mode
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"verbosestatus"=dword:00000001
+
