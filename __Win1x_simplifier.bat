@@ -1072,17 +1072,6 @@ powercfg -attributes SUB_PROCESSOR CPMINCORES -ATTRIB_HIDE
 powercfg -attributes SUB_PROCESSOR CPMAXCORES -ATTRIB_HIDE
 
 
-ECHO Set minimum unparked CPU Cores to 12/0 percent and maximum to 100/100 percent on power/battery
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES 12
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES 0
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 12
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMINCORES1 0
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMAXCORES 100
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMAXCORES 100
-powercfg /setACvalueindex scheme_current SUB_PROCESSOR CPMAXCORES1 100
-powercfg /setDCvalueindex scheme_current SUB_PROCESSOR CPMAXCORES1 100
-
-
 If /I "%ninjaturtles%"=="y" (
 	ECHO Stop Windows from requiring sign-in when waking from sleep
 	powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0

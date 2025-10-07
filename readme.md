@@ -117,7 +117,7 @@ Other changes this script makes:
 * Sets minimum and maximum CPU states to 5% and 100% respectively, regardless of whether plugged in
 * Tells windows to shutdown when the power button is pressed, instead of sleep (regardless of whether it's plugged in or a laptop)
 * Tells windows to do nothing when the lid of a laptop is closed, if it's plugged in (and to sleep if it's not)
-* Minimum/maximum unparked CPU cores option enabled in power management settings (control panel) and set to 0%/12% min on battery/power
+* Minimum/maximum unparked CPU cores option enabled in power management settings (control panel)
 * Makes 'This PC' the default opening point of windows explorer
 * Win7's Windows photo viewer is enabled as an option for viewing photos and pictures
 * Enables accent colors on title bars, but not taskbars
@@ -130,7 +130,6 @@ Other changes this script makes:
 * (Win11) Allow any apps to be installed by default, not just Windows Store apps
 * (Win11) Add creating a .txt file from right-click menu back into windows
 * (Win11) Restore 'show desktop' button in bottom-right of taskbar
-* (Win11) Enables 'verbose' startup/shutdown messages
 * (Win11) Get Win10-style right-click explorer menu back (OPTIONAL)
 * Cleans the WinSxS folder of redundant files using DISM (OPTIONAL)
 * Decrypts any drives currently encrypted using Bitlocker, to speed up disk access by up to 45% and make troubleshooting less of a pain (OPTIONAL)
