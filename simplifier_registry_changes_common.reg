@@ -871,4 +871,6 @@ Windows Registry Editor Version 5.00
 "NumberOfSIUFInPeriod"=dword:00000000
 "PeriodInNanoSeconds"=-
 
-
+; Disable hardware-accelerated gpu scheduling
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers]
+"HwSchMode"=dword:00000001

@@ -82,6 +82,7 @@ This script disables:
 * Play and Enqueue with Windows Media Player in right-click menu options for Folders
 * Notifications for Chrome and Edge
 * Old Copilot AI and associated buttons
+* Hardware-accelerated GPU scheduling (at-most 1fps gain in games, uses up to 1GB VRAM)
 * Most telemetry
 * "Learn about this picture" icon on desktop
 * (Win11) Widgets
