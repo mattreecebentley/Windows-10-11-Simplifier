@@ -72,6 +72,8 @@
     "Microsoft.WindowsCamera"
     "Microsoft.StorePurchaseApp"
     "Microsoft.WindowsStore"
+    "Microsoft.GetHelp"
+    "Spotify"
 )
 $global:Bloatware = @(
     "Microsoft.MixedReality.Portal"
@@ -79,7 +81,6 @@ $global:Bloatware = @(
     "MIDIBerry"
     "Microsoft.PPIProjection"
     "Microsoft.BingNews"
-    "Microsoft.GetHelp"
     "Microsoft.Getstarted"
     "Microsoft.Messaging"
     "Microsoft.Microsoft3DViewer"
@@ -114,7 +115,6 @@ $global:Bloatware = @(
     "Flipboard"
     "Twitter"
     "Facebook"
-    "Spotify"
     "Slack"
     "Minecraft"
     "Royal Revolt"

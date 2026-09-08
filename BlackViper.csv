@@ -195,7 +195,7 @@ AudioSrv,-3,-3,-3,-3,-3
 AudioEndpointBuilder,-3,-3,-3,-3,-3
 SDRSVC,-2,-2,-2,-2,-2
 WbioSrvc,-2,-2,-2,-2,-2
-FrameServer,2,2,1,1,1
+FrameServer,-2,-2,-2,-2,-2
 wcncsvc,2,2,2,2,1
 Wcmsvc,-3,-3,-3,-3,-3
 Sense,0,-2,-2,-2,-2

@@ -12,11 +12,6 @@ systeminfo | findstr /i /c:"windows 11" > nul && set winver=11
 
 ECHO Windows %winver% detected
 
-If /I "%winver%"=="11" (
-	ECHO Adding WMIC to Win11 - needed for rest of procedures:
-	DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
-)
-
 
 REM If no command line arguments, skip this
 IF "%~1"=="" goto begin_preliminaries
@@ -335,6 +330,13 @@ IF EXIST "ccleaner/CCleaner.exe" (
 
 
 
+IF EXIST "fluentcleaner/FluentCleaner.Classic.exe" (
+	ECHO Fluentcleaner portable found, running
+	start fluentcleaner/FluentCleaner.Classic.exe /AUTO
+)
+
+
+
 IF EXIST "bleachbit\Bleachbit.exe" (
 	ECHO Bleachbit portable found, running...
 	bleachbit\Bleachbit.exe
@@ -489,7 +491,7 @@ set /P reboot=Type input: %=%
 
 
 ECHO.
-ECHO Do you want to disable the notifications/action center and prevent closed Microsoft apps like Camera from running in the background?
+ECHO Do you want to disable the notifications/action center and prevent closed Microsoft apps like Camera from running in the background? Note that this will also disable the system tray calendar in windows 11.
 ECHO Press Y or N and then ENTER:
 set disable_notifications=
 set /P disable_notifications=Type input: %=%
@@ -612,37 +614,9 @@ ECHO.
 ECHO.
 ECHO Attempting to create System Restore Point prior to changes, please wait...
 ECHO.
-wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "Before Win1x_simplifier", 100, 7 | findstr /i /c:"ReturnValue = 0" > nul && goto skip_registry_backup
-
-ECHO.
-ECHO Unable to create System restore point, if System Restore is disabled for this computer it is highly-recommended that you enable system restore before continuing this script.
-ECHO Would you like to do so now and then retry creating the restore point?
-ECHO Press Y or N and then ENTER:
-set redo=
-set /P redo=Type input: %=%
-
-IF "%redo%"=="y" (
-	ECHO Please go into control panel or settings, look for Recovery, and enable system restore for your system drive, then
-	pause
-	goto begin
-)
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0simplifier_create_restore_point.ps1'" -Verb RunAs
 
 
-ECHO Backing up registry in registry_backups subfolder instead, please note this recovery method is highly-problematic if it is relied upon...
-
-md registry_backups
-md registry_backups\%COMPUTERNAME%
-cd registry_backups\%COMPUTERNAME%\
-
-REG SAVE HKLM\SOFTWARE HKLMSOFTWARE.HIV /y
-REG SAVE HKLM\SYSTEM HKLMSYSTEM.HIV /y
-REG SAVE HKCU\SOFTWARE HKCUSOFTWARE.HIV /y
-REG SAVE "HKCU\Control Panel" HKCUcontrol_panel.HIV /y
-REG SAVE "HKCU\AppEvents" HKCUapp_events.HIV /y
-
-cd ../..
-
-:skip_registry_backup
 
 ECHO.
 ECHO ***Starting Changes:***
@@ -1103,8 +1077,8 @@ If /I "%driveoptimize%"=="y" (
 )
 
 
-REM Loop until both ccleaner and bleachbit have finished running:
-IF EXIST "CCleaner.exe" goto ccleaner_wait_loop
+REM Loop until both ccleaner and bleachbit and fluentcleaner have finished running:
+IF EXIST "ccleaner/CCleaner.exe" goto ccleaner_wait_loop
 goto ccleaner_finished
 
 :ccleaner_wait_loop
@@ -1115,7 +1089,7 @@ goto ccleaner_wait_loop
 :ccleaner_finished
 
 
-IF EXIST "bleachbit.exe" goto bleachbit_wait_loop
+IF EXIST "bleachbit/bleachbit.exe" goto bleachbit_wait_loop
 goto bleachbit_finished
 
 :bleachbit_wait_loop
@@ -1124,6 +1098,18 @@ timeout /t 10
 goto bleachbit_wait_loop
 
 :bleachbit_finished
+
+
+
+IF EXIST "fluentcleaner/FluentCleaner.Classic.exe" goto fluentcleaner_wait_loop
+goto fluentcleaner
+
+:fluentcleaner_wait_loop
+tasklist | findstr /i /c:"FluentCleaner" > nul && ECHO Waiting for Fluentcleaner to stop running || goto fluentcleaner_finished
+timeout /t 10
+goto fluentcleaner_wait_loop
+
+:fluentcleaner_finished
 
 
 

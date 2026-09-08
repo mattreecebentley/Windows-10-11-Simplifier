@@ -31,8 +31,6 @@ Alternatively, run __Win1x_simplifier.bat from the command line with either "-al
 
 Win1x simplifier attempts to create a system restore point every time it runs. So to revert changes, simply run system restore (under windows settings) and restore to the restore point which matches the time you ran the script. Alternatively you can launch __Win1x_unsimplifier.bat (right-click then left-click "Run as Administrator") which attempts to launch system restore.
 
-If you don't have system restore enabled on your computer, simplifier creates a backup of the registry in the simplifier folder under registry_backups\%computer_name% just in case. If you need to revert settings in this scenario, again run __Win1x_unsimplifier.bat and it will correctly select the specific registry backup based on the computer name. If multiple computers have the same internal name, they could overwrite each other's registry backup. Be warned, if you have made any major system changes after running simplifier this could brick your machine on restart. So where possible, have system restore enabled and use that instead.
-
 If you run the scripts and later find that you liked having the Quick Access tree available in File Explorer, double-click on and Merge the _re-enable_quick_access.reg file, this will restore quick access. This is a common enough scenario that I've decided to include it.
 
 
@@ -45,6 +43,7 @@ This script disables:
 * auto-hide scrollbars
 * search button/tool on taskbar
 * quick access folders in explorer
+* 'pin to quick access' from menu when right-clicking a folder in file explorer
 * duplicate instances of external/USB drives visible in explorer
 * the ability for windows to change the sound scheme when changing themes
 * login/lock-screen photos
@@ -88,7 +87,7 @@ This script disables:
 * (Win11) Widgets
 * (Win11) Chat button
 * (Win11) Snap/arrange bar at top of screen when dragging windows, snap layouts in general
-* (Win11) AI 'Recall' "Feature"
+* (Win11) AI 'Recall' Feature
 * (Win11) "Unsupported device" message on desktop
 * (Win11) Popup window when an application installer isn't from the app store
 * (Win11) Settings page splash screen
@@ -176,7 +175,7 @@ Other scripts/executables this script will optionally run, if present in subfold
 
 * Bleachbit portable (https://bleachbit.org), if extracted to subfolder "bleachbit" within the simplifier folder.
 * Ccleaner portable by Piriform (https://www.ccleaner.com/ccleaner/builds), if extracted to subfolder "ccleaner" within the simplifier folder. Will run on automatic settings (ie. whatever settings you last used with ccleaner portable) in the background while the rest of the tasks complete. If 64-bit windows is detected it will run the 64-bit version, so include both executables. If the system is already running ccleaner (eg. in system tray) it will be terminated before running ccleaner portable.
-
+* Fluentcleaner classic (https://github.com/builtbybel/FluentCleaner), if extracted to subfolder "fluentcleaner" within the simplifier folder.
 
 
 Additional Command Line Options:
@@ -227,18 +226,17 @@ Additional Notes:
 
 Report on Bitlocker slowing down SSD drives by up to 45% here: https://www.tomshardware.com/news/windows-software-bitlocker-slows-performance
 
-This script has been tested on Windows 11 24H2, 23H2, 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803, but not 1709 or lower.
-I have not included any scripts to check for updates because from 1803 onwards, Windows 10/11 puts the user's computer in an update beta-tester channel if they click on 'Check for Updates' manually, and there is no good information about how to bypass or disable this. Good job Microsoft! You Really know what you're Doing!!! Really!
+This script has been tested on Windows 11 25H2, 24H2, 23H2, 22H2 and Windows 10 22H2, 22H1, 21H2, 20H2, 2004, 1909, 1903, 1809 and 1803.
 
 https://www.howtogeek.com/fyi/watch-out-clicking-check-for-updates-still-installs-unstable-updates-on-windows-10/
 
 I originally automated disk cleanup, but it was not possible to reliably get it to clean up 'Update storage' or 'Old Windows installation' between Win10 versions. Also the disk cleanup tool is being deprecated in future win10 vers. But you can always run disk cleanup manually later at your leisure once updates have completed. Background apps are only turned off if the notification center is disabled, as the notification center will not function if background apps are disabled as of 1809. However if you don't want to disable notifications, you can still go into settings and disable individual background apps.
 
 
-Unfortunately I've had to remove the optional Windows defender disabling component, as too many antivirus engines were detecting it as malware! Look up "Dcontrol" on the net as an alternative.
+Unfortunately I've had to remove the optional Windows defender disabling component, as too many antivirus engines were detecting it as malware. Look up "Dcontrol" on the net as an alternative.
 
 This script is under a Creative Commons Attribution 3.0 New Zealand License (https://creativecommons.org/licenses/by/3.0/nz/)
 
 Thanks go out to the multudinous sources of the registry hacks and powershell scripts, ranging from Stackoverflow to Winaero to tenforums/elevenforums. Thanks to microsoft for making 2020 the year of the linux desktop.
 
-Matt Bentley 2024
+Matt Bentley 2026

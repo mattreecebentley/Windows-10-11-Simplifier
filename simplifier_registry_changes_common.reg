@@ -858,9 +858,6 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection]
 "AllowTelemetry"=dword:00000000
 
-; Disable Let Windows improve Start and search results by tracking app launches
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
-"Start_TrackProgs"=dword:00000000
 
 ; Disable Activity History
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]
@@ -874,3 +871,14 @@ Windows Registry Editor Version 5.00
 ; Disable hardware-accelerated gpu scheduling
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers]
 "HwSchMode"=dword:00000001
+
+
+; Remove 'pin to quick access' from right-clicking a folder in file explorer
+[HKEY_CURRENT_USER\Software\Classes\Drive\shell\pintohome]
+"ProgrammaticAccessOnly"=""
+
+[HKEY_CURRENT_USER\Software\Classes\Folder\shell\pintohome]
+"ProgrammaticAccessOnly"=""
+
+[HKEY_CURRENT_USER\Software\Classes\Network\shell\pintohome]
+"ProgrammaticAccessOnly"=""
